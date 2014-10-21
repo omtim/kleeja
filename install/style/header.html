@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="{{echo getlang()}}" dir="{{echo $lang['DIR']}}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{echo $lang['INST_INSTALL_WIZARD']}}</title>
+	<link rel="shortcut icon" href="../images/favicon.ico" />
+	<link rel="icon" type="image/gif" href="../images/favicon.gif" />
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{echo getlink('bootstrap')}}" rel="stylesheet">
+	{{if($lang['DIR'] == 'rtl'):}}
+	<link href="{{echo getlink('bootstrap_rtl')}}" rel="stylesheet">
+	{{endif;}}
+
+	<script type="text/javascript" src="{{echo getlink('jquery')}}"></script>
+	<script type="text/javascript" src="style/javascript.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+		<div id="lang_box">
+			{{if($dh = opendir($_path . 'lang')):}}
+			{{while (($file = readdir($dh)) !== false): if(strpos($file, '.') === false && $file != '..' && $file != '.'):}}					
+			<a href="?step={{echo htmlspecialchars($_GET['step'])}}&amp;lang={{echo $file}}"><img src="style/images/{{echo $file}}_16.png"></a>
+			{{endif; endwhile;closedir($dh);endif;}}
+		</div>
+
+		
+	
+      <div class="page-header">
+        <h1>{{echo $lang['INST_INSTALL_WIZARD']}}</h1>
+      </div>
+	  
