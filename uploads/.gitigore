@@ -1,0 +1,6 @@
+*
+!.gitignore
+!thumbs
+!index.html
+!php.ini
+!.htaccess
