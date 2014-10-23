@@ -109,7 +109,7 @@ function clean_var($var, $type = 'str')
 */
 function get_ban()
 {
-	global $banss, $lang, $text;
+	global $banss, $lang, $text, $plugin;
 	
 
 	#now .. loop for banned ips 
@@ -130,29 +130,13 @@ function get_ban()
 
 			if ($ip == $ip2 || @preg_match('/' . preg_quote($replace_it, '/') . '/i', $user->data['ip']))
 			{
-				($hook = kleeja_run_hook('banned_get_ban_func')) ? eval($hook) : null; //run hook	
+				($hook = $plugin->run_hook('banned_get_ban_func')) ? eval($hook) : null; //run hook	
 				kleeja_info($lang['U_R_BANNED'], $lang['U_R_BANNED']);
 			}
 		}
 	}
 
-	($hook = kleeja_run_hook('get_ban_func')) ? eval($hook) : null; //run hook	
-}
-
-
-/**
-* Run plugins of kleeja
-* @package plugins
-*/
-function kleeja_run_hook($hook_name)
-{
-	global $all_plg_hooks;
-
-	if(defined('STOP_HOOKS') || !isset($all_plg_hooks[$hook_name]))
-	{
-		return false;
-	}
-	return implode("\n", $all_plg_hooks[$hook_name]);
+	($hook = $plugin->run_hook('get_ban_func')) ? eval($hook) : null; //run hook	
 }
 
 
@@ -167,6 +151,8 @@ function _sm_mk_utf8($text)
 
 function send_mail($to, $body, $subject, $fromaddress, $fromname, $bcc='')
 {
+	global $plugin;
+
 	$eol = "\r\n";
 	$headers = '';
 	$headers .= 'From: ' . _sm_mk_utf8(trim(preg_replace('#[\n\r:]+#s', '', $fromname))) . ' <' . trim(preg_replace('#[\n\r:]+#s', '', $fromaddress)) . '>' . $eol;
@@ -189,7 +175,7 @@ function send_mail($to, $body, $subject, $fromaddress, $fromname, $bcc='')
 	
 	//$headers .= 'X-MimeOLE: kleeja' . $eol;
 
-	($hook = kleeja_run_hook('kleeja_send_mail')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_send_mail')) ? eval($hook) : null; //run hook
 
 	$body = str_replace(array("\n", "\0"), array("\r\n", ''), $body);
 
@@ -216,10 +202,12 @@ function send_mail($to, $body, $subject, $fromaddress, $fromname, $bcc='')
 */
 function delete_cache($name, $all=false)
 {
+	global $plugin;
+
 	#Those files are exceptions and not for deletion
 	$exceptions = array('.htaccess', 'index.html', 'php.ini', 'styles_cached.php', 'web.config');
 
-	($hook = kleeja_run_hook('delete_cache_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('delete_cache_func')) ? eval($hook) : null; //run hook
 
 	//handle array of cached files
 	if(is_array($name))
@@ -275,9 +263,9 @@ function delete_cache($name, $all=false)
 */
 function get_lang($name, $folder = '')
 {
-	global $config, $lang;
+	global $config, $lang, $plugin;
 
-	($hook = kleeja_run_hook('get_lang_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('get_lang_func')) ? eval($hook) : null; //run hook
 
 	$name = str_replace('..', '', $name);
 	if($folder != '')
@@ -310,7 +298,7 @@ function get_lang($name, $folder = '')
 */
 function get_config($name)
 {
-	global $dbprefix, $SQL, $d_groups, $userinfo;
+	global $dbprefix, $SQL, $d_groups, $userinfo, $plugin;
 
 	$table = "{$dbprefix}config c";
 
@@ -333,7 +321,7 @@ function get_config($name)
 	$v		= $SQL->fetch($result);
 	$return	= $v['value'];
 
-	($hook = kleeja_run_hook('get_config_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('get_config_func')) ? eval($hook) : null; //run hook
 	return $return;
 }
 
@@ -346,6 +334,8 @@ function get_config($name)
 */
 function add_config($name, $value = '', $order = 0, $field = '', $type = '0', $dynamic = false)
 {
+	global $plugin;
+
 	#if bulk adding
 	if(is_array($name))
 	{
@@ -381,7 +371,7 @@ function add_config($name, $value = '', $order = 0, $field = '', $type = '0', $d
 									'VALUES'	=> "'" . $SQL->escape($name) . "','" . $SQL->escape($value) . "', " . $g_id,
 								);
 
-			($hook = kleeja_run_hook('insert_sql_add_config_func_groups_data')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('insert_sql_add_config_func_groups_data')) ? eval($hook) : null; //run hook
 
 			$SQL->build($insert_query);
 		}
@@ -393,7 +383,7 @@ function add_config($name, $value = '', $order = 0, $field = '', $type = '0', $d
 							'VALUES'	=> "'" . $SQL->escape($name) . "','" . $SQL->escape($value) . "', '" . $SQL->escape($field) . "', " . intval($order) . ",'" . $SQL->escape($type) . "','"  . ($dynamic ? '1' : '0') . "'",
 						);
 
-	($hook = kleeja_run_hook('insert_sql_add_config_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('insert_sql_add_config_func')) ? eval($hook) : null; //run hook
 
 	$SQL->build($insert_query);	
 
@@ -410,7 +400,7 @@ function add_config($name, $value = '', $order = 0, $field = '', $type = '0', $d
 
 function update_config($name, $value = '', $escape = true, $group = false)
 {
-	global $SQL, $dbprefix, $d_groups, $user;
+	global $SQL, $dbprefix, $d_groups, $user, $plugin;
 
 	$value = ($escape) ? $SQL->escape($value) : $value;
 	$table = "{$dbprefix}config";
@@ -436,7 +426,7 @@ function update_config($name, $value = '', $escape = true, $group = false)
 							'WHERE'		=> 'name = "' . $SQL->escape($name) . '"' . $group_id_sql
 					);
 
-	($hook = kleeja_run_hook('update_sql_update_config_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('update_sql_update_config_func')) ? eval($hook) : null; //run hook
 
 	$SQL->build($update_query);
 	if($SQL->affected())
@@ -461,6 +451,8 @@ function update_config($name, $value = '', $escape = true, $group = false)
 */
 function delete_config($name) 
 {
+	global $plugin;
+
 	if(is_array($name))
 	{
 		foreach($name as $n)
@@ -480,7 +472,7 @@ function delete_config($name)
 								'DELETE'	=> "{$dbprefix}config",
 								'WHERE'		=>  "name  = '" . $SQL->escape($name) . "'"
 						);
-	($hook = kleeja_run_hook('del_sql_delete_config_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('del_sql_delete_config_func')) ? eval($hook) : null; //run hook
 	
 	$SQL->build($delete_query);
 
@@ -490,7 +482,7 @@ function delete_config($name)
 									'DELETE'	=> "{$dbprefix}groups_data",
 									'WHERE'		=>  "name  = '" . $SQL->escape($name) . "'"
 							);
-		($hook = kleeja_run_hook('del_sql_delete_config_func2')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('del_sql_delete_config_func2')) ? eval($hook) : null; //run hook
 
 		$SQL->build($delete_query);
 	}
@@ -513,7 +505,8 @@ function delete_config($name)
  */
 function kleeja_check_captcha()
 {
-	global $config;
+	global $config, $plugin;
+
 	if((int) $config['enable_captcha'] == 0)
 	{
 		return true;
@@ -529,7 +522,7 @@ function kleeja_check_captcha()
 		}
 	}
 
-	($hook = kleeja_run_hook('kleeja_check_captcha_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_check_captcha_func')) ? eval($hook) : null; //run hook
 	return $return;
 }
 

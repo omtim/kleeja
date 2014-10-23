@@ -56,7 +56,7 @@ class user
 		#login expire after?
 		$expire = time() + ((int) $expire ? intval($expire) : 86400);
 
-		($hook = kleeja_run_hook('data_func_usr_class')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('data_func_usr_class')) ? eval($hook) : null; //run hook
 
 		#if the user system integrated, then get the right file
 		if($config['user_system'] != 1)
@@ -130,7 +130,7 @@ class user
 			$query['WHERE'] = "clean_name='" . $SQL->escape($this->cleanusername($name)) . "'";
 		}
 
-		($hook = kleeja_run_hook('qr_select_usrdata_n_usr_class')) ? eval($hook) : null; //run hook			
+		($hook = $plugin->run_hook('qr_select_usrdata_n_usr_class')) ? eval($hook) : null; //run hook			
 		$result = $SQL->build($query);
 
 		if (!$SQL->num($result))
@@ -159,7 +159,7 @@ class user
 				$new_salt = substr(base64_encode(pack("H*", sha1(mt_rand()))), 0, 7);
 				$new_password = $this->kleeja_hash_password(trim($pass) . $new_salt);
 
-				($hook = kleeja_run_hook('qr_update_usrdata_md5_n_usr_class')) ? eval($hook) : null; //run hook	
+				($hook = $plugin->run_hook('qr_update_usrdata_md5_n_usr_class')) ? eval($hook) : null; //run hook	
 
 				$update_query = array(
 							'UPDATE'	=> "{$dbprefix}users",
@@ -206,7 +206,7 @@ class user
 				$SQL->build($update_last_visit);
 		}
 
-		($hook = kleeja_run_hook('qr_while_usrdata_n_usr_class')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('qr_while_usrdata_n_usr_class')) ? eval($hook) : null; //run hook
 
 		$SQL->free($result);
 
@@ -241,7 +241,7 @@ class user
 						'WHERE'		=> "id=" . intval($user_id)
 					);
 
-		($hook = kleeja_run_hook('qr_select_userdata_in_usrclass')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('qr_select_userdata_in_usrclass')) ? eval($hook) : null; //run hook
 		$data_user = $SQL->fetch($SQL->build($query_name));
 
 		#if not an array, return as string
@@ -261,7 +261,7 @@ class user
 	 */
 	public function logout()
 	{
-		($hook = kleeja_run_hook('logout_func_usr_class')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('logout_func_usr_class')) ? eval($hook) : null; //run hook
 
 		#acp
 		$this->logout_cp();
@@ -280,7 +280,7 @@ class user
 	 */
 	public function logout_cp()
 	{
-		($hook = kleeja_run_hook('logout_cp_func_usr_class')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('logout_cp_func_usr_class')) ? eval($hook) : null; //run hook
 
 		if(!empty($_SESSION['ADMINLOGIN']))
 		{
@@ -299,7 +299,7 @@ class user
 	 */
 	public function cleanusername($uname) 
 	{
-		($hook = kleeja_run_hook('cleanusername_func_usr_class')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('cleanusername_func_usr_class')) ? eval($hook) : null; //run hook
 
 		static $arabic_t = array();
 		static $latin_t = array(
@@ -340,7 +340,7 @@ class user
 	{
 		include_once PATH . 'includes/classes/phpass.php';
 
-		($hook = kleeja_run_hook('kleeja_hash_password_func_usr_class')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('kleeja_hash_password_func_usr_class')) ? eval($hook) : null; //run hook
 
 		$return = false;
 		$hasher = new PasswordHash(8, true);
@@ -362,7 +362,7 @@ class user
 	{
 		global $config;
 
-		($hook = kleeja_run_hook('kleeja_set_cookie_func_usr_class')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('kleeja_set_cookie_func_usr_class')) ? eval($hook) : null; //run hook
 
 		#when user add cookie_* in config this will replace the current ones
 		global $config_cookie_name, $config_cookie_domian, $config_cookie_secure, $config_cookie_path;
@@ -398,8 +398,8 @@ class user
 	 */
 	public function kleeja_get_cookie($name)
 	{
-		global $config;
-		($hook = kleeja_run_hook('kleeja_get_cookie_func_usr_class')) ? eval($hook) : null; //run hook
+		global $config, $plugin;
+		($hook = $plugin->run_hook('kleeja_get_cookie_func_usr_class')) ? eval($hook) : null; //run hook
 
 		return isset($_COOKIE[$config['cookie_name'] . '_' . $name]) ? $_COOKIE[$config['cookie_name'] . '_' . $name] : false;
 	}
@@ -459,9 +459,9 @@ class user
 	 */
 	public function kleeja_check_user()
 	{
-		global $config, $SQL, $dbprefix;
+		global $config, $SQL, $dbprefix, $plugin;
 
-		($hook = kleeja_run_hook('kleeja_check_user_func_usr_class')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('kleeja_check_user_func_usr_class')) ? eval($hook) : null; //run hook
 
 		#is it a bot? record bot visits stat
 		$this->is_bot(true);
@@ -559,7 +559,7 @@ class user
 	 */
 	public function is_bot($record = false)
 	{
-		global $SQL, $user, $dbprefix, $config;
+		global $SQL, $user, $dbprefix, $config, $plugin;
 
 		#get information .. 
 		$agent	= $_SERVER['HTTP_USER_AGENT'];
@@ -576,7 +576,7 @@ class user
 			$bot_name = 'bing';
 		}
 
-		($hook = kleeja_run_hook('is_bot_func_before_qr')) ? eval($hook) : null; //run hook	
+		($hook = $plugin->run_hook('is_bot_func_before_qr')) ? eval($hook) : null; //run hook	
 
 		$this->data['is_bot'] =  $bot_name == '' ? false : true;
 
@@ -592,7 +592,7 @@ class user
 								'SET'		=> "last_$bot_name=$time, $bot_name_num=$bot_name_num+1"
 							);
 
-		($hook = kleeja_run_hook('qr_update_is_bot')) ? eval($hook) : null; //run hook	
+		($hook = $plugin->run_hook('qr_update_is_bot')) ? eval($hook) : null; //run hook	
 		$SQL->build($update_query);
 
 

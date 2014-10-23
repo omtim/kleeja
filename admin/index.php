@@ -22,7 +22,7 @@ $s_time = 18000;
 require PATH . 'includes/common.php';
 
 
-($hook = kleeja_run_hook('begin_admin_page')) ? eval($hook) : null; //run hook 
+($hook = $plugin->run_hook('begin_admin_page')) ? eval($hook) : null; //run hook 
 
 #current page
 $go_to = g('cp', 'string', 'start');
@@ -30,7 +30,7 @@ $go_to = g('cp', 'string', 'start');
 #for security, if not a user, redirect to login page
 if (!$user->is_user())
 {
-	($hook = kleeja_run_hook('user_not_admin_admin_page')) ? eval($hook) : null; //run hook 
+	($hook = $plugin->run_hook('user_not_admin_admin_page')) ? eval($hook) : null; //run hook 
 	redirect($config['siteurl'] . 'ucp.php?go=login&return=' . urlencode(ADMIN_PATH . '?cp=' . $go_to));
 }
 
@@ -152,7 +152,7 @@ $adm_extensions = array(
 );
 
 
-($hook = kleeja_run_hook('adm_extensions_admin_page')) ? eval($hook) : null; //run hook 
+($hook = $plugin->run_hook('adm_extensions_admin_page')) ? eval($hook) : null; //run hook 
 
 
 #no requst or wrong !
@@ -198,7 +198,7 @@ if(ig('check_msgs'))
 }
 
 #add your own bubbles here
-($hook = kleeja_run_hook('kbubbles_admin_page')) ? eval($hook) : null; //run hook 
+($hook = $plugin->run_hook('kbubbles_admin_page')) ? eval($hook) : null; //run hook 
 
 endif;
 
@@ -206,7 +206,7 @@ endif;
 foreach($adm_extensions as $m=>$folder_path)
 {
 
-	($hook = kleeja_run_hook('foreach_ext_admin_page')) ? eval($hook) : null; //run hook 
+	($hook = $plugin->run_hook('foreach_ext_admin_page')) ? eval($hook) : null; //run hook 
 	
 	if($m == 'start')
 	{
@@ -227,7 +227,7 @@ foreach($adm_extensions as $m=>$folder_path)
 										'kbubble'	=> in_array($m, array_keys($kbubbles)) ? '<span class="badge pull-' . ($lang['DIR'] == 'rtl'?'left':'right') . '" id="t_' . $m . '"' . ($kbubbles[$m] == 0 ? ' style="display:none"' : '') . '>' . $kbubbles[$m] . '</span>' : ''
 									);
 	
-	($hook = kleeja_run_hook('endforeach_ext_admin_page')) ? eval($hook) : null; //run hook 
+	($hook = $plugin->run_hook('endforeach_ext_admin_page')) ? eval($hook) : null; //run hook 
 }
 
 
@@ -237,16 +237,16 @@ $assigned_klj_ver = preg_replace('!#([a-z0-9]+)!', '', KLEEJA_VERSION);
 
 if (file_exists($adm_extensions[$go_to] . '/' . $go_to . '.php'))
 {
-	($hook = kleeja_run_hook("require_admin_page_begin_{$go_to}")) ? eval($hook) : null; //run hook 
+	($hook = $plugin->run_hook("require_admin_page_begin_{$go_to}")) ? eval($hook) : null; //run hook 
 	include $adm_extensions[$go_to] . '/' . $go_to . '.php';
-	($hook = kleeja_run_hook("require_admin_page_end_{$go_to}")) ? eval($hook) : null; //run hook 
+	($hook = $plugin->run_hook("require_admin_page_end_{$go_to}")) ? eval($hook) : null; //run hook 
 }
 else
 {
 	big_error('Loading !', 'Error while loading: ' . $adm_extensions[$go_to] . '/' . $go_to);
 }
 
-($hook = kleeja_run_hook('end_admin_page')) ? eval($hook) : null; //run hook 
+($hook = $plugin->run_hook('end_admin_page')) ? eval($hook) : null; //run hook 
 
 
 #no style defined

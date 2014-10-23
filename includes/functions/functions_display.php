@@ -27,7 +27,7 @@ if (!defined('IN_COMMON'))
  */	
 function kleeja_header($title = '', $extra_head_code = '')
 {
-	global $user, $lang, $config, $extras;
+	global $user, $lang, $config, $extras, $plugin;
 
 	#is user ? and username
 	$username = $user->is_user() ? $user->data['name'] : $lang['GUST'];
@@ -38,7 +38,7 @@ function kleeja_header($title = '', $extra_head_code = '')
 	#check for extra header 
 	$extras['header'] = empty($extras['header']) ? false : $extras['header'];
 
-	($hook = kleeja_run_hook('kleeja_header_links_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_header_links_func')) ? eval($hook) : null; //run hook
 
 	
 	$current_page = ig('go') ? g('go', 'str') : (empty($_GET) ? 'index' : '');
@@ -49,7 +49,7 @@ function kleeja_header($title = '', $extra_head_code = '')
 
 	include get_template_path('header.php');
 
-	($hook = kleeja_run_hook('kleeja_header_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_header_func')) ? eval($hook) : null; //run hook
 
 	flush();
 }
@@ -62,7 +62,7 @@ function kleeja_header($title = '', $extra_head_code = '')
  */	
 function kleeja_footer()
 {
-	global $SQL, $starttm, $config, $user, $lang, $extras;
+	global $SQL, $starttm, $config, $user, $lang, $extras, $plugin;
 
 	#show stats ..
 	$page_stats = false;
@@ -101,7 +101,7 @@ function kleeja_footer()
 		$extras['footer'] = false;
 	}
 
-	($hook = kleeja_run_hook('kleeja_footer_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_footer_func')) ? eval($hook) : null; //run hook
 
 
 	$k = '<div sty' . 'le="di' . 'spl'. 'ay:bl'. 'oc' . 'k !im' . 'po' . 'rt' . 'ant;' . 'backgrou' . 'nd:#ECE' .'CE' . 'C !im' . 'po' . 'rt' . 
@@ -132,7 +132,7 @@ function kleeja_footer()
  */
 function get_url_of($name, $get_default = false)
 {
-	global $config;
+	global $config, $plugin;
 
 	$urls = array(
 		'profile' => array('ucp.php?go=profile', 'profile.html'),
@@ -149,7 +149,7 @@ function get_url_of($name, $get_default = false)
 		'call' => array('go.php?go=call', 'call.html'),
 	);
 
-	($hook = kleeja_run_hook('get_url_of_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('get_url_of_func')) ? eval($hook) : null; //run hook
 
 	$link = $config['siteurl'];
 	if(isset($urls[$name]))
@@ -196,6 +196,8 @@ function get_template_path($name)
  */
 function readable_size($size)
 {
+	global $plugin;
+
 	$sizes = array(' B', ' KB', ' MB', ' GB', ' TB', 'PB', ' EB');
 	$ext = $sizes[0];
 	for ($i=1; (($i < count($sizes)) && ($size >= 1024)); $i++)
@@ -204,7 +206,7 @@ function readable_size($size)
 		$ext  = $sizes[$i];
 	}
 	$result	=	 round($size, 2) . $ext;
-	($hook = kleeja_run_hook('func_Customfile_size')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('func_readable_size')) ? eval($hook) : null; //run hook
 	return  $result;
 }
 
@@ -223,7 +225,7 @@ function readable_size($size)
  */
 function kleeja_error($text, $title = '', $exit = true, $redirect = false, $rs = 2, $extra_code_header = '', $style = 'error.php')
 {
-	global $SQL;
+	global $SQL, $plugin;
 
 	#if redirect after showing the message
 	 if($redirect)
@@ -231,7 +233,7 @@ function kleeja_error($text, $title = '', $exit = true, $redirect = false, $rs =
 		 $text .= redirect($redirect, false, $exit, $rs, true);
 	 }
 
-	($hook = kleeja_run_hook('kleeja_error_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_error_func')) ? eval($hook) : null; //run hook
 
 	#header
 	kleeja_header($title, $extra_code_header);
@@ -262,9 +264,9 @@ function kleeja_error($text, $title = '', $exit = true, $redirect = false, $rs =
  */
 function kleeja_info($text, $title='', $exit = true, $redirect = false, $rs = 5, $extra_code_header = '')
 {
-	global $SQL;
+	global $SQL, $plugin;
 
-	($hook = kleeja_run_hook('kleeja_info_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_info_func')) ? eval($hook) : null; //run hook
 
 	return kleeja_error($text, $title, $exit, $redirect, $rs, $extra_code_header, 'info.php');
 }
@@ -280,9 +282,9 @@ function kleeja_info($text, $title='', $exit = true, $redirect = false, $rs = 5,
  */
 function big_error($error_title, $msg_text, $error = true)
 {
-	global $SQL; 
+	global $SQL, $plugin;
 	
-	($hook = kleeja_run_hook('big_error_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('big_error_func')) ? eval($hook) : null; //run hook
 	
 	echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">' . "\n";
 	echo '<head>' . "\n";
@@ -321,9 +323,9 @@ function big_error($error_title, $msg_text, $error = true)
  */
 function redirect($url, $header = true, $exit = true, $sec = 0, $return = false)
 {
-	global $SQL;
+	global $SQL, $plugin;
 
-	($hook = kleeja_run_hook('redirect_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('redirect_func')) ? eval($hook) : null; //run hook
 
     if (!headers_sent() && $header && !$return)
 	{
@@ -374,11 +376,11 @@ function redirect($url, $header = true, $exit = true, $sec = 0, $return = false)
  */
 function kleeja_add_form_key_get($request_id)
 {
-	global $config;
+	global $config, $plugin;
 	
 	$return = 'formkey=' . substr(sha1($config['h_key'] . date('H-d-m') . $request_id), 0, 20);
 	
-	($hook = kleeja_run_hook('kleeja_add_form_key_get_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_add_form_key_get_func')) ? eval($hook) : null; //run hook
 	return $return;
 }
 
@@ -391,7 +393,7 @@ function kleeja_add_form_key_get($request_id)
  */
 function kleeja_check_form_key_get($request_id)
 {
-	global $config;
+	global $config, $plugin;
 
 	$token = substr(sha1($config['h_key'] . date('H-d-m') . $request_id), 0, 20);
 
@@ -401,7 +403,7 @@ function kleeja_check_form_key_get($request_id)
 		$return = true; 
 	}
 
-	($hook = kleeja_run_hook('kleeja_check_form_key_get_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_check_form_key_get_func')) ? eval($hook) : null; //run hook
 	return $return;
 }
 
@@ -413,11 +415,11 @@ function kleeja_check_form_key_get($request_id)
  */
 function kleeja_add_form_key($form_name)
 {
-	global $config;
+	global $config, $plugin;
 	$now = time();
 	$return = '<input type="hidden" name="k_form_key" value="' . sha1($config['h_key'] . $form_name . $now) . '" /><input type="hidden" name="k_form_time" value="' . $now . '" />' . "\n";
 	
-	($hook = kleeja_run_hook('kleeja_add_form_key_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_add_form_key_func')) ? eval($hook) : null; //run hook
 	return $return;
 }
 
@@ -429,7 +431,7 @@ function kleeja_add_form_key($form_name)
  */
 function kleeja_check_form_key($form_name, $require_time = 150 /*seconds*/ )
 {
-	global $config;
+	global $config, $plugin;
 
 	if(defined('IN_ADMIN'))
 	{
@@ -454,7 +456,7 @@ function kleeja_check_form_key($form_name, $require_time = 150 /*seconds*/ )
 		}
 	}
 	
-	($hook = kleeja_run_hook('kleeja_check_form_key_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_check_form_key_func')) ? eval($hook) : null; //run hook
 	return $return;
 }
 
@@ -469,7 +471,7 @@ function kleeja_check_form_key($form_name, $require_time = 150 /*seconds*/ )
 
 function kleeja_get_link($pid, $file_info = array())
 {
-	global $config;
+	global $config, $plugin;
 		
 	#to avoid problems, no type specifed so default is id
 	$id_form = empty($config['id_form']) ? 'id' : $config['id_form'];
@@ -532,7 +534,7 @@ function kleeja_get_link($pid, $file_info = array())
 
 	#add another type of links if you want
 	#if $config['id_form']  == 'another things' : do another things .. 
-	($hook = kleeja_run_hook('kleeja_get_link_d_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_get_link_d_func')) ? eval($hook) : null; //run hook
 
 
 	#if the file infos gives as regular params, then change them
@@ -564,7 +566,7 @@ function kleeja_get_link($pid, $file_info = array())
 	$return = $config['siteurl'] . str_replace(array_keys($file_info), array_values($file_info), $link);
 
 
-	($hook = kleeja_run_hook('kleeja_get_link_func_rerun')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_get_link_func_rerun')) ? eval($hook) : null; //run hook
 	
 	return $return; 
 }
@@ -575,6 +577,8 @@ function kleeja_get_link($pid, $file_info = array())
 */
 function kleeja_style_info($style_name)
 {
+	global $plugin;
+
 	$inf_path = PATH . 'styles/' . $style_name . '/info.txt';
 
 	//is info.txt exists or not
@@ -613,7 +617,7 @@ function kleeja_style_info($style_name)
 		}
 	}
 
-	($hook = kleeja_run_hook('kleeja_style_info_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_style_info_func')) ? eval($hook) : null; //run hook
 
 	return $inf_r;
 }
@@ -627,7 +631,9 @@ function kleeja_style_info($style_name)
 */
 function is_browser($b)
 {
-	//is there , which mean -OR-
+	global $plugin;
+
+	#is there , which mean -OR-
 	if(strpos($b, ',') !== false)
 	{
 		$e = explode(',', $b);
@@ -698,7 +704,7 @@ function is_browser($b)
 		break;
 	}
     
-	($hook = kleeja_run_hook('is_browser_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('is_browser_func')) ? eval($hook) : null; //run hook
     return $return;
 }
 
@@ -755,7 +761,7 @@ function echo_array_ajax($array)
 define('TIME_FORMAT', 'd-m-Y h:i a'); # to be moved to configs later
 function kleeja_date($time, $human_time = true, $format = false)
 {
-	global $lang, $config;
+	global $lang, $config, $plugin;
 
 	if((time() - $time > (86400 * 9)) || $format || !$human_time)
 	{
@@ -794,7 +800,7 @@ function kleeja_date($time, $human_time = true, $format = false)
 
 	$return = $lang['W_FROM'] .  ' ' . $return;
 
-	($hook = kleeja_run_hook('kleeja_date_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_date_func')) ? eval($hook) : null; //run hook
 
 	return $return;
 }
@@ -805,6 +811,8 @@ function kleeja_date($time, $human_time = true, $format = false)
  */
 function time_zones()
 {
+	global $plugin;
+
 	$zones = array(
 		'Kwajalein' => -12.00,
 		'Pacific/Midway' => -11.00,
@@ -842,7 +850,7 @@ function time_zones()
 		'Pacific/Tongatapu' => 13.00
 	);
 	
-	($hook = kleeja_run_hook('time_zones_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('time_zones_func')) ? eval($hook) : null; //run hook
 	
 	return $zones;
 }
@@ -855,9 +863,11 @@ function time_zones()
  */
 function is_image($ext)
 {
+	global $plugin;
+
 	$check = in_array(strtolower(trim($ext)), array('gif', 'jpg', 'jpeg', 'bmp', 'png')) ? true : false;
 
-	($hook = kleeja_run_hook('is_image_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('is_image_func')) ? eval($hook) : null; //run hook
 
 	return $check;
 }
@@ -870,6 +880,8 @@ function is_image($ext)
  */
 function shorten_text($text, $until = 30)
 {
+	global $plugin;
+
 	$until = $until < 4 ? 4 : $until;
 
 	if (strlen($text) >= $until)
@@ -881,7 +893,7 @@ function shorten_text($text, $until = 30)
 		$return = $text;
 	}
 
-	($hook = kleeja_run_hook('shorten_text_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('shorten_text_func')) ? eval($hook) : null; //run hook
 
 	return $return;
 }

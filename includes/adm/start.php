@@ -18,7 +18,7 @@ if (!defined('IN_ADMIN'))
 
 #hook to use it for start page, also there is a hook at admin/index.php that you
 #can use it with all includes/adm files, just hook your codes and gooo...
-($hook = kleeja_run_hook('default_admin_page')) ? eval($hook) : null; //run hook 
+($hook = $plugin->run_hook('default_admin_page')) ? eval($hook) : null; //run hook 
 
 
 #page info
@@ -90,7 +90,7 @@ if(version_compare(strtolower(KLEEJA_VERSION), strtolower($v['version_number']),
 									'msg'=> sprintf($lang['UPDATE_NOW_S'] , KLEEJA_VERSION, $v['version_number']) . '<br />' . '<a href="http://www.kleeja.com/">www.kleeja.com</a>'
 							);
 
-	($hook = kleeja_run_hook('admin_update_now')) ? eval($hook) : null; //run hook 
+	($hook = $plugin->run_hook('admin_update_now')) ? eval($hook) : null; //run hook 
 }
 
 

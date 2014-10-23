@@ -119,7 +119,7 @@ function kleeja_auth_login ($name, $pass, $hashed = false, $expire, $loginadm = 
 		$query_salt['WHERE']	= "userid=" . intval($name);
 	}
 
-	($hook = kleeja_run_hook('qr_select_usrdata_vb_usr_class')) ? eval($hook) : null; //run hook				
+	($hook = $plugin->run_hook('qr_select_usrdata_vb_usr_class')) ? eval($hook) : null; //run hook				
 	$result_salt = $SQLVB->build($query_salt);
 
 	if ($SQLVB->num($result_salt) > 0) 
@@ -176,7 +176,7 @@ function kleeja_auth_login ($name, $pass, $hashed = false, $expire, $loginadm = 
 												), $expire);
 						}
 
-						($hook = kleeja_run_hook('qr_while_usrdata_vb_usr_class')) ? eval($hook) : null; //run hook
+						($hook = $plugin->run_hook('qr_while_usrdata_vb_usr_class')) ? eval($hook) : null; //run hook
 					}
 					$SQLVB->free($result);
 				}#nums_sql2

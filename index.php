@@ -31,7 +31,7 @@ include PATH . 'includes/classes/uploading.php';
 $kljup	= new uploading;
 $kljup->allowed_extensions = $d_groups[$user->data['group_id']]['exts'];
 
-($hook = kleeja_run_hook('begin_index_page')) ? eval($hook) : null; //run hook
+($hook = $plugin->run_hook('begin_index_page')) ? eval($hook) : null; //run hook
 
 #Is kleeja only for memebers ?! 
 if(empty($d_groups[2]['exts']) && !$user->is_user())
@@ -85,7 +85,7 @@ if ($show_online)
 	$timeout2		= time()-$timeout;  
 
 	//put another bot name
-	($hook = kleeja_run_hook('anotherbots_online_index_page')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('anotherbots_online_index_page')) ? eval($hook) : null; //run hook
 
 	$query = array(
 					'SELECT'	=> 'u.name',
@@ -93,13 +93,13 @@ if ($show_online)
 					'WHERE'		=> "u.last_visit > $timeout2"
 				);
 
-	($hook = kleeja_run_hook('qr_select_online_index_page')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('qr_select_online_index_page')) ? eval($hook) : null; //run hook
 
 	$result	= $SQL->build($query); 
 
 	while($row=$SQL->fetch_array($result))
 	{
-		($hook = kleeja_run_hook('while_qr_select_online_index_page')) ? eval($hook) : null; //run hook	
+		($hook = $plugin->run_hook('while_qr_select_online_index_page')) ? eval($hook) : null; //run hook	
 
 		$usersnum++; 
 		$online_names[$row['name']] = $row['name'];
@@ -130,11 +130,11 @@ if ($show_online)
 		$show_online = false;
 	}
 
-	($hook = kleeja_run_hook('if_online_index_page')) ? eval($hook) : null; //run hook	
+	($hook = $plugin->run_hook('if_online_index_page')) ? eval($hook) : null; //run hook	
 }#allow_online
 
 
-($hook = kleeja_run_hook('end_index_page')) ? eval($hook) : null; //run hook	
+($hook = $plugin->run_hook('end_index_page')) ? eval($hook) : null; //run hook	
 
 
 #header

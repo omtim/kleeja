@@ -25,7 +25,7 @@ include PATH . 'includes/common.php';
 $extra_code_in_header = '';
 
 
-($hook = kleeja_run_hook('begin_usrcp_page')) ? eval($hook) : null; //run hook
+($hook = $plugin->run_hook('begin_usrcp_page')) ? eval($hook) : null; //run hook
 
 /**
  * User Control Page
@@ -48,12 +48,12 @@ switch (g('go', 'str', ''))
 		$t_lname = p('lname', 'str', ''); 
 		$t_lpass = p('lpass', 'str', ''); 
 
-		($hook = kleeja_run_hook('login_before_submit')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('login_before_submit')) ? eval($hook) : null; //run hook
 		
 		#already a user? 
 		if ($user->is_user())
 		{
-			($hook = kleeja_run_hook('login_logon_before')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('login_logon_before')) ? eval($hook) : null; //run hook
 
 			$errorpage = true;
 			$text	= $lang['LOGINED_BEFORE'] . '<br /> <a href="' . $config['siteurl']  . ($config['mod_writer'] ?  'logout.html' : 'ucp.php?go=logout') . '">' . $lang['LOGOUT'] . '</a>';
@@ -63,7 +63,7 @@ switch (g('go', 'str', ''))
 		{
 			$ERRORS	= array();
 
-			($hook = kleeja_run_hook('login_after_submit')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('login_after_submit')) ? eval($hook) : null; //run hook
 
 			#check for form key
 			if(!kleeja_check_form_key('login'))
@@ -79,7 +79,7 @@ switch (g('go', 'str', ''))
 				$ERRORS['login_check'] = $lang['LOGIN_ERROR'];
 			}
 
-			($hook = kleeja_run_hook('login_after_submit2')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('login_after_submit2')) ? eval($hook) : null; //run hook
 
 			#if no errors after submit, then ok
 			if(empty($ERRORS))
@@ -91,7 +91,7 @@ switch (g('go', 'str', ''))
 				}
 
 				$errorpage = true;
-				($hook = kleeja_run_hook('login_data_no_error')) ? eval($hook) : null; //run hook
+				($hook = $plugin->run_hook('login_data_no_error')) ? eval($hook) : null; //run hook
 
 				$text	= $lang['LOGIN_SUCCESFUL'] . ' <br /> <a href="' . $config['siteurl'] . '">' . $lang['HOME'] . '</a>';
 				kleeja_info($text, '', true, $config['siteurl'], 1);
@@ -119,7 +119,7 @@ switch (g('go', 'str', ''))
 		#if Kleeja user system is intgrated into other system, then links of user system goes there
 		else if ($config['user_system'] != 1)
 		{
-			($hook = kleeja_run_hook('register_not_default_sys')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('register_not_default_sys')) ? eval($hook) : null; //run hook
 
 			if(!empty($register_script_path))
 			{
@@ -151,7 +151,7 @@ switch (g('go', 'str', ''))
 		#already a user
 		if ($user->is_user())
 		{
-			($hook = kleeja_run_hook('register_logon_before')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('register_logon_before')) ? eval($hook) : null; //run hook
 			kleeja_info($lang['REGISTERED_BEFORE']);
 		}
 
@@ -164,14 +164,14 @@ switch (g('go', 'str', ''))
 		#no form submit yet
 		if (!ip('submit'))
 		{
-			($hook = kleeja_run_hook('register_no_submit')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('register_no_submit')) ? eval($hook) : null; //run hook
 		}
 		#form submit
 		else
 		{	
 			$ERRORS = array();
 
-			($hook = kleeja_run_hook('register_submit')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('register_submit')) ? eval($hook) : null; //run hook
 
 			#check for form key
 			if(!kleeja_check_form_key('register'))
@@ -208,7 +208,7 @@ switch (g('go', 'str', ''))
 							'WHERE'		=> "u.clean_name='" . $SQL->escape($user->cleanusername($t_lname)) . "' OR u.mail='" . strtolower($SQL->escape($t_lmail)) . "'",
 						);
 	
-				($hook = kleeja_run_hook('register_query_chk')) ? eval($hook) : null; //run hook
+				($hook = $plugin->run_hook('register_query_chk')) ? eval($hook) : null; //run hook
 
 				$result_chk		= $SQL->build($query_chk);
 				if($SQL->num($result_chk))
@@ -230,7 +230,7 @@ switch (g('go', 'str', ''))
 				}
 			}
 
-			($hook = kleeja_run_hook('register_submit2')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('register_submit2')) ? eval($hook) : null; //run hook
 
 			#no errors, lets do process
 			if(empty($ERRORS))	 
@@ -248,7 +248,7 @@ switch (g('go', 'str', ''))
 								'VALUES'	=> "'$name', '$pass', '$user_salt', '$mail', " . time() . ", '$session_id','$clean_name', " . intval($config['default_group'])
 							);
 
-				($hook = kleeja_run_hook('qr_insert_new_user_register')) ? eval($hook) : null; //run hook
+				($hook = $plugin->run_hook('qr_insert_new_user_register')) ? eval($hook) : null; //run hook
 
 				if ($SQL->build($insert_query))
 				{
@@ -261,7 +261,7 @@ switch (g('go', 'str', ''))
 											'SET'		=> "users=users+1, lastuser='$name'",
 											);
 
-					($hook = kleeja_run_hook('ok_added_users_register')) ? eval($hook) : null; //run hook
+					($hook = $plugin->run_hook('ok_added_users_register')) ? eval($hook) : null; //run hook
 
 					if($SQL->build($update_query))
 					{
@@ -280,7 +280,7 @@ switch (g('go', 'str', ''))
 
 		case 'logout':
 		
-		($hook = kleeja_run_hook('begin_logout')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('begin_logout')) ? eval($hook) : null; //run hook
 
 		if ($user->logout())
 		{
@@ -292,14 +292,14 @@ switch (g('go', 'str', ''))
 			kleeja_error($lang['LOGOUT_ERROR']);
 		}
 
-		($hook = kleeja_run_hook('end_logout')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('end_logout')) ? eval($hook) : null; //run hook
 		
 		break;
 
 
 		case 'fileuser': 
 
-		($hook = kleeja_run_hook('begin_fileuser')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('begin_fileuser')) ? eval($hook) : null; //run hook
 
 		
 		include PATH . 'includes/functions/functions_files.php';
@@ -321,14 +321,14 @@ switch (g('go', 'str', ''))
 		#Not allowed to browse files's folders
 		if (!user_can('access_fileusers') && !$user_himself)
 		{
-			($hook = kleeja_run_hook('user_cannot_access_fileusers')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('user_cannot_access_fileusers')) ? eval($hook) : null; //run hook
 			kleeja_info($lang['HV_NOT_PRVLG_ACCESS'], $lang['HV_NOT_PRVLG_ACCESS']);
 		}
 
 		#Not allowed to access this page ?
 		if (!user_can('access_fileuser') && $user_himself)
 		{
-			($hook = kleeja_run_hook('user_cannot_access_fileuser')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('user_cannot_access_fileuser')) ? eval($hook) : null; //run hook
 			kleeja_info($lang['HV_NOT_PRVLG_ACCESS'], $lang['HV_NOT_PRVLG_ACCESS']);
 		}
 
@@ -392,7 +392,7 @@ switch (g('go', 'str', ''))
 			$no_results = false;
 
 			$query['LIMIT'] = "$start, $perpage";
-			($hook = kleeja_run_hook('qr_select_files_in_fileuser')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('qr_select_files_in_fileuser')) ? eval($hook) : null; //run hook
 
 			$result	= $SQL->build($query);
 
@@ -406,7 +406,7 @@ switch (g('go', 'str', ''))
 					$sizes = 0;
 				
 				
-					($hook = kleeja_run_hook('submit_in_fileuser')) ? eval($hook) : null; //run hook	
+					($hook = $plugin->run_hook('submit_in_fileuser')) ? eval($hook) : null; //run hook	
 
 					//check for form key
 					if(!kleeja_check_form_key('fileuser', 1800 /* half hour */))
@@ -454,7 +454,7 @@ switch (g('go', 'str', ''))
 								'WHERE'		=> "id IN (" . implode(',', $ids) . ")"
 							);
 
-					($hook = kleeja_run_hook('qr_del_files_in_filecp')) ? eval($hook) : null; //run hook	
+					($hook = $plugin->run_hook('qr_del_files_in_filecp')) ? eval($hook) : null; //run hook	
 					$SQL->build($query_del);
 
 					if(($files_num <= $stat_files) && ($imgs_num <= $stat_imgs))
@@ -479,7 +479,7 @@ switch (g('go', 'str', ''))
 			}
 		}#num if
 
-		($hook = kleeja_run_hook('end_fileuser')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('end_fileuser')) ? eval($hook) : null; //run hook
 
 		break;
 
@@ -539,14 +539,14 @@ switch (g('go', 'str', ''))
 		$t_pmail		= p('pmail', 'mail', $user->data['mail']);
 		$t_show_my_filecp= p('show_my_filecp', 'bool', false);
 
-		($hook = kleeja_run_hook('no_submit_profile')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('no_submit_profile')) ? eval($hook) : null; //run hook
 
 		# after submit
 		if (ip('submit_data'))
 		{
 			$ERRORS	= array();
 
-			($hook = kleeja_run_hook('submit_profile')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('submit_profile')) ? eval($hook) : null; //run hook
 
 			//check for form key
 			if(!kleeja_check_form_key('profile'))
@@ -593,7 +593,7 @@ switch (g('go', 'str', ''))
 								'WHERE'		=> "u.mail='" . $SQL->escape($t_pmail) . "'",
 							);
 	
-					($hook = kleeja_run_hook('profile_query_chk')) ? eval($hook) : null; //run hook
+					($hook = $plugin->run_hook('profile_query_chk')) ? eval($hook) : null; //run hook
 
 					$result_chk	= $SQL->build($query_chk);
 					if($SQL->num($result_chk))
@@ -606,7 +606,7 @@ switch (g('go', 'str', ''))
 				$new_mail = true;
 			}
 
-			($hook = kleeja_run_hook('submit_profile2')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('submit_profile2')) ? eval($hook) : null; //run hook
 
 			#no errors , do it
 			if(empty($ERRORS))
@@ -624,7 +624,7 @@ switch (g('go', 'str', ''))
 								'WHERE'		=> 'id=' . $id,
 								);
 
-				($hook = kleeja_run_hook('qr_update_data_in_profile')) ? eval($hook) : null; //run hook
+				($hook = $plugin->run_hook('qr_update_data_in_profile')) ? eval($hook) : null; //run hook
 
 				if(trim($update_query['SET']) == '')
 				{
@@ -641,7 +641,7 @@ switch (g('go', 'str', ''))
 
 		}#else submit
 
-		($hook = kleeja_run_hook('end_profile')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('end_profile')) ? eval($hook) : null; //run hook
 
 		break; 
 
@@ -666,7 +666,7 @@ switch (g('go', 'str', ''))
 		# As in ucp.php?go=get_pass&activation_key=1af3405662ec373d672d003cf27cf998&uid=1 
 		if(ig('activation_key') && ig('uid'))
 		{
-			($hook = kleeja_run_hook('get_pass_activation_key')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('get_pass_activation_key')) ? eval($hook) : null; //run hook
 
 			$h_key = preg_replace('![^a-z0-9]!', '', g('activation_key', 'str'));
 			$u_id = g('uid', 'int');
@@ -683,7 +683,7 @@ switch (g('go', 'str', ''))
 						'WHERE'		=> "hash_key='" . $SQL->escape($h_key) . "' AND id=" . $u_id,
 					);
 	
-			($hook = kleeja_run_hook('get_pass_f_query')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('get_pass_f_query')) ? eval($hook) : null; //run hook
 
 			$result= $SQL->build($query);
 
@@ -699,7 +699,7 @@ switch (g('go', 'str', ''))
 								'WHERE'	=> 'id=' . $u_id,
 							);
 
-				($hook = kleeja_run_hook('qr_update_newpass_activation')) ? eval($hook) : null; //run hook
+				($hook = $plugin->run_hook('qr_update_newpass_activation')) ? eval($hook) : null; //run hook
 
 				$SQL->build($update_query);
 
@@ -715,7 +715,7 @@ switch (g('go', 'str', ''))
 		#logon already
 		if ($user->is_user())
 		{
-			($hook = kleeja_run_hook('get_pass_logon_before')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('get_pass_logon_before')) ? eval($hook) : null; //run hook
 			kleeja_info($lang['LOGINED_BEFORE']);
 		}
 
@@ -725,14 +725,14 @@ switch (g('go', 'str', ''))
 		#no submit yet
 		if (!ip('submit'))
 		{
-			($hook = kleeja_run_hook('no_submit_get_pass')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('no_submit_get_pass')) ? eval($hook) : null; //run hook
 		}
 		#submited
 		else
 		{ 
 			$ERRORS	= array();
 
-			($hook = kleeja_run_hook('submit_get_pass')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('submit_get_pass')) ? eval($hook) : null; //run hook
 			//check for form key
 			if(!kleeja_check_form_key('get_pass'))
 			{
@@ -755,7 +755,7 @@ switch (g('go', 'str', ''))
 							'WHERE'		=> "u.mail='" . strtolower($SQL->escape($t_rmail)) . "'",
 						);
 
-				($hook = kleeja_run_hook('get_pass_query_chk')) ? eval($hook) : null; //run hook
+				($hook = $plugin->run_hook('get_pass_query_chk')) ? eval($hook) : null; //run hook
 
 				$result_chk	= $SQL->build($query_chk);
 				if(!$SQL->num($result_chk))
@@ -764,7 +764,7 @@ switch (g('go', 'str', ''))
 				}
 			}
 
-			($hook = kleeja_run_hook('submit_get_pass2')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('submit_get_pass2')) ? eval($hook) : null; //run hook
 
 			#no errors, lets do it
 			if(empty($ERRORS))
@@ -775,7 +775,7 @@ switch (g('go', 'str', ''))
 								'WHERE'	=> "u.mail='" .  $SQL->escape($t_rmail) . "'"
 						);
 
-				($hook = kleeja_run_hook('qr_select_mail_get_pass')) ? eval($hook) : null; //run hook
+				($hook = $plugin->run_hook('qr_select_mail_get_pass')) ? eval($hook) : null; //run hook
 				$result	=	$SQL->build($query);
 	
 				$row = $SQL->fetch($result);
@@ -801,7 +801,7 @@ switch (g('go', 'str', ''))
 								'WHERE'	=> 'id=' . $row['id'],
 							);
 
-				($hook = kleeja_run_hook('qr_update_newpass_get_pass')) ? eval($hook) : null; //run hook
+				($hook = $plugin->run_hook('qr_update_newpass_get_pass')) ? eval($hook) : null; //run hook
 				$SQL->build($update_query);
 
 				$SQL->free($result);
@@ -821,7 +821,7 @@ switch (g('go', 'str', ''))
 			}
 		}
 
-		($hook = kleeja_run_hook('end_get_pass')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('end_get_pass')) ? eval($hook) : null; //run hook
 
 		break; 
 		
@@ -831,14 +831,14 @@ switch (g('go', 'str', ''))
 		//
 		default:
 
-		($hook = kleeja_run_hook('default_usrcp_page')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('default_usrcp_page')) ? eval($hook) : null; //run hook
 
 		kleeja_error($lang['ERROR_NAVIGATATION']);
 
 		break;
 }#end switch
 
-($hook = kleeja_run_hook('end_usrcp_page')) ? eval($hook) : null; //run hook
+($hook = $plugin->run_hook('end_usrcp_page')) ? eval($hook) : null; //run hook
 
 
 #no template, no title, set them to default

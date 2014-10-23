@@ -33,7 +33,7 @@ if (!($config = $cache->get('data_config')))
 					'WHERE'		=> 'c.dynamic = 0',
 				);
 
-	($hook = kleeja_run_hook('qr_select_config_cache')) ? eval($hook) : null; //run hook	
+	($hook = $plugin->run_hook('qr_select_config_cache')) ? eval($hook) : null; //run hook	
 			
 	$result = $SQL->build($query);
 
@@ -57,7 +57,7 @@ if (!($stats = $cache->get('data_stats')))
 					'FROM'		=> "{$dbprefix}stats s"
 			);
 
-	($hook = kleeja_run_hook('qr_select_stats_cache')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('qr_select_stats_cache')) ? eval($hook) : null; //run hook
 
 	$result = $SQL->build($query);
 
@@ -77,7 +77,7 @@ if (!($stats = $cache->get('data_stats')))
 			'stat_last_user'	=> $row['lastuser']
 		);
 
-		($hook = kleeja_run_hook('while_fetch_stats_in_cache')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('while_fetch_stats_in_cache')) ? eval($hook) : null; //run hook
 	}
 
 	$SQL->free($result);
@@ -129,7 +129,7 @@ if (!($banss = $cache->get('data_ban')))
 					'FROM'		=> "{$dbprefix}stats s"
 				);
 
-	($hook = kleeja_run_hook('qr_select_ban_cache')) ? eval($hook) : null; //run hook				
+	($hook = $plugin->run_hook('qr_select_ban_cache')) ? eval($hook) : null; //run hook				
 	$result = $SQL->build($query);
 
 	$row = $SQL->fetch($result);
@@ -161,7 +161,7 @@ if (!($ruless = $cache->get('data_rules')))
 					'FROM'		=> "{$dbprefix}stats s"
 				);
 
-	($hook = kleeja_run_hook('qr_select_rules_cache')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('qr_select_rules_cache')) ? eval($hook) : null; //run hook
 	$result = $SQL->build($query);
 
 	$row = $SQL->fetch($result);
@@ -180,7 +180,7 @@ if (!($extras = $cache->get('data_extra')))
 					'FROM'		=> "{$dbprefix}stats s"
 					);
 
-	($hook = kleeja_run_hook('qr_select_extra_cache')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('qr_select_extra_cache')) ? eval($hook) : null; //run hook
 	$result = $SQL->build($query);
 
 	$row = $SQL->fetch($result);
@@ -208,7 +208,7 @@ if (!($d_groups = $cache->get('data_groups')))
 					'ORDER_BY'	=> 'g.group_id ASC',
 					);
 
-	($hook = kleeja_run_hook('qr_select_groups_cache')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('qr_select_groups_cache')) ? eval($hook) : null; //run hook
 	$result = $SQL->build($query);
 	
 	#Initiating
@@ -228,7 +228,7 @@ if (!($d_groups = $cache->get('data_groups')))
 					'ORDER_BY'	=> 'g.group_id ASC',
 					);
 
-	($hook = kleeja_run_hook('qr_select_groups_data_cache')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('qr_select_groups_data_cache')) ? eval($hook) : null; //run hook
 	$result = $SQL->build($query);
 
 	while($row=$SQL->fetch($result))
@@ -244,7 +244,7 @@ if (!($d_groups = $cache->get('data_groups')))
 					'ORDER_BY'	=> 'g.group_id ASC',
 					);
 
-	($hook = kleeja_run_hook('qr_select_groups_acls_cache')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('qr_select_groups_acls_cache')) ? eval($hook) : null; //run hook
 	$result2 = $SQL->build($query2);
 
 	while($row=$SQL->fetch($result2))
@@ -260,7 +260,7 @@ if (!($d_groups = $cache->get('data_groups')))
 					'ORDER_BY'	=> 'g.group_id ASC',
 					);
 
-	($hook = kleeja_run_hook('qr_select_groups_exts_cache')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('qr_select_groups_exts_cache')) ? eval($hook) : null; //run hook
 	$result3 = $SQL->build($query3);
 
 	while($row=$SQL->fetch($result3))

@@ -134,7 +134,7 @@
 		#dreop tabe
 		if(strpos($name, 'insert') === false)
 		{
-			$SQL->query("DROP TABLE" . $dbprefix . $name .";");
+			$SQL->query("DROP TABLE IF EXISTS " . $dbprefix . $name .";");
 		}
 
 		if($SQL->query($sql_content))

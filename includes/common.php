@@ -132,6 +132,7 @@ switch ($db_type)
 include PATH . 'includes/classes/user.php';
 include PATH . 'includes/classes/pagination.php';
 include PATH . 'includes/classes/cache.php';
+include PATH . 'includes/classes/plugins.php';
 
 
 
@@ -153,6 +154,7 @@ unset($dbpass);
 #$tpl	= new kleeja_style;
 $usrcp = $user	= new user;
 $cache = new cache;
+$plugin = new plugins();
 
 
 #return to the default user system if this given
@@ -310,5 +312,9 @@ if(empty($perpage) || intval($perpage) == 0)
 $captcha_file_path = $config['siteurl'] . 'captcha.php';
 
 
-($hook = kleeja_run_hook('end_common')) ? eval($hook) : null; //run hook
+($hook = $plugin->run_hook('end_common')) ? eval($hook) : null; //run hook
+
+
+
+
 
