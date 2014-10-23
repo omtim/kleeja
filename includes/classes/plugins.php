@@ -14,6 +14,10 @@ if (!defined('IN_COMMON'))
 }
 
 
+# We are in the plugin system, plugins files won't work outside here
+define('IN_PLUGINS_SYSTEM', true);
+
+
 /**
 * Kleeja Plugins System
 * @package plugins
@@ -29,6 +33,9 @@ class plugins
 	 * All hooks from all plugins listed in this variable
 	 */
 	private $all_plugins_hooks = array();
+	
+	
+	private $plugin_path = '';
 
 	/**
 	 * Initating the class
@@ -41,6 +48,8 @@ class plugins
 			return false;
 		}
 
+		$this->plugin_path = PATH . 'plugins';
+	
 		$this->load_plugins();
 	}
 	
@@ -49,18 +58,22 @@ class plugins
 	 */
 	private function load_plugins()
 	{
-		$dir = PATH . 'plugins';
-		$dh  = opendir($dir);
+		$dh  = opendir($this->plugin_path);
 		$i = 0;
 		while (false !== ($filename = readdir($dh)))
 		{
 			if(strpos($filename, '.php') !== false)
 			{
 		    	$this->plugins[$i] = str_replace('.php', '', $filename);
+				$this->fetch_plugin($this->plugins[$i]);
 				$i++;
 			}
 		}
-		sort($this->plugins);
+		
+		#sort the plugins from high to low priority
+		krsort($this->plugins);
+		
+		
 		print_r($this->plugins);
 	}
 	
@@ -70,10 +83,43 @@ class plugins
 	 */
 	private function fetch_plugin($plugin_name)
 	{
-		include PATH . 'plugins/' . $plugin_name . '.php';
+		#load the plugin
+		include $this->plugin_path . '/' . $plugin_name . '.php';
+	
+		#bring the real priority of plugin and replace current one
+		$plugin_current_priority = array_search($plugin_name, $this->plugins);
+		unset($this->plugins[$plugin_current_priority]);
+		$this->plugins[$kleeja_plugin[$plugin_name]['information']['plugin_priority']] = $plugin_name;
+		
+		
+		#get the information...
+		
+		#add plugin hooks to global hooks, depend on its priority
+		
+		
+		
+		//print_r($this->plugins);
+		
+	}
+	
+	/**
+	 * Check if this is the first run of a plugin
+	 */
+	private function check_first_run($plugin_name)
+	{
+		global $SQL;
 		
 		
 	}
+	
+	/**
+	 * Delete a plugin
+	 */
+	public function unistall_plugin($plugin_name)
+	{
+		
+	}
+
 	
 	/**
 	 * Insert plugin hooks into 
@@ -84,7 +130,8 @@ class plugins
 	}
 	
 	/**
-	 * 
+	 * Bring all codes of this hook
+	 * This function scattered all over kleeja files
 	 */
 	public function run_hook($hook_name)
 	{
