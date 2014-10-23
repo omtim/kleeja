@@ -116,6 +116,8 @@ if (!$dbname || !$dbuser)
 $root_path = PATH;
 $db_type = isset($db_type) ? $db_type : 'mysqli';
 
+include PATH . 'includes/functions/functions.php';
+include PATH . 'includes/functions/functions_display.php';
 include PATH . 'includes/functions/functions_alternative.php';
 include PATH . 'includes/version.php';
 
@@ -130,8 +132,8 @@ include PATH . 'includes/classes/style.php';
 include PATH . 'includes/classes/user.php';
 include PATH . 'includes/classes/pagination.php';
 include PATH . 'includes/classes/cache.php';
-include PATH . 'includes/functions/functions.php';
-include PATH . 'includes/functions/functions_display.php';
+
+
 
 if(defined('IN_ADMIN'))
 {

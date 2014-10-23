@@ -19,6 +19,10 @@ if (!defined('IN_COMMON'))
 }  
 
 
+//include once func will check for us if the file was included before 
+include_once PATH . 'includes/functions/functions_display.php';
+include_once PATH . 'includes/functions/functions.php';
+
 /**
  * Wrapper for MySQLi database driver
  */
