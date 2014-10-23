@@ -128,7 +128,7 @@ switch ($db_type)
 		include PATH . 'includes/classes/mysqli.php';
 	break;
 }
-include PATH . 'includes/classes/style.php';
+#include PATH . 'includes/classes/style.php';
 include PATH . 'includes/classes/user.php';
 include PATH . 'includes/classes/pagination.php';
 include PATH . 'includes/classes/cache.php';
@@ -150,7 +150,7 @@ if(empty($script_encoding))
 #initiate classes
 $SQL	= new database($dbserver, $dbuser, $dbpass, $dbname);
 unset($dbpass);
-$tpl	= new kleeja_style;
+#$tpl	= new kleeja_style;
 $usrcp = $user	= new user;
 $cache = new cache;
 
@@ -190,10 +190,10 @@ $config = array_merge($config, (array) $d_groups[$user->data['group_id']]['confi
 
 
 #no tpl caching in dev stage  
-if(defined('DEV_STAGE'))
-{
-	$tpl->caching = false;
-}
+#if(defined('DEV_STAGE'))
+#{
+	#$tpl->caching = false;
+#}
 
 #admin path
 !defined('ADMIN_PATH') ? define('ADMIN_PATH', $config['siteurl'] . 'admin/') : null;

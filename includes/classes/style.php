@@ -9,6 +9,12 @@
 */
 
 
+
+# NOTE FOR DEVELOPERS!
+# WE NO LONGER USE this template system, 
+# Insted we use native PHP code inside 
+# the templates! go seeeeeee
+
 //no for directly open
 if (!defined('IN_COMMON'))
 {

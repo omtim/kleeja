@@ -20,7 +20,22 @@ if (!defined('IN_COMMON'))
 */
 class plugins
 {
+	public $var = '';
 	
-
+	public function __construct()
+	{
+		
+	}
+	
+	private load_plugins()
+	{
+		
+	}
+	
+	
+	private fetch_plugin_inforamtion()
+	{
+		
+	}
 }
 
