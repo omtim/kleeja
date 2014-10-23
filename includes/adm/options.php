@@ -142,7 +142,7 @@ while($row=$SQL->fetch($result))
 		}
 	}
 
-	($hook = kleeja_run_hook('while_fetch_adm_config')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('while_fetch_adm_config')) ? eval($hook) : null; //run hook
 				
 	//options from database [UNDER TEST]
 	if(!empty($row['option'])) 
@@ -216,7 +216,7 @@ while($row=$SQL->fetch($result))
 			}
 		}
 
-		($hook = kleeja_run_hook('after_submit_adm_config')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('after_submit_adm_config')) ? eval($hook) : null; //run hook
 
 		$update_query = array(
 								'UPDATE'	=> "{$dbprefix}config",
@@ -260,7 +260,7 @@ foreach($types as $typekey => $type)
 //after submit
 if (isset($_POST['submit']))
 {
-	($hook = kleeja_run_hook('after_submit_adm_config')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('after_submit_adm_config')) ? eval($hook) : null; //run hook
 
 	//empty ..
 	/*

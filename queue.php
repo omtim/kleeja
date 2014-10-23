@@ -22,7 +22,7 @@ define('PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 include PATH . 'includes/common.php';
 
 
-($hook = kleeja_run_hook('begin_queue_page')) ? eval($hook) : null; //run hook
+($hook = $plugin->run_hook('begin_queue_page')) ? eval($hook) : null; //run hook
 
 #img header and print spacer gif
 header('Cache-Control: no-cache');
@@ -60,7 +60,7 @@ if($for != 'all')
 
 
 
-($hook = kleeja_run_hook('qr_select_klj_clean_old_queue')) ? eval($hook) : null; //run hook
+($hook = $plugin->run_hook('qr_select_klj_clean_old_queue')) ? eval($hook) : null; //run hook
 
 $result	= $SQL->build($query);					
 $num_to_delete = $SQL->num_rows($result);
@@ -87,7 +87,7 @@ $query_del	= array(
 						'WHERE'	=> "id IN (" . implode(',', $ids) . ")"
 					);
 
-($hook = kleeja_run_hook('qr_del_delf_old_table')) ? eval($hook) : null; //run hook
+($hook = $plugin->run_hook('qr_del_delf_old_table')) ? eval($hook) : null; //run hook
 
 $SQL->build($query_del);
 

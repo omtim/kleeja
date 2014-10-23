@@ -784,7 +784,7 @@ case 'group_data':
 		#submit, why here ? dont ask me just accept it as it.
 		if(isset($_POST['editdata']))
 		{
-			($hook = kleeja_run_hook('after_submit_adm_users_groupdata')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('after_submit_adm_users_groupdata')) ? eval($hook) : null; //run hook
 
 			$new[$row['name']] = isset($_POST[$row['name']]) ? $_POST[$row['name']] : $row['value'];
 

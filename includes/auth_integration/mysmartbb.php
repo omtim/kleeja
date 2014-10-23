@@ -86,7 +86,7 @@ function kleeja_auth_login ($name, $pass, $hashed = false, $expire, $loginadm = 
 		$query_salt['WHERE']	= "id=" . intval($name);
 	}
 	
-	($hook = kleeja_run_hook('qr_select_usrdata_mysbb_usr_class')) ? eval($hook) : null; //run hook	
+	($hook = $plugin->run_hook('qr_select_usrdata_mysbb_usr_class')) ? eval($hook) : null; //run hook	
 	$result = $SQLMS->build($query);
 
 
@@ -118,7 +118,7 @@ function kleeja_auth_login ($name, $pass, $hashed = false, $expire, $loginadm = 
 				$usrcp->kleeja_set_cookie('ulogu', $usrcp->en_de_crypt($row['id'] . '|' . $row['password'] . '|' . $expire . '|' . $hash_key_expire . '|' . GROUP_ID . '|' . $user_y), $expire);
 			}
 
-			($hook = kleeja_run_hook('qr_while_usrdata_mysbb_usr_class')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('qr_while_usrdata_mysbb_usr_class')) ? eval($hook) : null; //run hook
 			
 		}
 

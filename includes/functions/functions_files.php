@@ -40,7 +40,7 @@ function get_mime_for_header($filename)
 		$mimetype = 'application/octetstream';
 	}
 
-	($hook = kleeja_run_hook('get_mime_for_header_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('get_mime_for_header_func')) ? eval($hook) : null; //run hook
 	return $mimetype;
 }
 
@@ -53,7 +53,7 @@ function get_mime_for_header($filename)
 */
 function fetch_remote_file($url, $save_in = false, $timeout = 20, $head_only = false, $max_redirects = 10, $binary = false)
 {
-	($hook = kleeja_run_hook('kleeja_fetch_remote_file_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_fetch_remote_file_func')) ? eval($hook) : null; //run hook
 
 	#Quite unlikely that this will be allowed on a shared host, but it can't hurt
 	if (function_exists('ini_set'))

@@ -67,7 +67,7 @@
 	
 
 	<!-- end of index -->
-	<?php ($hook = kleeja_run_hook('index_body_tpl_end_page')) ? eval($hook) : null;?>
+	<?php ($hook = $plugin->run_hook('index_body_tpl_end_page')) ? eval($hook) : null;?>
 
 <div class="clr"></div>
 </div>

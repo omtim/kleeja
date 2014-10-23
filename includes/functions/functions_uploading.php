@@ -122,7 +122,7 @@ function change_filename($filename, $ext)
 	}
 
 
-	($hook = kleeja_run_hook('change_filename_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('change_filename_func')) ? eval($hook) : null; //run hook
 
 	return $return;
 }
@@ -158,7 +158,7 @@ function check_file_content($file_path)
 	}
 
 
-	($hook = kleeja_run_hook('kleeja_check_mime_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_check_mime_func')) ? eval($hook) : null; //run hook
 	
 	return $return;
 }
@@ -173,7 +173,7 @@ function user_is_flooding()
 
 	$return = 'empty';
 
-	($hook = kleeja_run_hook('user_is_flooding_func')) ? eval($hook) : null; //run 
+	($hook = $plugin->run_hook('user_is_flooding_func')) ? eval($hook) : null; //run 
 
 	if($return != 'empty')
 	{
@@ -433,7 +433,7 @@ function create_thumb_imagick($name, $ext, $filename, $new_w, $new_h)
 
 function create_watermark($name, $ext)
 {
-	($hook = kleeja_run_hook('helper_watermark_func')) ? eval($hook) : null; //run hook	
+	($hook = $plugin->run_hook('helper_watermark_func')) ? eval($hook) : null; //run hook	
 	
 	#is this file really exsits ?
 	if(!file_exists($name))

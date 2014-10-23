@@ -35,7 +35,7 @@ function kleeja_admin_err($msg, $navigation = true, $title='', $exit = true, $re
 	global $text, $tpl, $SHOW_LIST, $adm_extensions, $adm_extensions_menu;
 	global $STYLE_PATH_ADMIN, $lang, $olang, $SQL, $MINI_MENU;
 
-	($hook = kleeja_run_hook('kleeja_admin_err_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_admin_err_func')) ? eval($hook) : null; //run hook
 
 	#Exception for ajax
 	if(isset($_GET['_ajax_']))
@@ -78,7 +78,7 @@ function kleeja_admin_err($msg, $navigation = true, $title='', $exit = true, $re
  */
 function kleeja_admin_info($msg, $navigation=true, $title='', $exit=true, $redirect = false, $rs = 2)
 {
-	($hook = kleeja_run_hook('kleeja_admin_info_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('kleeja_admin_info_func')) ? eval($hook) : null; //run hook
 
 	#since info message and error message are the same, we use one function callback
 	return kleeja_admin_err($msg, $navigation, $title, $exit, $redirect, $rs, 'admin_info');
@@ -108,7 +108,7 @@ function insert_filter($type, $value, $time = false, $user = false, $status = ''
 							'INTO'		=> "{$dbprefix}filters",
 							'VALUES'	=> "'" . ($uid ? $uid : uniqid()) . "', '" . $SQL->escape($type) . "','" . $SQL->escape($value) . "', " . intval($time) . "," . intval($user) . ",'" . $SQL->escape($status) . "'"
 						);
-	($hook = kleeja_run_hook('insert_sql_insert_filter_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('insert_sql_insert_filter_func')) ? eval($hook) : null; //run hook
 
 	$SQL->build($insert_query);
 
@@ -135,7 +135,7 @@ function update_filter($id_or_uid, $value)
 							'WHERE'		=> strval(intval($id_or_uid)) == strval($id_or_uid) ? 'filter_id=' . intval($id_or_uid) : "filter_uid='" . $SQL->escape($id_or_uid) . "'"
 					);
 
-	($hook = kleeja_run_hook('update_filter_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('update_filter_func')) ? eval($hook) : null; //run hook
 
 	$SQL->build($update_query);
 	if($SQL->affected())
@@ -167,7 +167,7 @@ function get_filter($item, $get_by = 'filter_id', $just_value = false)
 	$result	= $SQL->build($query);
 	$v		= $SQL->fetch($result);
 
-	($hook = kleeja_run_hook('get_filter_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('get_filter_func')) ? eval($hook) : null; //run hook
 	
 	$SQL->free($result);
 	if($just_value)
@@ -195,7 +195,7 @@ function filter_exists($item, $get_by = 'filter_id')
 					'WHERE'		=> "f." . $get_by . " = " . ($get_by == 'filter_id' ? intval($item) : "'" . $SQL->escape($item) . "'")
 				);
 
-	($hook = kleeja_run_hook('filter_exists_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('filter_exists_func')) ? eval($hook) : null; //run hook
 
 	$result	= $SQL->build($query);				
 	return $SQL->num($result);
@@ -331,7 +331,7 @@ function get_actual_stats($name)
 	$result	= $SQL->build($query);
 	$v		= $SQL->fetch($result);
 
-	($hook = kleeja_run_hook('get_actual_stats_func')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('get_actual_stats_func')) ? eval($hook) : null; //run hook
 	
 	$SQL->free($result);
 

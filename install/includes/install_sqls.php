@@ -14,7 +14,6 @@ if (!defined('IN_COMMON'))
 	exit();
 }
 
-
 if(empty($install_sqls) || !is_array($install_sqls))
 {
 	$install_sqls = array();
@@ -156,20 +155,16 @@ CREATE TABLE `{$dbprefix}hooks` (
 
 $install_sqls['plugins'] = "
 CREATE TABLE `{$dbprefix}plugins` (
-  `plg_id` int(11) unsigned NOT NULL auto_increment,
-  `plg_name` varchar(255) collate utf8_bin NOT NULL,
-  `plg_ver` varchar(255) collate utf8_bin NOT NULL,
-  `plg_author` varchar(255) collate utf8_bin NOT NULL,
-  `plg_dsc` mediumtext COLLATE utf8_bin NOT NULL,
-  `plg_icon` blob NOT NULL,
-  `plg_uninstall` mediumtext COLLATE utf8_bin NOT NULL,
-  `plg_disabled` tinyint(1) unsigned NOT NULL default '0',
-  `plg_instructions` mediumtext COLLATE utf8_bin NOT NULL,
-  `plg_store` longtext COLLATE utf8_bin NOT NULL,
-  `plg_files` text COLLATE utf8_bin NOT NULL,
+ `plg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+ `plg_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+ `plg_ver` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+ `plg_first_run` tinyint(1) unsigned NOT NULL DEFAULT '0',
+ `plg_uninstall` mediumtext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+ `plg_disabled` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`plg_id`),
-  KEY `plg_name` (`plg_name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+  KEY `plg_name` (`plg_name`),
+	 KEY `plg_first_run` (`plg_first_run`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 ";
 
 $install_sqls['lang'] = "

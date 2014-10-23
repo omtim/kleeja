@@ -265,5 +265,3 @@ if(!function_exists('filesize'))
 		return $filesize;
 	}
 }
-
-

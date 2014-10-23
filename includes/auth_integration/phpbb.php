@@ -141,7 +141,7 @@ function kleeja_auth_login ($name, $pass, $hashed = false, $expire, $loginadm = 
 		return false;
 	}
 	
-	($hook = kleeja_run_hook('qr_select_usrdata_phpbb_usr_class')) ? eval($hook) : null; //run hook		
+	($hook = $plugin->run_hook('qr_select_usrdata_phpbb_usr_class')) ? eval($hook) : null; //run hook		
 	$result = $SQLBB->build($query);
 
 
@@ -180,7 +180,7 @@ function kleeja_auth_login ($name, $pass, $hashed = false, $expire, $loginadm = 
 											), $expire);
 				}
 
-				($hook = kleeja_run_hook('qr_while_usrdata_phpbb_usr_class')) ? eval($hook) : null; //run hook
+				($hook = $plugin->run_hook('qr_while_usrdata_phpbb_usr_class')) ? eval($hook) : null; //run hook
 			}
 			else
 			{

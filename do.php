@@ -22,14 +22,14 @@ define('PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 include PATH . 'includes/common.php';
 include PATH . 'includes/functions/functions_files.php';
 
-($hook = kleeja_run_hook('begin_download_page')) ? eval($hook) : null; //run hook
+($hook = $plugin->run_hook('begin_download_page')) ? eval($hook) : null; //run hook
 
 //
 //page of wait downloading files
 //
 if(ig('id') || ig('filename'))
 {
-	($hook = kleeja_run_hook('begin_download_id_filename')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('begin_download_id_filename')) ? eval($hook) : null; //run hook
 
 	$query = array(
 					'SELECT'	=> 'f.id, f.real_filename, f.name, f.folder, f.size, f.time, f.uploads, f.type',
@@ -59,7 +59,7 @@ if(ig('id') || ig('filename'))
 		$query['WHERE']	= "f.id=" . $id_l;
 	}
 
-	($hook = kleeja_run_hook('qr_download_id_filename')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('qr_download_id_filename')) ? eval($hook) : null; //run hook
 	$result	= $SQL->build($query);
 
 	if ($SQL->num($result))
@@ -100,11 +100,11 @@ if(ig('id') || ig('filename'))
 	else
 	{
 		//file not exists
-		($hook = kleeja_run_hook('not_exists_qr_downlaod_file')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('not_exists_qr_downlaod_file')) ? eval($hook) : null; //run hook
 		kleeja_error($lang['FILE_NO_FOUNDED']);
 	}
 
-	($hook = kleeja_run_hook('b4_showsty_downlaod_id_filename')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('b4_showsty_downlaod_id_filename')) ? eval($hook) : null; //run hook
 
 	//add http reffer to session to prevent errors with some browsers ! 
 	if (ig('filename'))
@@ -153,7 +153,7 @@ else if (ig('down') || ig('downf') ||
 		ig('thmb') || ig('thmbf') || 
 		ig('downex') || ig('downexf'))
 {
-	($hook = kleeja_run_hook('begin_down_go_page')) ? eval($hook) : null; //run hook	
+	($hook = $plugin->run_hook('begin_down_go_page')) ? eval($hook) : null; //run hook	
 
 
 
@@ -249,7 +249,7 @@ else if (ig('down') || ig('downf') ||
 									'f.id=' . $id  . (ig('downex') ? " AND f.type IN ('" . implode("', '", $livexts) . "')" : ''),
 					);
 
-	($hook = kleeja_run_hook('qr_down_go_page_filename')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('qr_down_go_page_filename')) ? eval($hook) : null; //run hook
 	$result	= $SQL->build($query);
 
 	$is_live = false;
@@ -286,7 +286,7 @@ else if (ig('down') || ig('downf') ||
 									'WHERE'	=> $is_id_filename ? "name='" . $filename . "'" : 'id=' . $id,
 								);
 
-			($hook = kleeja_run_hook('qr_update_no_uploads_down')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('qr_update_no_uploads_down')) ? eval($hook) : null; //run hook
 			$SQL->build($update_query);
 
 			//
@@ -310,7 +310,7 @@ else if (ig('down') || ig('downf') ||
 		#not exists img or thumb
 		if(ig('img') || ig('thmb') || ig('thmbf') || ig('imgf'))
 		{
-			($hook = kleeja_run_hook('not_exists_qr_down_img')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('not_exists_qr_down_img')) ? eval($hook) : null; //run hook
 
 			$f = 'images';
 			$n = 'not_exists.jpg';
@@ -322,7 +322,7 @@ else if (ig('down') || ig('downf') ||
 		{
 			
 			#not exists file
-			($hook = kleeja_run_hook('not_exists_qr_down_file')) ? eval($hook) : null; //run hook
+			($hook = $plugin->run_hook('not_exists_qr_down_file')) ? eval($hook) : null; //run hook
 			kleeja_err($lang['FILE_NO_FOUNDED']);
 		}
 	}
@@ -340,7 +340,7 @@ else if (ig('down') || ig('downf') ||
 	$chunksize = 1024*120; //1 kelobyte * 120 = 120kb that will send to user every loop
 	$resuming_on = true;
 
-	($hook = kleeja_run_hook('down_go_page')) ? eval($hook) : null; //run hook	
+	($hook = $plugin->run_hook('down_go_page')) ? eval($hook) : null; //run hook	
 
 
 
@@ -358,7 +358,7 @@ else if (ig('down') || ig('downf') ||
 	#unable to read the file?
 	if(!is_readable($path_file))
 	{
-		($hook = kleeja_run_hook('down_file_not_exists')) ? eval($hook) : null; //run hook
+		($hook = $plugin->run_hook('down_file_not_exists')) ? eval($hook) : null; //run hook
 		if($is_image)
 		{
 			$path_file = 'images/not_exists.jpg';
@@ -490,8 +490,8 @@ else if (ig('down') || ig('downf') ||
 //
 else
 {
-	($hook = kleeja_run_hook('err_navig_download_page')) ? eval($hook) : null; //run hook
+	($hook = $plugin->run_hook('err_navig_download_page')) ? eval($hook) : null; //run hook
 	kleeja_error($lang['ERROR_NAVIGATATION']);
 }
 
-($hook = kleeja_run_hook('end_download_page')) ? eval($hook) : null; //run hook
+($hook = $plugin->run_hook('end_download_page')) ? eval($hook) : null; //run hook
