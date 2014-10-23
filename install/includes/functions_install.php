@@ -39,6 +39,11 @@ if(isset($_GET['change_lang']))
 	}
 }
 
+if(!isset($_path) || empty($_path))
+{
+	$_path = './';
+}
+
 # Including current language
 include $_path . 'lang/' . getlang() . '/common.php';
 include $_path . 'lang/' . getlang() . '/install.php';

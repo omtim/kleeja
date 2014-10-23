@@ -95,14 +95,14 @@
 	}
 
 	 
-	include_once  PATH . 'includes/usr.php';
-	include_once  PATH . 'includes/functions_alternative.php';
-	$usrcp = new usrcp;
+	include_once  PATH . 'includes/classes/user.php';
+	include_once  PATH . 'includes/functions/functions_alternative.php';
+	$usrcp = $user	= new user;
 	
 	#random password
 	$rand_password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'),0 ,10);
 
-	$user_salt			= substr(kleeja_base64_encode(pack("H*", sha1(mt_rand()))), 0, 7);
+	$user_salt			= substr(base64_encode(pack("H*", sha1(mt_rand()))), 0, 7);
 	$user_pass 			= $usrcp->kleeja_hash_password($rand_password . $user_salt);
 	$user_name 			= 'admin';
 	$user_mail 			= 'admin@kleeja.com';
@@ -114,14 +114,16 @@
 	$clean_name			= 'admin';
 
 	#ok .. we will get sqls now ..
-	include PATH . 'includes/install_sqls.php';
-	include PATH . 'includes/default_values.php';
+	include PATH . 'install/includes/install_sqls.php';
+	include PATH . 'install/includes/default_values.php';
 
 	$err = $dots = 0;
 	$errors = '';
 
 	#do important alter before
 	$SQL->query($install_sqls['ALTER_DATABASE_UTF']);
+
+	//echo "here";
 	
 	$sqls_done = $sql_err = array();
 	foreach($install_sqls as $name=>$sql_content)
@@ -130,12 +132,14 @@
 		{
 			continue;
 		}
+
 		
 		#dreop tabe
 		if(strpos($name, 'insert') === false)
 		{
-			$SQL->query("DROP TABLE" . $dbprefix . $name .";");
+			$SQL->query("DROP TABLE IF EXISTS " . $dbprefix . $name .";");
 		}
+
 
 		if($SQL->query($sql_content))
 		{

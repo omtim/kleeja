@@ -711,8 +711,11 @@ function garbage_collection()
 	}
 	
 	global $SQL;
-	
-	$SQL->close();
+
+	if($SQL)
+	{
+		$SQL->close();
+	}
 	
 	#now close session to let user open any other page in Kleeja
 	@session_write_close();
