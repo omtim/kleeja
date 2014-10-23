@@ -7,3 +7,4 @@ $dbuser			= 'root' ; // database user
 $dbpass			= '112233'; // database password 
 $dbname			= 'kleeja'; // database name 
 $dbprefix		= 'klj_'; // if you use perfix for tables , fill it 
+

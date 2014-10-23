@@ -116,9 +116,9 @@ if (!$dbname || !$dbuser)
 $root_path = PATH;
 $db_type = isset($db_type) ? $db_type : 'mysqli';
 
+include PATH . 'includes/functions/functions_alternative.php';
 include PATH . 'includes/functions/functions.php';
 include PATH . 'includes/functions/functions_display.php';
-include PATH . 'includes/functions/functions_alternative.php';
 include PATH . 'includes/version.php';
 
 switch ($db_type)

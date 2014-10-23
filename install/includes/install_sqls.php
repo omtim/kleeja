@@ -14,7 +14,6 @@ if (!defined('IN_COMMON'))
 	exit();
 }
 
-
 if(empty($install_sqls) || !is_array($install_sqls))
 {
 	$install_sqls = array();

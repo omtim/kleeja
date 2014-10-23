@@ -141,7 +141,7 @@ function get_ban()
 
 
 /**
-* Run hooks of kleeja
+* Run plugins of kleeja
 * @package plugins
 */
 function kleeja_run_hook($hook_name)
@@ -241,7 +241,7 @@ function delete_cache($name, $all=false)
 			{
 				if($file != '.' && $file != '..' && !in_array($file, $exceptions))
 				{
-					$del = kleeja_unlink($path_to_cache . '/' . $file, true);
+					$del = @unlink($path_to_cache . '/' . $file, true);
 				}
 			}
 			@closedir($dh);
@@ -258,7 +258,7 @@ function delete_cache($name, $all=false)
 		$name = str_replace('.php', '', $name) . '.php';
 		if (file_exists($path_to_cache . '/' . $name))
 		{
-			$del = kleeja_unlink ($path_to_cache . "/" . $name, true);
+			$del = @unlink($path_to_cache . "/" . $name, true);
 		}
 	}
 
@@ -316,6 +316,7 @@ function get_config($name)
 
 	#what if this config is a group-configs related ?
 	$group_id_sql = '';
+	print $name;
 	if(array_key_exists($name, $d_groups[$userinfo['group_id']]['configs']))
 	{
 		$table = "{$dbprefix}groups_data c";
