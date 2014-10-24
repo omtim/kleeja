@@ -51,7 +51,7 @@ class user
 	 */
 	public function login($name, $pass, $hashed = false, $expire = 86400, $loginadm = false)
 	{
-		global $config;
+		global $config, $plugin;
 
 		#login expire after?
 		$expire = time() + ((int) $expire ? intval($expire) : 86400);
@@ -113,7 +113,7 @@ class user
 	 */
 	public function normal($name, $pass, $hashed = false, $expire, $loginadm = false)
 	{
-		global $SQL, $dbprefix, $config;
+		global $SQL, $dbprefix, $config, $plugin;
 
 		$query = array(
 					'SELECT'	=> '*',
@@ -228,7 +228,7 @@ class user
 	 */
 	public function get_data($type = "*", $user_id = false)
 	{
-		global $dbprefix, $SQL;
+		global $dbprefix, $SQL, $plugin;
 
 		if(!$user_id)
 		{
@@ -299,6 +299,8 @@ class user
 	 */
 	public function cleanusername($uname) 
 	{
+		global $plugin;
+
 		($hook = $plugin->run_hook('cleanusername_func_usr_class')) ? eval($hook) : null; //run hook
 
 		static $arabic_t = array();
@@ -338,6 +340,8 @@ class user
 	 */
 	public function kleeja_hash_password($password, $check_pass = false)
 	{
+		global $plugin;
+
 		include_once PATH . 'includes/classes/phpass.php';
 
 		($hook = $plugin->run_hook('kleeja_hash_password_func_usr_class')) ? eval($hook) : null; //run hook
@@ -360,7 +364,7 @@ class user
 	 */ 
 	public function kleeja_set_cookie($name, $value, $expire)
 	{
-		global $config;
+		global $config, $plugin;
 
 		($hook = $plugin->run_hook('kleeja_set_cookie_func_usr_class')) ? eval($hook) : null; //run hook
 
