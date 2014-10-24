@@ -55,7 +55,11 @@ switch (g('go', 'str', ''))
 			}
 
 			$guide_exts[$gid] = array(
-				'group_name' => preg_replace('!{lang.([A-Z0-9]+)}!e', '$lang[\'\\1\']', $d_groups[$gid]['data']['group_name']),
+				'group_name' => preg_replace_callback('!{lang.([A-Z0-9]+)}!', 
+				function ($m) 
+				{
+				    return '$lang[\'' . $m[1] . '\']';
+				 }, $d_groups[$gid]['data']['group_name']),
 				'exts' => $d_groups[$gid]['exts']
 			);
 

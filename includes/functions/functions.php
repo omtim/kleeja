@@ -695,7 +695,19 @@ function untar($file, $dest = "./")
 	return false;
 }
 
+//old is cool
+function kleeja_run_hook($hookname)
+{
+	global $plugin;
 
+	if(!$plugin)
+	{
+		include_once PATH . 'includes/classes/plugins.php';
+		$plugin = new plugins();
+	}
+
+	return $plugin->run_hook($hookname);
+}
 
 function garbage_collection()
 {

@@ -284,7 +284,7 @@ function big_error($error_title, $msg_text, $error = true)
 {
 	global $SQL, $plugin;
 	
-	($hook = $plugin->run_hook('big_error_func')) ? eval($hook) : null; //run hook
+	($hook = kleeja_run_hook('big_error_func')) ? eval($hook) : null; //run hook
 	
 	echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">' . "\n";
 	echo '<head>' . "\n";
