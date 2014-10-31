@@ -27,11 +27,33 @@ define('IN_COMMON', true);
  * Development stage, KLeeja will treats you as a developer
  */
 define('DEV_STAGE', true);
+define('DEBUG', false);
+
 
 /**
  * Error reporting in Development stage are agressive
  */
 defined('DEV_STAGE') ? @error_reporting(E_ALL) : @error_reporting(E_ALL ^ E_NOTICE);
+
+//no CACHING while debug
+if (defined('DEBUG'))
+{
+    
+    //refresh cache 
+    if(($dh = @opendir(PATH . 'cache')) !== false)
+    {
+     while (($file = readdir($dh)) !== false)
+     {
+        if($file != "kleeja_log.log")
+        {
+        	@unlink(PATH . 'cache/' . $file);
+        }
+
+     }
+     closedir($dh);
+    }
+    //session_save_path(PATH . 'cache');
+}
 
 /**
  * The path of the configuration file of Kleeja
@@ -118,6 +140,7 @@ $db_type = isset($db_type) ? $db_type : 'mysqli';
 
 include PATH . 'includes/functions/functions_alternative.php';
 include PATH . 'includes/functions/functions.php';
+include PATH . 'includes/functions/functions_files.php';
 include PATH . 'includes/functions/functions_display.php';
 include PATH . 'includes/version.php';
 
@@ -188,7 +211,6 @@ $usrcp->kleeja_check_user();
 
 #+ configs of the current group
 $config = array_merge($config, (array) $d_groups[$user->data['group_id']]['configs']);
-
 
 
 #no tpl caching in dev stage  
@@ -313,8 +335,6 @@ $captcha_file_path = $config['siteurl'] . 'captcha.php';
 
 
 ($hook = $plugin->run_hook('end_common')) ? eval($hook) : null; //run hook
-
-
 
 
 

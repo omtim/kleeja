@@ -298,17 +298,17 @@ function get_lang($name, $folder = '')
 */
 function get_config($name)
 {
-	global $dbprefix, $SQL, $d_groups, $userinfo, $plugin;
+	global $dbprefix, $SQL, $d_groups, $user, $plugin;
 
 	$table = "{$dbprefix}config c";
 
 	#what if this config is a group-configs related ?
 	$group_id_sql = '';
-	print $name;
-	if(array_key_exists($name, $d_groups[$userinfo['group_id']]['configs']))
+	
+	if(array_key_exists($name, $d_groups[$user->data['group_id']]['configs']))
 	{
 		$table = "{$dbprefix}groups_data c";
-		$group_id_sql = " AND c.group_id=" . $userinfo['group_id'];
+		$group_id_sql = " AND c.group_id=" . $user->data['group_id'];
 	}
 
 	$query = array(

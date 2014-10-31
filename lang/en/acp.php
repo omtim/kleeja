@@ -206,13 +206,13 @@ $lang = array_merge($lang, array(
 	'ADMIN_DELETE_FILE_ERR'		=> 'There is error occurred while trying to delete user files . ',
 	'ADMIN_DELETE_FILE_OK'		=> 'Done ! ',
 	'ADMIN_DELETE_FILES'		=> 'Delete all user files',
-	
+	/*
 	#'KLJ_MORE_PLUGINS'			=> array('Get more plugins from Kleeja\'s plugin center ,<a target="_blank" href="http://www.kleeja.com/store/">click here</a> .',
 								'Are you a developer? have you developed plugins for Kleeja & you want to showcase  in Kleeja\'s plugins center? <a target="_blank" href="http://www.kleeja.com/store/">click here</a>. ',
 								),
 	#'KLJ_MORE_STYLES'			=> array('Get more styles from Kleeja\'s style gallery ,<a target="_blank" href="http://www.kleeja.com/store/">click here</a> .',
 								'Are you a designer? looking to showcase your styles in Kleeja\'s gallery for everyone? <a target="_blank" href="http://www.kleeja.com/store/">click here</a> .',
-								),
+								),*/
 	'BCONVERTER' 				=> 'Byte Converter',
 	'NO_HTACCESS_DIR_UP'		=> 'No .htaccess file was found in "%s" folder, Which means if malicious codes were injected a hacker can do damage to your website!',
 	'NO_HTACCESS_DIR_UP_THUMB'	=> 'No .htaccess file was found in Thumbs folder "%s", Which means if malicious codes were injected a hacker can do damage to your website!',

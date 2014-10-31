@@ -119,7 +119,7 @@ else
 //then go back  to start
 if(isset($_GET['show_msg']))
 {
-	redirect(basename(ADMIN_PATH) . '?update_done=1');
+	redirect(ADMIN_PATH . '?update_done=1');
 	$SQL->close();
 	exit;
 }

@@ -261,6 +261,7 @@ class user
 	 */
 	public function logout()
 	{
+		global $plugin;
 		($hook = $plugin->run_hook('logout_func_usr_class')) ? eval($hook) : null; //run hook
 
 		#acp

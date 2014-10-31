@@ -66,6 +66,7 @@
 	}
 	include  PATH . 'install/includes/functions_install.php';
 	
+
 	$submit_disabled = $no_connection = $mysql_ver = false;
 
 	//config.php
@@ -96,8 +97,9 @@
 
 	include_once  PATH . 'includes/classes/user.php';
 	include_once  PATH . 'includes/functions/functions_alternative.php';
+	include PATH . 'includes/classes/plugins.php';
 	$usrcp = $user	= new user;
-
+	$plugin = new plugins();
 	
 	#random password
 	$rand_password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'),0 ,10);
@@ -107,7 +109,7 @@
 	$user_name 			= 'admin';
 	$user_mail 			= 'admin@kleeja.com';
 	$config_sitename	= 'Developer Background';
-	$config_siteurl		= 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
+	$config_siteurl		= 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/';
 	$config_sitemail	= 'admin@kleeja.com';
 	$config_time_zone	= '0';
 	$config_urls_type	= 'id';

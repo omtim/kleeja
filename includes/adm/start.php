@@ -47,7 +47,7 @@ $s_last_google		= ($stat_last_google == 0) ? '[ ? ]' : kleeja_date($stat_last_go
 $s_google_num		= $stat_google_num;
 $s_last_bing		= ($stat_last_bing == 0) ? '[ ? ]' : kleeja_date($stat_last_bing);
 $s_bing_num			= $stat_bing_num;
-$usernamelang		= sprintf($lang['KLEEJA_CP_W'], $user->data['name	']);
+$usernamelang		= sprintf($lang['KLEEJA_CP_W'], $user->data['name']);
 
 //size board by percent
 $per	= $stat_sizes / ($config['total_size'] * 1048576);
@@ -149,7 +149,7 @@ if(isset($u_exts)  && isset($g_exts) && is_array($u_exts) && !is_array($g_exts))
 //
 if(empty($v['last_check']) || ((time() - $v['last_check']) > 86400 && !$v['msg_appeared'] && $_SERVER['SERVER_NAME'] != 'localhost' && !isset($_GET['update_done'])))
 {
-	redirect(basename(ADMIN_PATH) . '?cp=p_check_update&amp;show_msg=1');
+	redirect(ADMIN_PATH . '?cp=check_update&amp;show_msg=1');
 	$SQL->close();
 	exit;
 }

@@ -187,7 +187,7 @@ function get_filter($item, $get_by = 'filter_id', $just_value = false)
  */
 function filter_exists($item, $get_by = 'filter_id')
 {
-	global $dbprefix, $SQL;
+	global $dbprefix, $SQL, $plugin;
 
 	$query = array(
 					'SELECT'	=> 'f.filter_id',
