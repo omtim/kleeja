@@ -1,0 +1,346 @@
+
+@import url(http://fonts.googleapis.com/earlyaccess/droidarabickufi.css);
+
+
+
+body{
+	font-family:'Droid Arabic Kufi', Tahoma,Arial,'Droid Arabic Naskh';
+	font-size:14px;
+	line-height:1.428571429;
+	color:#333333;
+	background-color:#ffffff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6{
+	font-family:"Droid Arabic Kufi", Tahoma,Arial,'Droid Arabic Naskh';
+	font-weight:500;
+	line-height:1.1;
+}
+
+
+.col-xs-1,
+.col-xs-2,
+.col-xs-3,
+.col-xs-4,
+.col-xs-5,
+.col-xs-6,
+.col-xs-7,
+.col-xs-8,
+.col-xs-9,
+.col-xs-10,
+.col-xs-11 {
+  float: right;
+}
+
+
+.col-sm-1,
+.col-sm-2,
+.col-sm-3,
+.col-sm-4,
+.col-sm-5,
+.col-sm-6,
+.col-sm-7,
+.col-sm-8,
+.col-sm-9,
+.col-sm-10,
+.col-sm-11 {
+  float: right;
+}
+
+.col-md-1,
+.col-md-2,
+.col-md-3,
+.col-md-4,
+.col-md-5,
+.col-md-6,
+.col-md-7,
+.col-md-8,
+.col-md-9,
+.col-md-10,
+.col-md-11 {
+  float: right;
+}
+
+.col-lg-1,
+.col-lg-2,
+.col-lg-3,
+.col-lg-4,
+.col-lg-5,
+.col-lg-6,
+.col-lg-7,
+.col-lg-8,
+.col-lg-9,
+.col-lg-10,
+.col-lg-11 {
+  float: right;
+}
+
+th {
+  text-align: right;
+}
+
+.radio,
+.checkbox {
+  padding-left:0;
+  padding-right: 20px;
+}
+
+.radio input[type="radio"],
+.radio-inline input[type="radio"],
+.checkbox input[type="checkbox"],
+.checkbox-inline input[type="checkbox"] {
+  float: right;
+   margin-left: 0;
+  margin-right: -20px;
+}
+
+
+.btn-toolbar > .btn + .btn,
+.btn-toolbar > .btn-group + .btn,
+.btn-toolbar > .btn + .btn-group,
+.btn-toolbar > .btn-group + .btn-group {
+  margin-left: 0px;
+  margin-right: 5px;
+}
+
+.btn-group > .btn:first-child {
+  margin-right: 0;
+}
+
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+
+.btn-group > .btn:last-child:not(:first-child),
+.btn-group > .dropdown-toggle:not(:first-child) {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.btn-group > .btn-group {
+  float: right;
+}
+
+
+.btn-group > .btn-group:first-child > .btn:last-child,
+.btn-group > .btn-group:first-child > .dropdown-toggle {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.btn-group > .btn-group:last-child > .btn:first-child {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+
+.btn .caret {
+  margin-right: 0;
+}
+
+.input-group .form-control:first-child,
+.input-group-addon:first-child,
+.input-group-btn:first-child > .btn,
+.input-group-btn:first-child > .dropdown-toggle,
+.input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.input-group-addon:first-child {
+  border-left: 0;
+}
+
+.input-group .form-control:last-child,
+.input-group-addon:last-child,
+.input-group-btn:last-child > .btn,
+.input-group-btn:last-child > .dropdown-toggle,
+.input-group-btn:first-child > .btn:not(:first-child) {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.input-group-addon:last-child {
+  border-right: 0;
+}
+
+.nav-tabs > li {
+  float: right;
+}
+
+
+.nav-pills > li {
+  float: right;
+}
+
+@media (min-width: 768px) {
+  .navbar-header {
+    float: right;
+  }
+}
+
+
+
+@media (min-width: 768px) {
+  .navbar-collapse .navbar-nav.navbar-left:first-child {
+    margin-right: -15px;
+  }
+  .navbar-collapse .navbar-nav.navbar-right:last-child {
+    margin-left: -15px;
+  }
+  .navbar-collapse .navbar-text:last-child {
+    margin-left: 0;
+  }
+}
+
+
+.navbar-brand {
+  float: right;
+}
+
+@media (min-width: 768px) {
+  .navbar > .container .navbar-brand {
+    margin-right: -15px;
+  }
+}
+
+
+.navbar-toggle {
+  float: left;
+  margin-left: 15px;
+}
+
+
+@media (min-width: 768px) {
+  .navbar-nav {
+    float: right;
+    margin: 0;
+  }
+  .navbar-nav > li {
+    float: right;
+  }
+}
+
+
+@media (min-width: 768px) {
+  .navbar-form .radio,
+  .navbar-form .checkbox {
+    padding-right: 0;
+  }
+  .navbar-form .radio input[type="radio"],
+  .navbar-form .checkbox input[type="checkbox"] {
+    margin-right: 0;
+  }
+}
+
+
+.navbar-nav.pull-right > li > .dropdown-menu,
+.navbar-nav > li > .dropdown-menu.pull-right {
+  left: 0;
+  right: auto;
+}
+
+
+.navbar-text {
+  float: right;
+}
+
+
+.pagination {
+  padding-right: 0;
+  
+}
+
+.form-group{
+	margin-left:1px;
+}
+.navbar-brand{
+	padding:7px !important;
+}
+.pagination > li > a,
+.pagination > li > span {
+  float: right;
+  margin-right: -1px;
+}
+
+
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  margin-left: 0;
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 0px;
+  border-top-left-radius: 0px;
+}
+
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.pagination-lg > li:first-child > a,
+.pagination-lg > li:first-child > span {
+  border-bottom-right-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.pagination-lg > li:last-child > a,
+.pagination-lg > li:last-child > span {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+
+.pagination-sm > li:first-child > a,
+.pagination-sm > li:first-child > span {
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.pagination-sm > li:last-child > a,
+.pagination-sm > li:last-child > span {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.pager {
+  padding-right: 0;
+}
+
+.pager .next > a,
+.pager .next > span {
+  float: left;
+}
+
+.pager .previous > a,
+.pager .previous > span {
+  float: right;
+}
+
+.media-list {
+  padding-right: 0;
+}
+
+.list-group {
+  padding-right: 0;
+}
+
+.popover {
+	  text-align: right;
+  }

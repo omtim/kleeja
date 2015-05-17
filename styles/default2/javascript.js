@@ -8,23 +8,7 @@
 */
 
 $(document).ready(function(){		
-	//display new input until it exceed maximum input
-	$('.file').change(function(){
-		var i = this.name.replace(/file|_/g,'');
-		if( i >= number_of_uploads )
-		{
-			alert(LANG_MORE_F_FILES);
-			return;
-		};
 
-		$('.file:eq('+ i +')').css('display', 'block');
-	});
-		
-	//display loader while upload files
-	$('#uploader').submit(function(){
-		$('#loadbox').css('display', 'block');
-		$('#uploader').css('display', 'none');
-	});
 });
 	
 //javascript for captcha

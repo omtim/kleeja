@@ -281,6 +281,8 @@ class user
 	 */
 	public function logout_cp()
 	{
+		global $plugin;
+
 		($hook = $plugin->run_hook('logout_cp_func_usr_class')) ? eval($hook) : null; //run hook
 
 		if(!empty($_SESSION['ADMINLOGIN']))

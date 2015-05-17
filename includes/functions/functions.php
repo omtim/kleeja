@@ -354,7 +354,7 @@ function add_config($name, $value = '', $order = 0, $field = '', $type = '0', $d
 		return true;
 	}
 
-	if($html != '' && $type == '0')
+	if($field != '' && $type == '0')
 	{
 		$type = 'other';
 	}

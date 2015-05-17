@@ -152,7 +152,7 @@ function get_url_of($name, $get_default = false)
 	($hook = $plugin->run_hook('get_url_of_func')) ? eval($hook) : null; //run hook
 
 	$link = $config['siteurl'];
-	if(isset($urls[$name]))
+	if(isset($urls[$name]) && $name != 'index')
 	{
 		$link .= !$config['mod_writer'] || $get_default ? $urls[$name][0] : $urls[$name][1];
 	}
