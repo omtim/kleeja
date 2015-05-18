@@ -28,7 +28,11 @@
 	<script type="text/javascript" src="<?=STYLE_PATH?>javascript.js"></script>
 	<script type="text/javascript" src="<?=STYLE_PATH?>bootstrap.min.js"></script>
 	
-
+	
+	<?php 
+	/* use this hook to add more in the head tag */
+	($hook = $plugin->run_hook('header_template_head_tag')) ? eval($hook) : null;?>
+	
 	<!-- Extra code -->
 	<?=$extra_head_code?>
 </head>
@@ -47,21 +51,21 @@
           <a class="navbar-brand" href="<?=$config['siteurl']?>" title="<?=$config['sitename']?>"><?=$config['sitename']?></a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">			
-			<li <?php if($current_page == 'index'):?> class="active"<?php endif;?>><a href="<?=get_url_of('index')?>"><?=$lang['HOME']?></a></li>
-			<li <?php if($current_page == 'rules'):?> class="active"<?php endif;?>><a href="<?=get_url_of('rules')?>"><?=$lang['RULES']?></a></li>
-			<li <?php if($current_page == 'guide'):?> class="active"<?php endif;?>><a href="<?=get_url_of('guide')?>"><?=$lang['GUIDE']?></a></li>
+          <ul class="nav navbar-nav">
+			<li class="kleeja-default-item<?php if($current_page == 'index'):?> active<?php endif;?>"><a href="<?=get_url_of('index')?>"><?=$lang['HOME']?></a></li>
+			<li class="kleeja-default-item <?php if($current_page == 'rules'):?> active<?php endif;?>"><a href="<?=get_url_of('rules')?>"><?=$lang['RULES']?></a></li>
+			<li class="kleeja-default-item<?php if($current_page == 'guide'):?> active<?php endif;?>"><a href="<?=get_url_of('guide')?>"><?=$lang['GUIDE']?></a></li>
 			<?php if($config['allow_stat_pg'] && user_can('access_stats')):?>
-			<li <?php if($current_page == 'stats'):?> class="active"<?php endif;?>><a href="<?=get_url_of('stats')?>"><?=$lang['STATS']?></a></li>
+			<li class="kleeja-default-item<?php if($current_page == 'stats'):?> active<?php endif;?>"><a href="<?=get_url_of('stats')?>"><?=$lang['STATS']?></a></li>
 			<?php endif;?>
 			<?php if(user_can('access_report')):?>
-			<li <?php if($current_page == 'report'):?> class="active"<?php endif;?>><a href="<?=get_url_of('report')?>"><?=$lang['REPORT']?></a></li>
+			<li class="kleeja-default-item<?php if($current_page == 'report'):?> active<?php endif;?>"><a href="<?=get_url_of('report')?>"><?=$lang['REPORT']?></a></li>
 			<?php endif;?>
 			<?php if(user_can('access_call')):?>
-			<li <?php if($current_page == 'call'):?> class="active"<?php endif;?>><a href="<?=get_url_of('call')?>"><?=$lang['CALL']?></a></li>
+			<li class="kleeja-default-item<?php if($current_page == 'call'):?> active<?php endif;?>"><a href="<?=get_url_of('call')?>"><?=$lang['CALL']?></a></li>
 			<?php endif;?>
 			<?php 
-			/* use this hook to add more to the menu */
+			/* use this hook to add more to the top menu */
 			($hook = $plugin->run_hook('header_template_top_menu')) ? eval($hook) : null;?>
           </ul>
         </div><!--/.nav-collapse -->
@@ -98,7 +102,9 @@
 				<a href="<?=get_url_of('register')?>"  class="list-group-item<?php if($current_page == 'register'):?> active<?php endif;?>"><?=$lang['REGISTER']?></a>
 				<?php endif;?>
 			<?php endif;?>
-			<?php ($hook = $plugin->run_hook('header_template_side_menu')) ? eval($hook) : null; ?>
+			<?php 
+			/* use this hook to add more to the side menu */
+			($hook = $plugin->run_hook('header_template_side_menu')) ? eval($hook) : null; ?>
 			
           </div>
         </div><!--/.sidebar-offcanvas-->

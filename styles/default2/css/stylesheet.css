@@ -27,18 +27,6 @@
 	.onlineall, .onlinevisitor, .onlineusers, .name_users {float:right;line-height:16px;margin: 0 0 8px 5px;padding:2px 10px;font-weight:400;}
 
 
-/*	--------------------------------------------------
-	10. Template & Rules > rules.html
-	-------------------------------------------------- */
-	#rules {padding:10px 0;font-size:90%;font-weight:700;}
-	#rules .rut {clear:both;margin-bottom:3px;padding:4px 0px;text-indent:10px;}
-	#rules .rls {display:block;text-indent:10px;}
-	#rules .rls ul{list-style-type:disc;text-indent:4px;}
-	#rules .rls ul li {line-height:20px;padding:1px 5px 2px 0;}
-
-/* @end */
-
-
 
 /*	--------------------------------------------------
 	12. Template & Users Files > fileuser.html
@@ -103,19 +91,3 @@
 /* @end */
 
 
-/*	--------------------------------------------------
-	19. Template & List of allowed file upload > guide.html
-	-------------------------------------------------- */
-	#guide {width:100%;margin:5px auto 15px;}
-	.guide_right_th, .guide_left_th{padding:8px 15px;font-weight:700;font-size:12px;text-align:center;}
-	.guide_right_box{padding:10px;margin:1px 0px;}
-	.guide_right_img,.guide_right_n4me, .guide_left_img {display:block;font-size:12px;font-weight:700;padding:5px 8px;}
-	.guide_right_n4me{display:inline;}
-	.guide_right_img img{padding-left:5px;}
-	.guide_right_ext{line-height:18px;padding:4px 8px;margin:2px 0; text-align:center}
-	.guide_left_ext{line-height:18px;padding:4px 8px;margin:2px 0;text-align:center}
-	.guide_right_ext_color{font-size:12px;margin:0 2px; }
-	.guide_right_ext_lang{font-weight:400;font-size:12px;margin:0 2px;}
-	.guide_right_ext_lang{font-weight:400;font-size:12px;margin:0 2px;}
-	.guide_left_img img{padding-left:5px;}
-/* @end */

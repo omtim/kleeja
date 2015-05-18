@@ -58,7 +58,8 @@ switch (g('go', 'str', ''))
 				'group_name' => preg_replace_callback('!{lang.([A-Z0-9]+)}!', 
 				function ($m) 
 				{
-				    return '$lang[\'' . $m[1] . '\']';
+					global $lang;
+				    return $lang[$m[1]];
 				 }, $d_groups[$gid]['data']['group_name']),
 				'exts' => $d_groups[$gid]['exts']
 			);

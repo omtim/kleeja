@@ -28,7 +28,7 @@
    		<a href="<?=ADMIN_PATH?>" class="btn btn-md btn-warning pull-<?php if($lang['DIR']=='rtl'):?>left<?php else:?>right<?php endif;?>"><?=$lang['ADMINCP']?></a>
 		<?php endif;?>
 		<?php if($page_stats):?>
-		<div class="footer_stats"><?=$page_stats?></div>
+		<div class="text-muted"><small><?=$page_stats?></small></div>
 		<?php endif;?>
 		
    </p>
