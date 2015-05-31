@@ -17,6 +17,7 @@
 <style type="text/css">
 body, h1, h2, h3, h4, h5{
 	font-family: "Tahoma",Arial,sans-serif !important;
+  font-weight: 300;
 }
 </style>
 <?php endif?>
