@@ -102,13 +102,14 @@
 	$plugin = new plugins();
 	
 	#random password
-	$rand_password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'),0 ,10);
+	//$rand_password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'),0 ,10);
+	$rand_password = 'admin';
 
 	$user_salt			= substr(base64_encode(pack("H*", sha1(mt_rand()))), 0, 7);
 	$user_pass 			= $usrcp->kleeja_hash_password($rand_password . $user_salt);
 	$user_name 			= 'admin';
 	$user_mail 			= 'admin@kleeja.com';
-	$config_sitename	= 'Developer Background';
+	$config_sitename	= 'Developer Playground';
 	$config_siteurl		= 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/';
 	$config_sitemail	= 'admin@kleeja.com';
 	$config_time_zone	= '0';
