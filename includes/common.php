@@ -38,8 +38,8 @@ defined('DEV_STAGE') ? @error_reporting(E_ALL) : @error_reporting(E_ALL ^ E_NOTI
 //no CACHING while debug
 if (defined('DEBUG'))
 {
-    
-    //refresh cache 
+
+    //refresh cache
     if(($dh = @opendir(PATH . 'cache')) !== false)
     {
      while (($file = readdir($dh)) !== false)
@@ -62,20 +62,26 @@ define('KLEEJA_CONFIG_FILE', 'config.php');
 
 
 /**
+ * Set default time zone
+ */
+date_default_timezone_set('GMT');
+
+
+/**
  * @ignore
  */
 if(!defined('PATH'))
 {
 	if(!defined('__DIR__'))
 	{
-		define('__DIR__', dirname(__FILE__)); 
+		define('__DIR__', dirname(__FILE__));
 	}
 	define('PATH', str_replace(DIRECTORY_SEPARATOR . 'includes', '', __DIR__) . DIRECTORY_SEPARATOR);
 }
 
 
 #start session after setting it right
-$s_time = isset($s_time) ? $s_time : 86400 * 2; #two days 
+$s_time = isset($s_time) ? $s_time : 86400 * 2; #two days
 $s_path = isset($s_path) ? $s_path : '/';
 if(function_exists('ini_set'))
 {
@@ -91,7 +97,7 @@ if(function_exists('ini_set'))
 	ini_set('session.gc_maxlifetime', $s_time);
 	//& is not valid xhtml, so we replaced with &amp;
 	ini_set('arg_separator.output', '&amp;');
-	
+
 	#session of upload progress
 	ini_set('session.upload_progress.enabled', true);
 }
@@ -213,7 +219,7 @@ $usrcp->kleeja_check_user();
 $config = array_merge($config, (array) $d_groups[$user->data['group_id']]['configs']);
 
 
-#no tpl caching in dev stage  
+#no tpl caching in dev stage
 #if(defined('DEV_STAGE'))
 #{
 	#$tpl->caching = false;
@@ -233,10 +239,10 @@ if(!empty($config['siteurl']))
 
 
 #set display headers
-header('Content-type: text/html; charset=UTF-8');	
+header('Content-type: text/html; charset=UTF-8');
 header('Cache-Control: private, no-cache="set-cookie"');
 header('Expires: 0');
-header('Pragma: no-cache');	
+header('Pragma: no-cache');
 
 #check the current laguage package
 if(!$config['language'] || empty($config['language']))
@@ -282,14 +288,14 @@ define('ADMIN_STYLE_PATH_ABS', PATH . 'admin/' . ADMIN_STYLE_NAME . '/');
 #get languge of common
 get_lang('common');
 
-#ban system 
+#ban system
 get_ban();
 
 
-#install.php exists, raise a message 
-if (file_exists(PATH . 'install') && !defined('IN_ADMIN') && !defined('IN_LOGIN') && !defined('DEV_STAGE')) 
+#install.php exists, raise a message
+if (file_exists(PATH . 'install') && !defined('IN_ADMIN') && !defined('IN_LOGIN') && !defined('DEV_STAGE'))
 {
-	#Different message for admins! delete install folder 
+	#Different message for admins! delete install folder
 	kleeja_info((user_can('enter_acp') ? $lang['DELETE_INSTALL_FOLDER'] : $lang['WE_UPDATING_KLEEJA_NOW']), $lang['SITE_CLOSED']);
 }
 
@@ -315,9 +321,9 @@ if ($config['siteclose'] == '1' && !user_can('enter_acp') && !defined('IN_LOGIN'
 	kleeja_info($config['closemsg'], $lang['SITE_CLOSED']);
 }
 
-#exceed total size 
+#exceed total size
 if (($stat_sizes >= ($config['total_size'] *(1048576))) && !defined('IN_LOGIN') && !defined('IN_ADMIN'))
-{ 
+{
 	// Send a 503 HTTP response code to prevent search bots from indexing the maintenace message
 	header('HTTP/1.1 503 Service Temporarily Unavailable');
 	kleeja_info($lang['SIZES_EXCCEDED'], $lang['STOP_FOR_SIZE']);
@@ -335,6 +341,3 @@ $captcha_file_path = $config['siteurl'] . 'captcha.php';
 
 
 ($hook = $plugin->run_hook('end_common')) ? eval($hook) : null; //run hook
-
-
-
