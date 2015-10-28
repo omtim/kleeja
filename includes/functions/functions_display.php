@@ -20,11 +20,11 @@ if (!defined('IN_COMMON'))
 
 /**
  * Print header part of the page
- * 
+ *
  * @param string $title [optional] The page title
  * @param string $extra_head_code [optional] any extra codes to include it between head tag
  * @return void
- */	
+ */
 function kleeja_header($title = '', $extra_head_code = '')
 {
 	global $user, $lang, $config, $extras, $plugin;
@@ -35,12 +35,12 @@ function kleeja_header($title = '', $extra_head_code = '')
 	#our default charset
 	$charset = 'utf-8';
 
-	#check for extra header 
+	#check for extra header
 	$extras['header'] = empty($extras['header']) ? false : $extras['header'];
 
 	($hook = $plugin->run_hook('kleeja_header_links_func')) ? eval($hook) : null; //run hook
 
-	
+
 	$current_page = ig('go') ? g('go', 'str') : (empty($_GET) ? 'index' : '');
 
 
@@ -59,21 +59,22 @@ function kleeja_header($title = '', $extra_head_code = '')
  * Print footer part of the page
  *
  * @return void
- */	
+ */
 function kleeja_footer()
 {
 	global $SQL, $starttm, $config, $user, $lang, $extras, $plugin;
 
 	#show stats ..
 	$page_stats = false;
-	if ($config['statfooter'] != 0 || DEV_STAGE) 
+	if ($config['statfooter'] != 0 || DEV_STAGE)
 	{
 		$hksys			= !defined('STOP_HOOKS') ? 'Enabled' : 'Disabled';
 		$endtime		= get_microtime();
 		$loadtime		= number_format($endtime - $starttm , 4);
 		$queries_num	= $SQL->query_num;
 		$time_sql		= round($SQL->query_num / $loadtime) ;
-		$page_stats		= "<strong>[</strong> Generation Time: $loadtime Sec  - Queries: $queries_num - Hook System:  $hksys <strong>]</strong>  " ;
+		$time_zone		= (strpos($config['time_zone'], '-') !== false ? '' : '+') . $config['time_zone'];
+		$page_stats		= "<strong>[</strong> Generation Time: $loadtime Sec  - Queries: $queries_num - Hook System:  $hksys - Time Zone: UTC$time_zone<strong> ]</strong>  " ;
 	}
 
 	#if google analytics is enabled, show it
@@ -95,7 +96,7 @@ function kleeja_footer()
 		$google_analytics .= '</script>' . "\n";
 	}
 
-	#check for extra header 
+	#check for extra header
 	if(empty($extras['footer']))
 	{
 		$extras['footer'] = false;
@@ -104,10 +105,10 @@ function kleeja_footer()
 	($hook = $plugin->run_hook('kleeja_footer_func')) ? eval($hook) : null; //run hook
 
 
-	$k = '<div sty' . 'le="di' . 'spl'. 'ay:bl'. 'oc' . 'k !im' . 'po' . 'rt' . 'ant;' . 'backgrou' . 'nd:#ECE' .'CE' . 'C !im' . 'po' . 'rt' . 
-	'ant;margin:5p' . 'x; padding:2px 3px; position:fi' . 'xed;bottom' . ':0px;left:1%' . ';z-index:9' . '9999;text' . '-align:center;">P' . 
-	'owe' . 'red b' . 'y <a style="di' . 'spl'. 'ay:in'. 'li' . 'ne  !im' . 'po' . 'rt' . 'ant;' . 'color:#6' . 
-	'2B4E8 !im' . 'po' . 'rt' . 'ant;" href="http:' . '/' . '/ww' . 'w.kl' . 'ee' . 'ja.c' . 'om/" onclic' . 'k="windo' . 'w.op' . 'en(this.h' . 
+	$k = '<div sty' . 'le="di' . 'spl'. 'ay:bl'. 'oc' . 'k !im' . 'po' . 'rt' . 'ant;' . 'backgrou' . 'nd:#ECE' .'CE' . 'C !im' . 'po' . 'rt' .
+	'ant;margin:5p' . 'x; padding:2px 3px; position:fi' . 'xed;bottom' . ':0px;left:1%' . ';z-index:9' . '9999;text' . '-align:center;">P' .
+	'owe' . 'red b' . 'y <a style="di' . 'spl'. 'ay:in'. 'li' . 'ne  !im' . 'po' . 'rt' . 'ant;' . 'color:#6' .
+	'2B4E8 !im' . 'po' . 'rt' . 'ant;" href="http:' . '/' . '/ww' . 'w.kl' . 'ee' . 'ja.c' . 'om/" onclic' . 'k="windo' . 'w.op' . 'en(this.h' .
 	'ref,' . '\'_b' . 'lank\');retur' . 'n false;" title' . '="K' . 'lee' . 'ja">K' . 'lee' . 'ja</a></div>' . "\n";
 
 	$v = @unserialize($config['new_version']);
@@ -125,10 +126,10 @@ function kleeja_footer()
 
 /**
  * Get the link of any kleeja page, respect rewrite mod option
- * 
+ *
  * @param string $name The page you want the url of.
- * @param bool $get_default Get default link despite rewrite mod option 
- * @return string The link  
+ * @param bool $get_default Get default link despite rewrite mod option
+ * @return string The link
  */
 function get_url_of($name, $get_default = false)
 {
@@ -144,7 +145,7 @@ function get_url_of($name, $get_default = false)
 		'index' => array($config['siteurl'], $config['siteurl']),
 		'rules' => array('go.php?go=rules', 'rules.html'),
 		'guide' => array('go.php?go=guide', 'guide.html'),
-		'stats' => array('go.php?go=stats', 'stats.html'), 
+		'stats' => array('go.php?go=stats', 'stats.html'),
 		'report' => array('go.php?go=report', 'report.html'),
 		'call' => array('go.php?go=call', 'call.html'),
 	);
@@ -165,7 +166,7 @@ function get_url_of($name, $get_default = false)
  * Return the absoulte path of a template, if not exists get it from the parent style
  *
  * @param string $name The template name
- * @return mixed Template path if exists or false if not 
+ * @return mixed Template path if exists or false if not
  */
 function get_template_path($name)
 {
@@ -178,7 +179,7 @@ function get_template_path($name)
 	else if(file_exists(PARENT_STYLE_PATH_ABS . $name))
 	{
 		return PARENT_STYLE_PATH_ABS . $name;
-	} 
+	}
 	else
 	{
 		global $text;
@@ -191,8 +192,8 @@ function get_template_path($name)
 /**
  * To return file size in propriate format
  *
- * @param int $size the size to be costumized 
- * @return string Size in a readable formate 
+ * @param int $size the size to be costumized
+ * @return string Size in a readable formate
  */
 function readable_size($size)
 {
@@ -212,8 +213,8 @@ function readable_size($size)
 
 
 /**
- * Show an Error message 
- * 
+ * Show an Error message
+ *
  * @param string $text Text that will show as error message
  * @param string $title [optional] Title of the message page
  * @param bool $exit [optional] Stop script after showing the message
@@ -252,8 +253,8 @@ function kleeja_error($text, $title = '', $exit = true, $redirect = false, $rs =
 
 
 /**
- * Show an inforamtion message 
- * 
+ * Show an inforamtion message
+ *
  * @param string $text Text that will show as inforamtion message
  * @param string $title [optional] Title of the message page
  * @param bool $exit [optional] Stop script after showing the message
@@ -274,18 +275,18 @@ function kleeja_info($text, $title='', $exit = true, $redirect = false, $rs = 5,
 
 /**
  * Show error of a critical problem
- * 
+ *
  * @param string $error_title Title of the error page
  * @param string $msg_text Text of the error message
  * @param bool $error [optional] if false, error will be shown as inforamtion message
- * @return viod 
+ * @return viod
  */
 function big_error($error_title, $msg_text, $error = true)
 {
 	global $SQL, $plugin;
-	
+
 	($hook = kleeja_run_hook('big_error_func')) ? eval($hook) : null; //run hook
-	
+
 	echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">' . "\n";
 	echo '<head>' . "\n";
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />' . "\n";
@@ -314,12 +315,12 @@ function big_error($error_title, $msg_text, $error = true)
 /**
  * Redirect to a link after *given* seconds
  *
- * @param string $url The link to redirect to 
+ * @param string $url The link to redirect to
  * @param bool $header [optional] Redirct using header:location or html meta
  * @param bool $exit [optional] Exit after showing redirect code
  * @param int $sec The time in second before redirecting to the link
  * @param bool $return [optional] return as a code or just execute it
- * @return void|string 
+ * @return void|string
  */
 function redirect($url, $header = true, $exit = true, $sec = 0, $return = false)
 {
@@ -329,7 +330,7 @@ function redirect($url, $header = true, $exit = true, $sec = 0, $return = false)
 
     if (!headers_sent() && $header && !$return)
 	{
-		header('Location: ' . str_replace(array('&amp;'), array('&'), $url)); 
+		header('Location: ' . str_replace(array('&amp;'), array('&'), $url));
     }
 	else
 	{
@@ -377,9 +378,9 @@ function redirect($url, $header = true, $exit = true, $sec = 0, $return = false)
 function kleeja_add_form_key_get($request_id)
 {
 	global $config, $plugin;
-	
+
 	$return = 'formkey=' . substr(sha1($config['h_key'] . date('H-d-m') . $request_id), 0, 20);
-	
+
 	($hook = $plugin->run_hook('kleeja_add_form_key_get_func')) ? eval($hook) : null; //run hook
 	return $return;
 }
@@ -400,7 +401,7 @@ function kleeja_check_form_key_get($request_id)
 	$return = false;
 	if($token == $_GET['formkey'])
 	{
-		$return = true; 
+		$return = true;
 	}
 
 	($hook = $plugin->run_hook('kleeja_check_form_key_get_func')) ? eval($hook) : null; //run hook
@@ -418,7 +419,7 @@ function kleeja_add_form_key($form_name)
 	global $config, $plugin;
 	$now = time();
 	$return = '<input type="hidden" name="k_form_key" value="' . sha1($config['h_key'] . $form_name . $now) . '" /><input type="hidden" name="k_form_time" value="' . $now . '" />' . "\n";
-	
+
 	($hook = $plugin->run_hook('kleeja_add_form_key_func')) ? eval($hook) : null; //run hook
 	return $return;
 }
@@ -435,7 +436,7 @@ function kleeja_check_form_key($form_name, $require_time = 150 /*seconds*/ )
 
 	if(defined('IN_ADMIN'))
 	{
-		//we increase it for admin to be a duble 
+		//we increase it for admin to be a duble
 		$require_time *= 2;
 	}
 
@@ -446,7 +447,7 @@ function kleeja_check_form_key($form_name, $require_time = 150 /*seconds*/ )
 		$time_was = intval($_POST['k_form_time']);
 		$different = time() - $time_was;
 
-		#check time that user spent in the form 
+		#check time that user spent in the form
 		if($different && (!$require_time || $require_time >= $different))
 		{
 			if(sha1($config['h_key'] . $form_name . $time_was) === $key_was)
@@ -455,13 +456,13 @@ function kleeja_check_form_key($form_name, $require_time = 150 /*seconds*/ )
 			}
 		}
 	}
-	
+
 	($hook = $plugin->run_hook('kleeja_check_form_key_func')) ? eval($hook) : null; //run hook
 	return $return;
 }
 
 /**
- * Link generator 
+ * Link generator
  * Files can be many links styles, so this will generate the current style of link.
  *
  * @param string $pid The type of link to return, i.e. thumb or image ...
@@ -472,7 +473,7 @@ function kleeja_check_form_key($form_name, $require_time = 150 /*seconds*/ )
 function kleeja_get_link($pid, $file_info = array())
 {
 	global $config, $plugin;
-		
+
 	#to avoid problems, no type specifed so default is id
 	$id_form = empty($config['id_form']) ? 'id' : $config['id_form'];
 	#type of links
@@ -495,7 +496,7 @@ function kleeja_get_link($pid, $file_info = array())
 							'file'	=> 'do.php?id=::ID::',
 						)
 					),
-	
+
 		'filename' => array(
 
 				'html' => array(
@@ -519,7 +520,7 @@ function kleeja_get_link($pid, $file_info = array())
 							'file'	=> '::DIR::/::NAME::',
 							'del'	=> 'del::CODE::.html',
 						),
-						
+
 					'default' => array(
 							'del'	=> 'go.php?go=del&amp;cd=::CODE::',
 							'thumb' => '::DIR::/thumbs/::NAME::',
@@ -533,7 +534,7 @@ function kleeja_get_link($pid, $file_info = array())
 	$keys2replace = array('name' => '::NAME::', 'real_filename'=>'::FNAME::', 'id'=>'::ID::', 'type'=>'::EXT::', 'folder'=>'::DIR::', 'code_del'=>'::CODE::');
 
 	#add another type of links if you want
-	#if $config['id_form']  == 'another things' : do another things .. 
+	#if $config['id_form']  == 'another things' : do another things ..
 	($hook = $plugin->run_hook('kleeja_get_link_d_func')) ? eval($hook) : null; //run hook
 
 
@@ -567,8 +568,8 @@ function kleeja_get_link($pid, $file_info = array())
 
 
 	($hook = $plugin->run_hook('kleeja_get_link_func_rerun')) ? eval($hook) : null; //run hook
-	
-	return $return; 
+
+	return $return;
 }
 
 
@@ -647,7 +648,7 @@ function is_browser($b)
 
 		return false;
 	}
-	
+
 	//if no agent, let's take the worst case
 	$u_agent = (!empty($_SERVER['HTTP_USER_AGENT'])) ? htmlspecialchars((string) $_SERVER['HTTP_USER_AGENT']) : (function_exists('getenv') ? getenv('HTTP_USER_AGENT') : '');
 	$t = trim(preg_replace('/[^a-z]/', '', $b));
@@ -690,7 +691,7 @@ function is_browser($b)
 		 **/
 		case 'mobile':
 			$mobile_agents = array('iPhone;', 'iPod;', 'blackberry', 'Android', 'HTC' , 'IEMobile', 'LG/', 'LG-',
-									'LGE-', 'MOT-', 'Nokia', 'SymbianOS', 'nokia_', 'PalmSource', 'webOS', 'SAMSUNG-', 
+									'LGE-', 'MOT-', 'Nokia', 'SymbianOS', 'nokia_', 'PalmSource', 'webOS', 'SAMSUNG-',
 									'SEC-SGHU', 'SonyEricsson', 'BOLT/', 'Mobile Safari', 'Fennec/', 'Opera Mini');
 			$return = false;
 			foreach($mobile_agents as $agent)
@@ -703,7 +704,7 @@ function is_browser($b)
 			}
 		break;
 	}
-    
+
 	($hook = $plugin->run_hook('is_browser_func')) ? eval($hook) : null; //run hook
     return $return;
 }
@@ -722,8 +723,8 @@ function generate_json($array)
 
 	foreach($array as $key=>$value)
 	{
-		$json .= ($json != '' ? ', ' : '') . '"' . $key . '":' . 
-				(preg_match('^[0-9]+$', $value) ? $v : '"' . str_replace($json_escape[0], $json_escape[1], $value) . '"');  
+		$json .= ($json != '' ? ', ' : '') . '"' . $key . '":' .
+				(preg_match('^[0-9]+$', $value) ? $v : '"' . str_replace($json_escape[0], $json_escape[1], $value) . '"');
 	}
 
 	return '{' . $json . '}';
@@ -750,7 +751,7 @@ function echo_array_ajax($array)
 
 	#at end, close sql connections & etc
 	garbage_collection();
-    
+
     //generate_json has some bugs so I will use json_encode insted :[
 	exit(@json_encode($array));
 }
@@ -781,7 +782,7 @@ function kleeja_date($time, $human_time = true, $format = false)
 		$difference /= $lengths[$j];
 	}
 	$difference = round($difference);
-	$return = $difference;	
+	$return = $difference;
 	if($difference != 1)
 	{
 		if($difference == 2)
@@ -789,7 +790,7 @@ function kleeja_date($time, $human_time = true, $format = false)
 			$return = $lang['W_PERIODS2'][$j];
 		}
 		else
-		{		
+		{
 			$return = $difference . ' ' . ($difference > 10 ? $lang['W_PERIODS'][$j] :  $lang['W_PERIODS_P'][$j]);
 		}
 	}
@@ -849,16 +850,16 @@ function time_zones()
 		'Pacific/Fiji' => 12.00,
 		'Pacific/Tongatapu' => 13.00
 	);
-	
+
 	($hook = $plugin->run_hook('time_zones_func')) ? eval($hook) : null; //run hook
-	
+
 	return $zones;
 }
 
 /**
  * Check if current extension is an image or not
  *
- * @param string $ext The file extension i.e. gif 
+ * @param string $ext The file extension i.e. gif
  * @return bool True if image, False if not
  */
 function is_image($ext)

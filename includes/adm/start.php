@@ -17,8 +17,8 @@ if (!defined('IN_ADMIN'))
 
 
 #hook to use it for start page, also there is a hook at admin/index.php that you
-#can use it with all includes/adm files, just hook your codes and gooo...
-($hook = $plugin->run_hook('default_admin_page')) ? eval($hook) : null; //run hook 
+#can use it with all includes/adm files, just hook your codes and go...
+($hook = $plugin->run_hook('default_admin_page')) ? eval($hook) : null; //run hook
 
 
 #page info
@@ -28,14 +28,16 @@ $h_lst_imgs		= ADMIN_PATH . '?cp=d_img_ctrl&amp;last_visit=';
 $current_smt	= isset($_GET['smt']) ? (preg_match('![a-z0-9_]!i', trim($_GET['smt'])) ? trim($_GET['smt']) : 'general') : 'general';
 $GET_FORM_KEY	= kleeja_add_form_key_get('adm_start_actions');
 
-//data
+# current kleeja data
 $lst_reg			= empty($stat_last_user) ? $lang['UNKNOWN'] : $stat_last_user;
 $files_number 		= $stat_files + $stat_imgs;
 $files_sizes 		= readable_size($stat_sizes);
 $users_number 		= $stat_users;
-$php_version 		= isset($NO_PHPINFO) || !function_exists('phpinfo') ? phpversion() : '<a href="' . basename(ADMIN_PATH) . '?cp=php_info" title="php_info" onclick="javascript:get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=php_info\', \'#content\'); return false;">php ' . phpversion() . '</a>';
-$version 		= 'MYSQL ' . $SQL->version();
-#info from php ini
+
+
+# other info about php, mysql, php.ini
+$php_version 		= isset($NO_PHPINFO) || !function_exists('phpinfo') ? phpversion() : 'php ' . phpversion();
+$mysql_version 		= 'MYSQL ' . $SQL->version();
 $file_uploads_ini	= function_exists('ini_get') ?  @ini_get('file_uploads') : @get_cfg_var('file_uploads');
 $max_file_uploads_ini= function_exists('ini_get') ?  @ini_get('max_file_uploads') : @get_cfg_var('max_file_uploads');
 $upload_max_filesize= function_exists('ini_get') ?  @ini_get('upload_max_filesize') : @get_cfg_var('upload_max_filesize');
@@ -49,52 +51,55 @@ $s_last_bing		= ($stat_last_bing == 0) ? '[ ? ]' : kleeja_date($stat_last_bing);
 $s_bing_num			= $stat_bing_num;
 $usernamelang		= sprintf($lang['KLEEJA_CP_W'], $user->data['name']);
 
-//size board by percent
+#size board by percent
 $per	= $stat_sizes / ($config['total_size'] * 1048576);
 $per1	= round($per*100, 2);
 $per1	= $per1 >= 100 ? 100 : ($per1 == 0 ? 1 : $per1);
 
 
-//ppl must know about kleeja version!
-$kleeja_version	 = '<a href="' . basename(ADMIN_PATH) . '?cp=p_check_update" onclick="javascript:get_kleeja_link(this.href, \'#content\'); return false;" title="' . $lang['R_CHECK_UPDATE'] . '">' . KLEEJA_VERSION . '</a>';
+#ppl must know about kleeja version!
+$kleeja_version	 = '<a href="' . ADMIN_PATH . '?cp=p_check_update" title="' . $lang['R_CHECK_UPDATE'] . '">' . KLEEJA_VERSION . '</a>';
 
-//admin messages system
+//
+// admin messages system
+// @ see how to do it beneath
+//
 $ADM_NOTIFICATIONS = array();
 
-//useing IE6 ! and he is admin ?  omg !
+# show note: useing IE6 ! and he is admin ?  omg !
 $u_agent = (!empty($_SERVER['HTTP_USER_AGENT'])) ? htmlspecialchars((string) strtolower($_SERVER['HTTP_USER_AGENT'])) : (function_exists('getenv') ? getenv('HTTP_USER_AGENT') : '');
 if(is_browser('ie6') && !is_browser('ie8, ie7'))
 {
 	$ADM_NOTIFICATIONS[]  = array('id' => 'IE6', 'msg_type'=> 'warning', 'title'=> $lang['NOTE'], 'msg'=> $lang['ADMIN_USING_IE6']);
 }
 
-//if upgrading from 1rc6 to 1.0, some files must be deleted ! 
+# show note: if upgrading from 1rc6 to 1.0, some files must be deleted !
 if(file_exists(PATH . 'includes/adm/files.php') || file_exists(PATH . 'admin.php'))
 {
 	$ADM_NOTIFICATIONS[]  = array('id' => 'old_files', 'msg_type'=> 'info', 'title'=> $lang['NOTE'], 'msg'=> $lang['ADM_UNWANTED_FILES']);
 }
 
-//if html url is enabled but .htaccess is not available in the root dir !
+# show note: if html url is enabled but .htaccess is not available in the root dir !
 if(!file_exists(PATH . '.htaccess') && (int) $config['mod_writer'] == 1)
 {
 	$ADM_NOTIFICATIONS[]  = array('id' => 'htmlurlshtaccess', 'msg_type'=> 'info', 'title'=> $lang['NOTE'], 'msg'=> $lang['HTML_URLS_ENABLED_NO_HTCC']);
 }
 
-//updating
+# show note: new version, update now
 $v = @unserialize($config['new_version']);
 if(version_compare(strtolower(KLEEJA_VERSION), strtolower($v['version_number']), '<'))
 {
 	$ADM_NOTIFICATIONS[]  = array(
-									'id' => 'up_ver_klj',//this not so important row 
-									'msg_type'=> 'warning', 'title'=> $lang['R_CHECK_UPDATE'], 
+									'id' => 'up_ver_klj',//this not so important row
+									'msg_type'=> 'warning', 'title'=> $lang['R_CHECK_UPDATE'],
 									'msg'=> sprintf($lang['UPDATE_NOW_S'] , KLEEJA_VERSION, $v['version_number']) . '<br />' . '<a href="http://www.kleeja.com/">www.kleeja.com</a>'
 							);
 
-	($hook = $plugin->run_hook('admin_update_now')) ? eval($hook) : null; //run hook 
+	($hook = $plugin->run_hook('admin_update_now')) ? eval($hook) : null; //run hook
 }
 
 
-//check upload_max_filesize
+//show note: check upload_max_filesize, and show note about it
 if(isset($u_exts)  && isset($g_exts) && is_array($u_exts) && !is_array($g_exts))
 {
 	$u_e_s = array_values($u_exts);
@@ -115,7 +120,7 @@ if(isset($u_exts)  && isset($g_exts) && is_array($u_exts) && !is_array($g_exts))
 	{
 		$ADM_NOTIFICATIONS[]  = array(
 										'id' => 'file_size_ini_low',
-										'msg_type'=> 'info', 'title'=> $lang['NOTE'], 
+										'msg_type'=> 'info', 'title'=> $lang['NOTE'],
 										'msg'=> sprintf($lang['PHPINI_FILESIZE_SMALL'] , Customfile_size($big_size_is), Customfile_size($upload_max_filesize_s))
 									);
 	}
@@ -136,14 +141,15 @@ if(isset($u_exts)  && isset($g_exts) && is_array($u_exts) && !is_array($g_exts))
 	{
 				$ADM_NOTIFICATIONS[]  = array(
 										'id' => 'post_m_size_ini_low',
-										'msg_type'=> 'info', 'title'=> $lang['NOTE'], 
+										'msg_type'=> 'info', 'title'=> $lang['NOTE'],
 										'msg'=> sprintf($lang['PHPINI_MPOSTSIZE_SMALL'] , $config['filesnum'], Customfile_size($post_max_size_s_must_be))
-										);		
+										);
 	}
 }
 
 //
-//if 24 hours, lets chcek agian !
+// check for update
+// if 24 hours, lets chcek agian !
 //rev: let's say cache is not refreshed, so we will redirect alots of time,
 // so update_done will be good solution
 //
@@ -155,19 +161,19 @@ if(empty($v['last_check']) || ((time() - $v['last_check']) > 86400 && !$v['msg_a
 }
 
 
-//cached templates
-$there_is_cached = false;
-$cached_file = PATH . 'cache/styles_cached.php';
-if(file_exists($cached_file))
-{
-	$ADM_NOTIFICATIONS[]  = array(
-								'id' => 'cached_tpl',
-								'msg_type'=> 'info', 'title'=> $lang['CACHED_STYLES'],
-								'msg'=> sprintf($lang['CACHED_STYLES_DISC'] , '<a href="' . basename(ADMIN_PATH) . '?cp=m_styles&amp;sty_t=cached" onclick="javascript:get_kleeja_link(this.href, \'#content\'); return false;">' . $lang['CLICKHERE'] .'</a>')
-							);
-}
+# show note: cached templates, deprecated
+#$there_is_cached = false;
+#$cached_file = PATH . 'cache/styles_cached.php';
+#if(file_exists($cached_file))
+#{
+#	$ADM_NOTIFICATIONS[]  = array(
+#								'id' => 'cached_tpl',
+#								'msg_type'=> 'info', 'title'=> $lang['CACHED_STYLES'],
+#								'msg'=> sprintf($lang['CACHED_STYLES_DISC'] , '<a href="' . ADMIN_PATH . '?cp=m_styles&amp;sty_t=cached" onclick="javascript:get_kleeja_link(this.href, \'#content\'); return false;">' . $lang['CLICKHERE'] .'</a>')
+#							);
+#}
 
-//if config not safe
+# show note: if config not safe
 if(function_exists('fileperms') && !defined('KLEEJA_NO_CONFIG_CHECK') && strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN' && !@ini_get('safe_mode'))
 {
 	if((bool) (@fileperms(PATH . KLEEJA_CONFIG_FILE) & 0x0002))
@@ -175,7 +181,8 @@ if(function_exists('fileperms') && !defined('KLEEJA_NO_CONFIG_CHECK') && strtoup
 		$ADM_NOTIFICATIONS[]  = array('id' => 'config_perm', 'msg_type'=> 'info', 'title'=> $lang['NOTE'], 'msg'=> $lang['CONFIG_WRITEABLE']);
 	}
 }
-//no htaccess
+
+# show note: if there is no htaccess file protecing the uploading folders
 if(!file_exists(PATH . $config['foldername'] . '/.htaccess'))
 {
 	$ADM_NOTIFICATIONS[]  = array('id' => 'htaccess_u', 'msg_type'=> 'warning', 'title'=> $lang['WARN'], 'msg'=> sprintf($lang['NO_HTACCESS_DIR_UP'], $config['foldername']));
@@ -194,8 +201,8 @@ if(file_exists($STYLE_PATH . 'footer.html'))
 
 	if(strpos($t_data, 'kleeja.com') === false)
 	{
-		//not guilty or not guilty! we love who use kleeja even witout copyrights 
-		//but we are human being, so we need some money to live as a normal people 
+		//not guilty or not guilty! we love who use kleeja even witout copyrights
+		//but we are human being, so we need some money to live as a normal people
 		if($v['copyrights'] == false)
 		{
 			//it's not so usefull ...
@@ -205,20 +212,21 @@ if(file_exists($STYLE_PATH . 'footer.html'))
 	}
 }
 */
-//there is cleaning files process now
+
+# show note: there is cleaning files process now
 if((int)$config['klj_clean_files_from'] > 0)
 {
 	$ADM_NOTIFICATIONS[]  = array('id' => 'klj_clean_files', 'msg_type'=> 'info', 'title'=> $lang['NOTE'], 'msg'=> $lang['T_CLEANING_FILES_NOW']);
 }
 
-//if there is no thumbs folder
+# show note: if there is no thumbs folder
 if(!file_exists(PATH . $config['foldername'] . '/thumbs') && (int) $config['thumbs_imgs'] != 0)
 {
 	$ADM_NOTIFICATIONS[]  = array('id' => 'no_thumbs', 'msg_type'=> 'info', 'title'=> $lang['NOTE'], 'msg'=> sprintf($lang['NO_THUMB_FOLDER'], PATH . $config['foldername'] . '/thumbs'));
 }
 
 
-//if dev stage
+# show this if this is a developer version
 $sql_debug = false;
 if(defined('DEV_STAGE'))
 {
@@ -248,35 +256,25 @@ if(defined('DEV_STAGE'))
 }
 
 
-//is there copyrights for translator ? 
+# is there copyrights for translator ?
 $translator_copyrights = isset($lang['S_TRANSLATED_BY']) ?  $lang['S_TRANSLATED_BY'] : false;
 
 
-//secondary menu
+# secondary menu
 $go_menu = array(
-				'general' => array('name'=>$lang['GENERAL_STAT'], 'link'=> basename(ADMIN_PATH) . '?cp=start&amp;smt=general', 'goto'=>'general', 'current'=> $current_smt == 'general'),
-				'other' => array('name'=>$lang['OTHER_INFO'], 'link'=> basename(ADMIN_PATH) . '?cp=start&amp;smt=other', 'goto'=>'other', 'current'=> $current_smt == 'other'),
-				'team' => array('name'=>$lang['KLEEJA_TEAM'], 'link'=> basename(ADMIN_PATH) . '?cp=start&amp;smt=team', 'goto'=>'team', 'current'=> $current_smt == 'team'),
+				'general' => array('name'=>$lang['GENERAL_STAT'], 'link'=> ADMIN_PATH . '?cp=start&amp;smt=general', 'goto'=>'general', 'current'=> $current_smt == 'general'),
+				'other' => array('name'=>$lang['OTHER_INFO'], 'link'=> ADMIN_PATH . '?cp=start&amp;smt=other', 'goto'=>'other', 'current'=> $current_smt == 'other'),
+				'team' => array('name'=>$lang['KLEEJA_TEAM'], 'link'=> ADMIN_PATH . '?cp=start&amp;smt=team', 'goto'=>'team', 'current'=> $current_smt == 'team'),
 	);
 
-if(!$config['firstime'])
-{
-	//$go_menu['firstime'] = array('name'=>$lang['FIRST_TIME_CP'], 'link'=> basename(ADMIN_PATH) . '?cp=start&amp;smt=firstime', 'goto'=>'firstime', 'current'=> $current_smt == 'firstime');
-}
 
-#if this is your first time, let make sure that it's the last
-if($current_smt == 'firstime')
-{
-	update_config('firstime', '1');
-}
-
-#is there a last visit of images and files ?
-$files_last_visit = filter_exists('f_lastvisit', 'filter_uid') ? get_filter('f_lastvisit', 'filter_uid', true) : false;
-$image_last_visit = filter_exists('i_lastvisit', 'filter_uid') ? get_filter('i_lastvisit', 'filter_uid', true) : false;
+# is there a last visit of images and files ?
+$files_last_visit = filter_exists('f_lastvisit', 'filter_uid') ? get_filter('f_lastvisit', 'filter_uid', true) : time()-3600*24;
+$image_last_visit = filter_exists('i_lastvisit', 'filter_uid') ? get_filter('i_lastvisit', 'filter_uid', true) : time()-3600*24;
 
 
-#hurry, hurry section, get styles
-$hurry_style_link	= basename(ADMIN_PATH) . '?cp=m_styles&amp;sty_t=st&amp;method=2&amp;home=1&amp;smt=curstyle&amp;' . $GET_FORM_KEY . '&amp;style_choose=';
+# hurry, hurry section, get styles
+$hurry_style_link	= ADMIN_PATH . '?cp=m_styles&amp;sty_t=st&amp;method=2&amp;home=1&amp;smt=curstyle&amp;' . $GET_FORM_KEY . '&amp;style_choose=';
 $hurry_styles_list	= array();
 if ($dh = @opendir(PATH . 'styles'))
 {
@@ -284,14 +282,14 @@ if ($dh = @opendir(PATH . 'styles'))
 	{
 		if(strpos($file, '.') === false && $file != '..' && $file != '.')
 		{
-			$hurry_styles_list[] = array('name' => $file);
+			$hurry_styles_list[] = $file;
 		}
 	}
 	@closedir($dh);
 }
 
-#hurry, hurry section, get languages
-$hurry_lang_link	= basename(ADMIN_PATH) . '?cp=g_users&smt=general&amp;smt=group_data&' . $GET_FORM_KEY . '&amp;lang_change=';
+# hurry, hurry section, get languages
+$hurry_lang_link	= ADMIN_PATH . '?cp=g_users&smt=general&amp;smt=group_data&' . $GET_FORM_KEY . '&amp;lang_change=';
 $hurry_langs_list	= array();
 if ($dh = @opendir(PATH . 'lang'))
 {
@@ -299,7 +297,7 @@ if ($dh = @opendir(PATH . 'lang'))
 	{
 		if(strpos($file, '.') === false && $file != '..' && $file != '.')
 		{
-			$hurry_langs_list[] = array('name' => $file);
+			$hurry_langs_list[] = $file;
 		}
 	}
 	@closedir($dh);
@@ -307,8 +305,8 @@ if ($dh = @opendir(PATH . 'lang'))
 
 
 
-#hurry, hurry section, links
-$del_cache_link		= basename(ADMIN_PATH) . '?cp=r_repair&amp;case=clearc&amp;' . kleeja_add_form_key_get('REPAIR_FORM_KEY');
+# hurry, hurry section, links
+$del_cache_link		= ADMIN_PATH . '?cp=r_repair&amp;case=clearc&amp;' . kleeja_add_form_key_get('REPAIR_FORM_KEY');
 
 
 # get stats filter so we can draw a chart for the user
@@ -326,12 +324,12 @@ $cf_num	= $SQL->num($cf_result);
 if($cf_num > 4)
 {
 	$stats_chart = 'arrayOfDataMulti = new Array(';
-	
+
 	$comma = false;
 	#get currently right now stats, not cached one
 	$prv_files = get_actual_stats('files');
 	$prev_imgs = get_actual_stats('imgs');
-	$prev_date = date('d-n-Y');	
+	$prev_date = date('d-n-Y');
 	while($row=$SQL->fetch($cf_result))
 	{
 		#jump today
@@ -342,7 +340,7 @@ if($cf_num > 4)
 
 		#get this row data
 		list($s_files, $s_imgs, $s_sizes) = explode(':', $row['filter_value']);
-	
+
 		$t_files = $prv_files - $s_files;
 		$t_imgs = $prev_imgs - $s_imgs;
 
@@ -370,4 +368,3 @@ if($cf_num > 4)
 		 $SQL->build($query_del);
 	}
 }
-

@@ -77,3 +77,4 @@
 -[80%] templates will use php no more template system compelling
 -[50%] different hooks and plugins system, one file plugin, plugins appear in maintenance page
 -[20%] remove download from urls feature since this is not a leech script .. 
+-[0] remove get_kleeja_link and go back to normal links
