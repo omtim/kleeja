@@ -87,7 +87,7 @@ function kleeja_admin_info($msg, $navigation=true, $title='', $exit=true, $redir
 
 /**
  * Generate a filter, filiter is a value stored in the database to use it later
- * 
+ *
  * @param string $type Unique name to connect multiple filters together if you want
  * @param string $value The stored value
  * @param bool|int $time [optional] timestamp if this filter depends on time  or leave it
@@ -119,7 +119,7 @@ function insert_filter($type, $value, $time = false, $user = false, $status = ''
 
 /**
  * Update filter value..
- * 
+ *
  * @param int|string $id_or_uid Number of filter_id or the unique id string of filter_uid
  * @param string $value The modified value of filter
  * @return bool
@@ -148,11 +148,11 @@ function update_filter($id_or_uid, $value)
 
 /**
  * Get filter from db..
- * 
+ *
  * @param string|int $item The value of $get_by, to get the filter depend on it
  * @param string $get_by The name of filter column we want to get the filter value from
  * @param bool $just_value If true the return value should be just filter_value otherwise all filter rows
- * @return mixed  
+ * @return mixed
  */
 function get_filter($item, $get_by = 'filter_id', $just_value = false)
 {
@@ -168,7 +168,7 @@ function get_filter($item, $get_by = 'filter_id', $just_value = false)
 	$v		= $SQL->fetch($result);
 
 	($hook = $plugin->run_hook('get_filter_func')) ? eval($hook) : null; //run hook
-	
+
 	$SQL->free($result);
 	if($just_value)
 	{
@@ -183,7 +183,7 @@ function get_filter($item, $get_by = 'filter_id', $just_value = false)
  *
  * @param string|int $item The value of $get_by, to find the filter depend on it
  * @param string $get_by The name of filter column we want to get the filter from
- * @return bool|int 
+ * @return bool|int
  */
 function filter_exists($item, $get_by = 'filter_id')
 {
@@ -197,7 +197,7 @@ function filter_exists($item, $get_by = 'filter_id')
 
 	($hook = $plugin->run_hook('filter_exists_func')) ? eval($hook) : null; //run hook
 
-	$result	= $SQL->build($query);				
+	$result	= $SQL->build($query);
 	return $SQL->num($result);
 }
 
@@ -217,7 +217,7 @@ function build_search_query($search)
 
 	global $SQL;
 
-	$search['filename'] = !isset($search['filename']) ? '' : $search['filename']; 
+	$search['filename'] = !isset($search['filename']) ? '' : $search['filename'];
 	$search['username'] = !isset($search['username']) ? '' : $search['username'];
 	$search['than']		= !isset($search['than']) ? '' : $search['than'];
 	$search['size']		= !isset($search['size']) ? '' : $search['size'];
@@ -229,8 +229,8 @@ function build_search_query($search)
 	$search['ext']		= !isset($search['ext']) ? '' : $search['ext'];
 	$search['user_ip']	= !isset($search['user_ip']) ? '' : $search['user_ip'];
 
-	$file_namee	= $search['filename'] != '' ? 'AND f.real_filename LIKE \'%' . $SQL->escape($search['filename']) . '%\' ' : ''; 
-	$usernamee	= $search['username'] != '' ? 'AND u.name LIKE \'%' . $SQL->escape($search['username']) . '%\'' : ''; 
+	$file_namee	= $search['filename'] != '' ? 'AND f.real_filename LIKE \'%' . $SQL->escape($search['filename']) . '%\' ' : '';
+	$usernamee	= $search['username'] != '' ? 'AND u.name LIKE \'%' . $SQL->escape($search['username']) . '%\'' : '';
 	$size_than	= ' f.size ' . ($search['than']!=1 ? '<=' : '>=') . (intval($search['size']) * 1024) . ' ';
 	$ups_than	= $search['ups'] != '' ? 'AND f.uploads ' . ($search['uthan']!=1 ? '<' : '>') . intval($search['ups']) . ' ' : '';
 	$rep_than	= $search['rep'] != '' ? 'AND f.report ' . ($search['rthan']!=1 ? '<' : '>') . intval($search['rep']) . ' ' : '';
@@ -245,7 +245,7 @@ function build_search_query($search)
  * To re-count the total files, without making the server goes down
  *
  * @param bool $files [optional] If true, function will just count files; false, just images
- * @param bool|int $start This value is used in couning in segments, in loop every refresh 
+ * @param bool|int $start This value is used in couning in segments, in loop every refresh
  * @return bool|int
  */
 function sync_total_files($files = true, $start = false)
@@ -264,7 +264,7 @@ function sync_total_files($files = true, $start = false)
 	$result	= $SQL->build($query);
 	$v		= $SQL->fetch($result);
 	$SQL->free($result);
-	
+
 	#if no data, turn them to number
 	$min_id = (int) $v['min_file_id'];
 	$max_id = (int) $v['max_file_id'];
@@ -277,7 +277,7 @@ function sync_total_files($files = true, $start = false)
 	$start	= !$start ? $min_id : $start;
 	$end	= $start + $batch_size;
 
-	#now lets get this step's files number 
+	#now lets get this step's files number
 	unset($v, $result);
 
 	$query['SELECT'] = 'COUNT(f.id) as num_files';
@@ -302,10 +302,10 @@ function sync_total_files($files = true, $start = false)
 	#make it zero, firstly
 	if($first_loop)
 	{
-		$update_query['SET'] = ($files ? 'files' : 'imgs') . "= 0"; 
+		$update_query['SET'] = ($files ? 'files' : 'imgs') . "= 0";
 		$SQL->build($update_query);
 	}
-	
+
 	$update_query['SET'] = ($files ? 'files' : 'imgs') . "=" . ($files ? 'files' : 'imgs') . '+' . $this_step_count;
 	$SQL->build($update_query);
 
@@ -317,11 +317,11 @@ function sync_total_files($files = true, $start = false)
  * Get the *right* now number of the given stat from stats table
  *
  * @param string $name The name of stats you want get from the DB
- * @return string|int 
+ * @return string|int
  */
 function get_actual_stats($name)
 {
-	global $dbprefix, $SQL;
+	global $dbprefix, $SQL, $plugin;
 
 	$query = array(
 					'SELECT'	=> 's.' . $name,
@@ -332,7 +332,7 @@ function get_actual_stats($name)
 	$v		= $SQL->fetch($result);
 
 	($hook = $plugin->run_hook('get_actual_stats_func')) ? eval($hook) : null; //run hook
-	
+
 	$SQL->free($result);
 
 	return $v[$name];

@@ -48,7 +48,7 @@ default:
 $all_files = get_actual_stats('files');
 $all_images = get_actual_stats('imgs');
 $all_users = get_actual_stats('users');
-$all_sizes = Customfile_size(get_actual_stats('sizes'));
+$all_sizes = readable_size(get_actual_stats('sizes'));
 
 
 #links
@@ -62,13 +62,13 @@ $status_file_link	= basename(ADMIN_PATH) . '?cp=r_repair&amp;case=status_file&am
 
 
 
-$current_template = "repair.php";
+$current_template = "maintenance.php";
 
 break;
 
 
 // We, I mean developrts and support team anywhere, need sometime
-// some inforamtion about the status of Kleeja .. this will give 
+// some inforamtion about the status of Kleeja .. this will give
 // a zip file contain those data ..
 case 'status_file':
 
@@ -79,7 +79,7 @@ if(isset($_GET['_ajax_']))
 
 include PATH . 'includes/plugins.php';
 $zip = new zipfile();
-	
+
 #kleeja version
 $zip->create_file(KLEEJA_VERSION, 'kleeja_version.txt');
 
@@ -109,7 +109,7 @@ if(file_exists(PATH . 'cache/kleeja_log.log') && defined('DEV_STAGE'))
 {
 	$zip->create_file(file_get_contents(PATH . 'cache/kleeja_log.log'), 'kleeja_log.log');
 }
-	
+
 #Groups info
 $zip->create_file(var_export($d_groups, true), 'groups.txt');
 
@@ -151,7 +151,7 @@ case 'tables':
 $query	= "SHOW TABLE STATUS";
 $result	= $SQL->query($query);
 $text = '';
-	
+
 while($row=$SQL->fetch($result))
 {
 	$queryf	=	"REPAIR TABLE `" . $row['Name'] . "`";
@@ -161,7 +161,7 @@ while($row=$SQL->fetch($result))
 		$text .= '<li>' . $lang['REPAIRE_TABLE'] . $row['Name'] . '</li>';
 	}
 }
-	
+
 $SQL->free($result);
 
 $text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=r_repair' .  '\');", 2000);</script>' . "\n";
@@ -221,13 +221,13 @@ $query_w	= array(
 				);
 
 $result_w = $SQL->build($query_w);
-		
+
 $user_number = 0;
 while($row=$SQL->fetch($result_w))
 {
 	$user_number++;
 }
-	
+
 $SQL->free($result_w);
 
 $update_query	= array(
@@ -276,7 +276,3 @@ $current_template = 'info.php';
 break;
 
 endswitch;
-
-
-
-
