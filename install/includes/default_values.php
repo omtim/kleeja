@@ -24,7 +24,7 @@ if (!defined('IN_COMMON'))
 
 $config_values = array();
 
-// do it like this : 
+// do it like this :
 //$config_values = array('name', 'value', 'option', 'display_order', 'type', 'plg_id', 'dynamic');
 
 // General settings
@@ -38,7 +38,7 @@ $config_values[] = array('time_zone', $config_time_zone, '<select name=\"time_zo
 $config_values[] = array('siteclose', '0', '<label>{lang.YES}<input type=\"radio\" id=\"siteclose\" name=\"siteclose\" value=\"1\"  <IF NAME=\"con.siteclose==1\"> checked=\"checked\"</IF> /></label><label>{lang.NO}<input type=\"radio\" id=\"siteclose\" name=\"siteclose\" value=\"0\"  <IF NAME=\"con.siteclose==0\"> checked=\"checked\"</IF> /></label>', 7, 'general', 0, 0);
 $config_values[] = array('closemsg', 'sits is closed now', '<input type=\"text\" id=\"closemsg\" name=\"closemsg\" value=\"{con.closemsg}\" size=\"68\" />', 8, 'general', 0, 0);
 $config_values[] = array('user_system', '1', '<select id=\"user_system\" name=\"user_system\">{authtypes}</select>', 9, 'advanced', 0, 0);
-$config_values[] = array('register', '1', '<label>{lang.YES}<input type=\"radio\" id=\"register\" name=\"register\" value=\"1\"  <IF NAME=\"con.register==1\"> checked=\"checked\"</IF> /></label>\r\n <label>{lang.NO}<input type=\"radio\" id=\"register\" name=\"register\" value=\"0\"  <IF NAME=\"con.register==0\"> checked=\"checked\"</IF> /></label>', 10, 'general', 0, 0);
+$config_values[] = array('register', '1', '{yesno.register}', 10, 'general', 0, 0);
 $config_values[] = array('enable_userfile', '1', '<label>{lang.YES}<input type=\"radio\" id=\"enable_userfile\" name=\"enable_userfile\" value=\"1\"  <IF NAME=\"con.enable_userfile==1\"> checked=\"checked\"</IF> /></label>\r\n <label>{lang.NO}<input type=\"radio\" id=\"enable_userfile\" name=\"enable_userfile\" value=\"0\"  <IF NAME=\"con.enable_userfile==0\"> checked=\"checked\"</IF> /></label>', 11, 'groups', 0, 0);
 $config_values[] = array('mod_writer', '0', '<label>{lang.YES}<input type=\"radio\" id=\"mod_writer\" name=\"mod_writer\" value=\"1\"  <IF NAME=\"con.mod_writer==1\"> checked=\"checked\"</IF> /></label>\r\n <label>{lang.NO}<input type=\"radio\" id=\"mod_writer\" name=\"mod_writer\" value=\"0\"  <IF NAME=\"con.mod_writer==0\"> checked=\"checked\"</IF> /></label>\r\n   [ {lang.MOD_WRITER_EX} ]', 12, 'advanced', 0, 0);
 
@@ -49,7 +49,7 @@ $config_values[] = array('cookie_path', $cookie_data['cookie_path'], '<input typ
 $config_values[] = array('cookie_domain', $cookie_data['cookie_domain'], '<input type=\"text\" id=\"cookie_domain\" name=\"cookie_domain\" value=\"{con.cookie_domain}\" size=\"20\" style=\"direction:ltr\" />', '15', 'advanced', 0, 0);
 $config_values[] = array('cookie_secure', ($cookie_data['cookie_secure'] ? '1' : '0'), '<label>{lang.YES}<input type=\"radio\" id=\"cookie_secure\" name=\"cookie_secure\" value=\"1\"  <IF NAME=\"con.cookie_secure==1\"> checked=\"checked\"</IF> /></label>\r\n <label>{lang.NO}<input type=\"radio\" id=\"cookie_secure\" name=\"cookie_secure\" value=\"0\"  <IF NAME=\"con.cookie_secure==0\"> checked=\"checked\"</IF> /></label>', '16', 'advanced', 0, 0);
 
-// Upload settings 
+// Upload settings
 $config_values[] = array('total_size', '10000000000', '<input type=\"text\" id=\"total_size\" name=\"total_size\" value=\"{con.total_size}\" size=\"20\" style=\"direction:ltr\" />', 17, 'upload', 0, 0);
 $config_values[] = array('foldername', 'uploads', '<input type=\"text\" id=\"foldername\" name=\"foldername\" value=\"{con.foldername}\" size=\"20\" style=\"direction:ltr\" />', 18, 'upload', 0, 0);
 $config_values[] = array('prefixname', '', '<input type=\"text\" id=\"prefixname\" name=\"prefixname\" value=\"{con.prefixname}\" size=\"20\" style=\"direction:ltr\" />', 19, 'upload', 0, 0);
@@ -71,7 +71,7 @@ $config_values[] = array('imagefolder', 'uploads', '<input type=\"text\" id=\"im
 $config_values[] = array('imagefolderexts', '', '<input type=\"text\" id=\"imagefolderexts\" name=\"imagefolderexts\" value=\"{con.imagefolderexts}\" size=\"80\">', '20', 'KLIVE', '0', '0');
 $config_values[] = array('imagefoldere', '1', '<label>{lang.YES}<input type=\"radio\" id=\"imagefoldere\" name=\"imagefoldere\" value=\"1\"  <IF NAME=\"con.imagefoldere\"> checked=\"checked\"</IF>></label><label>{lang.NO}<input type=\"radio\" id=\"imagefoldere\" name=\"imagefoldere\" value=\"0\"  <IF NAME=\"con.imagefoldere\"> <ELSE> checked=\"checked\"</IF>></label>', '30', 'KLIVE', '0', '0');
 
-// Interface settings 
+// Interface settings
 $config_values[] = array('welcome_msg', $lang['INST_MSGINS'], '<input type=\"text\" id=\"welcome_msg\" name=\"welcome_msg\" value=\"{con.welcome_msg}\" size=\"68\" />', 30, 'interface', 0, 0);
 $config_values[] = array('allow_stat_pg', '1', '<label>{lang.YES}<input type=\"radio\" id=\"allow_stat_pg\" name=\"allow_stat_pg\" value=\"1\"  <IF NAME=\"con.allow_stat_pg==1\"> checked=\"checked\"</IF> /></label>\r\n <label>{lang.NO}<input type=\"radio\" id=\"allow_stat_pg\" name=\"allow_stat_pg\" value=\"0\"  <IF NAME=\"con.allow_stat_pg==0\"> checked=\"checked\"</IF> /></label>', 31, 'interface', 0, 0);
 $config_values[] = array('allow_online', '0', '<label>{lang.YES}<input type=\"radio\" id=\"allow_online\" name=\"allow_online\" value=\"1\"  <IF NAME=\"con.allow_online==1\"> checked=\"checked\"</IF> /></label>\r\n <label>{lang.NO}<input type=\"radio\" id=\"allow_online\" name=\"allow_online\" value=\"0\"  <IF NAME=\"con.allow_online==0\"> checked=\"checked\"</IF> /></label>', 32, 'interface', 0, 0);
@@ -99,7 +99,7 @@ $config_values[] = array('default_group', '3', '', 0, 0, 1);
 // Extensions
 //
 
-// do it like this : 
+// do it like this :
 //$ext_values[group_id] = array('ext'=>sizeInKB);
 $ext_values = array();
 

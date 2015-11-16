@@ -52,13 +52,13 @@ $all_sizes = readable_size(get_actual_stats('sizes'));
 
 
 #links
-$del_cache_link		= basename(ADMIN_PATH) . '?cp=r_repair&amp;case=clearc&amp;' . $GET_FORM_KEY;
+$del_cache_link		= ADMIN_PATH . '?cp=maintenance&amp;case=clearc&amp;' . $GET_FORM_KEY;
 $resync_files_link	= $config['siteurl'] . 'go.php?go=resync&amp;case=sync_files';
 $resync_images_link	= $config['siteurl'] . 'go.php?go=resync&amp;case=sync_images';
-$resync_users_link	= basename(ADMIN_PATH) . '?cp=r_repair&amp;case=sync_users&amp;' . $GET_FORM_KEY;
-$resync_sizes_link	= basename(ADMIN_PATH) . '?cp=r_repair&amp;case=sync_sizes&amp;' . $GET_FORM_KEY;
-$repair_tables_link	= basename(ADMIN_PATH) . '?cp=r_repair&amp;case=tables&amp;' . $GET_FORM_KEY;
-$status_file_link	= basename(ADMIN_PATH) . '?cp=r_repair&amp;case=status_file&amp;' . $GET_FORM_KEY;
+$resync_users_link	= ADMIN_PATH . '?cp=maintenance&amp;case=sync_users&amp;' . $GET_FORM_KEY;
+$resync_sizes_link	= ADMIN_PATH . '?cp=maintenance&amp;case=sync_sizes&amp;' . $GET_FORM_KEY;
+$repair_tables_link	= ADMIN_PATH . '?cp=maintenance&amp;case=tables&amp;' . $GET_FORM_KEY;
+$status_file_link	= ADMIN_PATH . '?cp=maintenance&amp;case=status_file&amp;' . $GET_FORM_KEY;
 
 
 
@@ -164,7 +164,7 @@ while($row=$SQL->fetch($result))
 
 $SQL->free($result);
 
-$text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=r_repair' .  '\');", 2000);</script>' . "\n";
+$text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=maintenance' .  '\');", 2000);</script>' . "\n";
 $current_template = 'info.php';
 
 
@@ -239,7 +239,7 @@ $result = $SQL->build($update_query);
 
 delete_cache('data_stats');
 $text = sprintf($lang['SYNCING'], $lang['USERS_ST']);
-$text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=r_repair' .  '\');", 2000);</script>' . "\n";
+$text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=maintenance' .  '\');", 2000);</script>' . "\n";
 
 $current_template = 'info.php';
 
@@ -267,7 +267,7 @@ if(function_exists('apc_fetch') && defined('APC_CACHE'))
 
 #show done, msg
 $text .= '<li>' . $lang['REPAIRE_CACHE'] . '</li>';
-$text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=r_repair' .  '\');", 2000);</script>' . "\n";
+$text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=maintenance' .  '\');", 2000);</script>' . "\n";
 
 
 $current_template = 'info.php';

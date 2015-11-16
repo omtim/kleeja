@@ -16,7 +16,7 @@ if (!defined('IN_ADMIN'))
 
 
 //for style ..
-$current_template = "configs.php";
+$current_template = 'options.php';
 $current_smt	= isset($_GET['smt']) ? (preg_match('![a-z0-9_]!i', trim($_GET['smt'])) ? trim($_GET['smt']) : 'general') : 'general';
 //words
 $action 		= basename(ADMIN_PATH) . '?cp=options&amp;smt=' . $current_smt;
@@ -24,7 +24,31 @@ $n_submit 		= $lang['UPDATE_CONFIG'];
 $options		= '';
 #$current_type	= isset($_GET['type']) ? htmlspecialchars($_GET['type']) : 'general';
 $CONFIGEXTEND	= false;
-$H_FORM_KEYS	= kleeja_add_form_key('adm_configs');
+$H_FORM_KEYS	= kleeja_add_form_key('adm_options');
+
+function parse_options($opt)
+{
+	global $con, $lang;
+
+	if($opt[1] == 'con' && trim($opt[2]) != '' && isset($con[$opt[2]]))
+	{
+		return $con[$opt[2]];
+	}
+
+	if($opt[1] == 'lang' && trim($opt[2]) != '' && isset($lang[$opt[2]]))
+	{
+		return $lang[$opt[2]];
+	}
+
+
+	if($opt[1] == 'yesno' && trim($opt[2]) != '')
+	{
+		return '<label>' . $lang['YES'] . '<input type="radio" id="register" name="register" value="1" ' . ($con[$opt[2]] == 1 ? ' checked="checked"' :'') . '></label>' .
+					'<label>' . $lang['NO'] . '<input type="radio" id="register" name="register" value="0" ' . ($con[$opt[2]] == 0 ? ' checked="checked"' :'') . '></label>';
+
+	}
+}
+
 
 //secondary menu
 $query	= array(
@@ -49,7 +73,7 @@ $go_menu['all'] = array('name'=>$lang['CONFIG_KLJ_MENUS_ALL'], 'link'=>$action .
 //
 if (isset($_POST['submit']))
 {
-	if(!kleeja_check_form_key('adm_configs'))
+	if(!kleeja_check_form_key('adm_options'))
 	{
 		kleeja_admin_err($lang['INVALID_FORM_KEY'], true, $lang['ERROR'], true, $action, 1);
 	}
@@ -72,7 +96,7 @@ $query	= array(
 
 $CONFIGEXTEND	  = $SQL->escape($current_smt);
 $CONFIGEXTENDLANG = $go_menu[$current_smt]['name'];
-		
+
 if($current_smt != 'all')
 {
 	$query['WHERE'] = "type = '" . $SQL->escape($current_smt) . "' OR type = ''";
@@ -91,11 +115,11 @@ while($row=$SQL->fetch($result))
 	#make new lovely array !!
 	$con[$row['name']] = $row['value'];
 
-	if($row['name'] == 'thumbs_imgs') 
+	if($row['name'] == 'thumbs_imgs')
 	{
 		list($thmb_dim_w, $thmb_dim_h) = array_map('trim', @explode('*', $thumbs_are));
 	}
-	else if($row['name'] == 'time_zone') 
+	else if($row['name'] == 'time_zone')
 	{
 		$zones = time_zones();
 		foreach($zones as $z=>$t)
@@ -103,7 +127,7 @@ while($row=$SQL->fetch($result))
 			$time_zones .= '<option ' . ($con['time_zone'] == $t ? 'selected="selected"' : '') . ' value="' . $t . '">' . $z . '</option>' . "\n";
 		}
 	}
-	else if($row['name'] == 'language') 
+	else if($row['name'] == 'language')
 	{
 		//get languages
 		if ($dh = @opendir(PATH . 'lang'))
@@ -118,10 +142,10 @@ while($row=$SQL->fetch($result))
 			@closedir($dh);
 		}
 	}
-	else if($row['name'] == 'user_system') 
+	else if($row['name'] == 'user_system')
 	{
 		//get auth types
-		//fix previus choice in old kleeja
+		//fix previous choice in old kleeja
 		if(in_array($con['user_system'], array('2', '3', '4')))
 		{
 			$con['user_system'] = str_replace(array('2', '3', '4'), array('phpbb', 'vb', 'mysmartbb'), $con['user_system']);
@@ -143,26 +167,33 @@ while($row=$SQL->fetch($result))
 	}
 
 	($hook = $plugin->run_hook('while_fetch_adm_config')) ? eval($hook) : null; //run hook
-				
+
+
 	//options from database [UNDER TEST]
-	if(!empty($row['option'])) 
+	if(!empty($row['option']))
 	{
-		$option_value = $tpl->admindisplayoption($row['option']);
+
+		$option_value = preg_replace_callback(
+		'!\{([a-z]+)\.([a-zA-Z0-9-_]+)\}!',
+		'parse_options',
+		$row['option']);
+
+
 
 		if(strpos($option_value, 'delf_caution') !== false){
 			$option_value = str_replace('delf_caution', 'text-warning', $option_value);
 		}
 
 		$is_it_radio = strpos($option_value, 'type="radio"') !== false;
-		
+
 		if($is_it_radio){
 			$option_value = str_replace(array('<label>', '</label>'), array('<div class="radio"><label>', '</label></div>'), $option_value);
 		}
-		
+
 		$option_value = str_replace(array('<select ', 'type="text" '), array('<select class="form-control" ', 'type="text" class="form-control" '), $option_value);
 
 		$optionss[$row['name']] = array(
-				'option'		 => '<li class="list-group-item form-group">' . "\n" .  
+				'option'		 => '<li class="list-group-item form-group">' . "\n" .
 									'<h4 class="list-group-item-heading"><label for="' . $row['name'] . '">' . (!empty($lang[strtoupper($row['name'])]) ? $lang[strtoupper($row['name'])] : $olang[strtoupper($row['name'])]) . '</label></h4>' . "\n" .
 									'<p class="list-group-item-text">' . $option_value . '</p>' . "\n" .
 									'</li>' . "\n" . '',
@@ -170,7 +201,7 @@ while($row=$SQL->fetch($result))
 				'display_order' => $row['display_order'],
 			);
 	}
-			
+
 	//when submit
 	if (isset($_POST['submit']))
 	{
@@ -207,7 +238,7 @@ while($row=$SQL->fetch($result))
 			{
 				$new['siteurl'] .= '/';
 			}
-			
+
 			if($config['siteurl'] != $new['siteurl'])
 			{
 				#when site url changed, cookies will be currptued !
@@ -239,7 +270,7 @@ $types = array();
 foreach($optionss as $key => $option)
 {
 	if(empty($types[$option['type']]))
-	{ 
+	{
 		$types[$option['type']] = '<h2>' . $go_menu[$option['type']]['name'] . '</h2><ul class="list-group">';
 	}
 }

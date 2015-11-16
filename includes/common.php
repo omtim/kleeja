@@ -27,7 +27,7 @@ define('IN_COMMON', true);
  * Development stage, KLeeja will treats you as a developer
  */
 define('DEV_STAGE', true);
-define('DEBUG', false);
+define('DEBUG', true);
 
 
 /**
