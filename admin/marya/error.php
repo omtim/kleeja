@@ -1,6 +1,6 @@
 
 <!-- start error System Messages -->
 <div class="alert alert-danger">
-{text}
+<?=$text?>
 </div>
 <!-- end error System Messages -->

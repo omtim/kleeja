@@ -182,6 +182,7 @@ function get_template_path($name)
 	}
 	else
 	{
+		echo $folder_path;
 		global $text;
 		$text = 'Requested "' . $name . '" template doesnt exists or an empty!';
 		return get_template_path('error.php');

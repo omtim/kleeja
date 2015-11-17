@@ -30,17 +30,17 @@ if (!defined('IN_COMMON'))
  * @param int $rs [optional] if $redirected is given and not false, this will be the time in seconds
  * @param string $style [optional] this is just here to use it inside kleeja_admin_info to use admin_info
  */
-function kleeja_admin_err($msg, $navigation = true, $title='', $exit = true, $redirect = false, $rs = 5, $style = 'admin_err')
+function kleeja_admin_err($msg, $navigation = true, $title='', $exit = true, $redirect = false, $rs = 5, $style = 'error.php')
 {
 	global $text, $tpl, $SHOW_LIST, $adm_extensions, $adm_extensions_menu;
-	global $STYLE_PATH_ADMIN, $lang, $olang, $SQL, $MINI_MENU;
+	global $STYLE_PATH_ADMIN, $lang, $plugin, $SQL, $MINI_MENU;
 
 	($hook = $plugin->run_hook('kleeja_admin_err_func')) ? eval($hook) : null; //run hook
 
 	#Exception for ajax
 	if(isset($_GET['_ajax_']))
 	{
-		$text = $msg  . ($redirect ?  "\n" . '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . str_replace('&amp;', '&', $redirect) . '\');", ' . ($rs*1000) . ');</script>' : '');
+		$text = $msg  . ($redirect ?  "\n" . '<script type="text/javascript"> setTimeout("location.href=\'' . str_replace('&amp;', '&', $redirect) . '\';", ' . ($rs*1000) . ');</script>' : '');
 		echo_ajax(1, $tpl->display($style));
 		$SQL->close();
 		exit();
@@ -51,11 +51,15 @@ function kleeja_admin_err($msg, $navigation = true, $title='', $exit = true, $re
 	$SHOW_LIST	= $navigation;
 
 	#header
-	echo $tpl->display("admin_header");
+	include get_template_path('header.php');
+		#show tpl
+	include get_template_path($style);
+		#footer
+	include get_template_path('footer.php');
 	#show tpl
-	echo $tpl->display($style);
+	//echo $tpl->display($style);
 	#footer
-	echo $tpl->display("admin_footer");
+	//echo $tpl->display("admin_footer");
 
 	#if exit, clean it
 	if($exit)
@@ -78,10 +82,12 @@ function kleeja_admin_err($msg, $navigation = true, $title='', $exit = true, $re
  */
 function kleeja_admin_info($msg, $navigation=true, $title='', $exit=true, $redirect = false, $rs = 2)
 {
+	global $plugin;
+
 	($hook = $plugin->run_hook('kleeja_admin_info_func')) ? eval($hook) : null; //run hook
 
 	#since info message and error message are the same, we use one function callback
-	return kleeja_admin_err($msg, $navigation, $title, $exit, $redirect, $rs, 'admin_info');
+	return kleeja_admin_err($msg, $navigation, $title, $exit, $redirect, $rs, 'info.php');
 }
 
 
@@ -336,4 +342,112 @@ function get_actual_stats($name)
 	$SQL->free($result);
 
 	return $v[$name];
+}
+
+
+
+/**
+ * Options page, values of <select> option
+ *
+ * @param string $name The name of config name, ex: config.lang
+ * @param string $default_value The default value of a select input
+ * @return string|bool
+ */
+function option_select_values($name, $default_value = '')
+{
+	global $plugin, $lang;
+
+	$values = '';
+
+	switch($name)
+	{
+		case 'time_zone':
+			$zones = time_zones();
+			foreach($zones as $z=>$t)
+			{
+				$values .= '<option ' . ($default_value == $t ? 'selected="selected" ' : '') . 'value="' . $t . '">' . $z . '</option>' . "\n";
+			}
+
+		break;
+
+		case 'language':
+
+			if ($dh = @opendir(PATH . 'lang'))
+			{
+				while (($file = readdir($dh)) !== false)
+				{
+					if(strpos($file, '.') === false && $file != '..' && $file != '.')
+					{
+						$values .= '<option ' . ($default_value == $file ? 'selected="selected"' : '') . ' value="' . $file . '">' . $file . '</option>' . "\n";
+					}
+				}
+				@closedir($dh);
+			}
+
+		break;
+
+		case 'user_system':
+
+			#fix previous choice in old kleeja
+			if(in_array($default_value, array('2', '3', '4')))
+			{
+				$default_value = str_replace(array('2', '3', '4'), array('phpbb', 'vb', 'mysmartbb'), $default_value);
+			}
+
+			$values .= '<option value="1"' . ($con['user_system']=='1' ? ' selected="selected"' : '') . '>' . $lang['NORMAL'] . '</option>' . "\n";
+			if ($dh = @opendir(PATH . 'includes/auth_integration'))
+			{
+				while (($file = readdir($dh)) !== false)
+				{
+					if(strpos($file, '.php') !== false)
+					{
+						$file = trim(str_replace('.php', '', $file));
+						$values .= '<option value="' . $file . '"' . ($default_value == $file ? ' selected="selected"' : '') . '>' . $file . '</option>' . "\n";
+					}
+				}
+				@closedir($dh);
+			}
+
+
+		break;
+
+		case 'decode':
+
+			$decode_types = array(
+					0 => $lang['NO_CHANGE'],
+					1 => $lang['CHANGE_TIME'],
+					2 => $lang['CHANGE_MD5']
+				);
+
+				($hook = $plugin->run_hook('option_select_values_decode_types_func')) ? eval($hook) : null; //run hook
+
+				foreach($decode_types as $d=>$l)
+				{
+					$values .= '<option ' . ($default_value == $d ? 'selected="selected" ' : '') . 'value="' . $d . '">' . $l . '</option>' . "\n";
+				}
+
+		break;
+
+		case 'id_form':
+
+			$id_form_types = array(
+					'id' => $lang['IDF'],
+					'filename' => $lang['IDFF'],
+					'direct' => $lang['IDFF']
+				);
+
+				($hook = $plugin->run_hook('option_select_values_decode_types_func')) ? eval($hook) : null; //run hook
+
+				foreach($id_form_types as $d=>$l)
+				{
+					$values .= '<option ' . ($default_value == $d ? 'selected="selected" ' : '') . 'value="' . $d . '">' . $l . '</option>' . "\n";
+				}
+
+		break;
+
+	}
+
+	($hook = $plugin->run_hook('option_select_values_func')) ? eval($hook) : null; //run hook
+
+	return $values;
 }

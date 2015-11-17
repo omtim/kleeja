@@ -42,7 +42,7 @@ else
 
 	$version_data = trim(htmlspecialchars($b_data[0]));
 
-	//auto update requirements 
+	//auto update requirements
 	$aupdate = false;
 
 	if (version_compare(strtolower(KLEEJA_VERSION), strtolower($version_data), '<'))
@@ -119,7 +119,7 @@ else
 //then go back  to start
 if(isset($_GET['show_msg']))
 {
-	redirect(basename(ADMIN_PATH) . '?update_done=1');
+	redirect(ADMIN_PATH . '?update_done=1');
 	$SQL->close();
 	exit;
 }
@@ -129,7 +129,7 @@ endif;
 
 //secondary menu
 $go_menu = array(
-				'general' => array('name'=>$lang['R_CHECK_UPDATE'], 'link'=> basename(ADMIN_PATH) . '?cp=p_check_update&amp;smt=general', 'goto'=>'general', 'current'=> $current_smt == 'general'),
-				'howto' => array('name'=>$lang['HOW_UPDATE_KLEEJA'], 'link'=> basename(ADMIN_PATH) . '?cp=p_check_update&amp;smt=howto', 'goto'=>'howto', 'current'=> $current_smt == 'howto'),
-				'site' => array('name'=>'Kleeja.com', 'link'=> basename(ADMIN_PATH) . '?cp=p_check_update&amp;smt=site', 'goto'=>'site', 'current'=> $current_smt == 'site'),
+				'general' => array('name'=>$lang['R_CHECK_UPDATE'], 'link'=> ADMIN_PATH . '?cp=p_check_update&amp;smt=general', 'goto'=>'general', 'current'=> $current_smt == 'general'),
+				'howto' => array('name'=>$lang['HOW_UPDATE_KLEEJA'], 'link'=> ADMIN_PATH . '?cp=p_check_update&amp;smt=howto', 'goto'=>'howto', 'current'=> $current_smt == 'howto'),
+				'site' => array('name'=>'Kleeja.com', 'link'=> ADMIN_PATH . '?cp=p_check_update&amp;smt=site', 'goto'=>'site', 'current'=> $current_smt == 'site'),
 	);

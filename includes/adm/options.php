@@ -19,7 +19,7 @@ if (!defined('IN_ADMIN'))
 $current_template = 'options.php';
 $current_smt	= isset($_GET['smt']) ? (preg_match('![a-z0-9_]!i', trim($_GET['smt'])) ? trim($_GET['smt']) : 'general') : 'general';
 //words
-$action 		= basename(ADMIN_PATH) . '?cp=options&amp;smt=' . $current_smt;
+$action 		= ADMIN_PATH . '?cp=options&amp;smt=' . $current_smt;
 $n_submit 		= $lang['UPDATE_CONFIG'];
 $options		= '';
 #$current_type	= isset($_GET['type']) ? htmlspecialchars($_GET['type']) : 'general';
@@ -30,29 +30,53 @@ function parse_options($opt)
 {
 	global $con, $lang;
 
+
+	#Exceptions for some options
+	if($opt[2] == 'write_imgs')
+	{
+		$opt[4] = '<br /><img src="' . (file_exists(PATH . 'images/watermark.gif') ? PATH . 'images/watermark.gif' : PATH . 'images/watermark.png') . '" alt="Seal photo" style=\"margin-top:4px;border:1px groove #FF865E;">';
+	}
+	else if($opt[2] == 'googleanalytics')
+	{
+		$opt[4] = '<a href="http://www.google.com/analytics">Google Analytics</a>';
+
+	}
+
+
+
+	#if it's only the value
 	if($opt[1] == 'con' && trim($opt[2]) != '' && isset($con[$opt[2]]))
 	{
 		return $con[$opt[2]];
 	}
 
+	#language term
 	if($opt[1] == 'lang' && trim($opt[2]) != '' && isset($lang[$opt[2]]))
 	{
 		return $lang[$opt[2]];
 	}
 
-
+	#yes or no option
 	if($opt[1] == 'yesno' && trim($opt[2]) != '')
 	{
 		return '<div class="radio"><label><input type="radio" id="' . $opt[2] . '" name="' . $opt[2] . '" value="1" ' . ($con[$opt[2]] == 1 ? ' checked="checked"' :'') . '>' . $lang['YES'] . '</label></div>' .
 					'<div class="radio"><label><input type="radio" id="' .  $opt[2] . '" name="' . $opt[2] . '" value="0" ' . ($con[$opt[2]] == 0 ? ' checked="checked"' :'') . '>' . $lang['NO'] . '</label></div>' .
-					(isset($opt[4]) ? '<br> <p class="text-muted">' . $lang[$opt[4]]  .'</p>': '');
+					(isset($opt[4]) ? '<br> <small class="text-muted">' . (isset($lang[$opt[4]]) ? $lang[$opt[4]] :  $opt[4])  .'</small>': '');
 	}
 
+	#text or left-to-right text input
 	if(($opt[1] == 'text' || $opt[1] == 'ltr') && trim($opt[2]) != '')
 	{
-		return '<input type="text" id="' . $opt[2] . '" name="' . $opt[2] . '" value="' . $con[$opt[2]] . '" class="form-control text-options" ' . ($opt[1] == 'ltr'? ' style="direction:ltr"' : '') .' />';
+		return '<input type="text" id="' . $opt[2] . '" name="' . $opt[2] . '" value="' . $con[$opt[2]] . '" class="form-control text-options" ' . ($opt[1] == 'ltr'? ' style="direction:ltr"' : '') .' />' .
+		(isset($opt[4]) ? '<br> <small class="text-muted">' . (isset($lang[$opt[4]]) ? $lang[$opt[4]] :  $opt[4])  .'</small>': '');
 	}
 
+	#select option
+	if($opt[1] == 'select' && trim($opt[2]) != '')
+	{
+		return '<select name="' . $opt[2] . '" class="form-control"  id="' . $opt[2] . '">\r\n ' . option_select_values($opt[2], $con[$opt[2]])  . '\r\n </select>' .
+		(isset($opt[4]) ? '<br> <small class="text-muted">' . (isset($lang[$opt[4]]) ? $lang[$opt[4]] :  $opt[4])  .'</small>': '');
+	}
 }
 
 
@@ -68,7 +92,7 @@ $result = $SQL->build($query);
 
 while($row = $SQL->fetch($result))
 {
-	$name = !empty($lang['CONFIG_KLJ_MENUS_' . strtoupper($row['type'])]) ? $lang['CONFIG_KLJ_MENUS_' . strtoupper($row['type'])] : (!empty($olang['CONFIG_KLJ_MENUS_' . strtoupper($row['type'])]) ? $olang['CONFIG_KLJ_MENUS_' . strtoupper($row['type'])] : $lang['CONFIG_KLJ_MENUS_OTHER']);
+	$name = !empty($lang['CONFIG_KLJ_MENUS_' . strtoupper($row['type'])]) ? $lang['CONFIG_KLJ_MENUS_' . strtoupper($row['type'])] : $lang['CONFIG_KLJ_MENUS_OTHER'];
 	$go_menu[$row['type']] = array('name'=>$name, 'link'=>$action . '&amp;smt=' . $row['type'], 'goto'=>$row['type'], 'current'=> $current_smt == $row['type']);
 }
 
@@ -87,21 +111,16 @@ if (isset($_POST['submit']))
 
 
 
-//general varaibles
-#$action		= basename(ADMIN_PATH) . '?cp=options&amp;type=' .$current_type;
-$STAMP_IMG_URL = file_exists(PATH . 'images/watermark.gif') ? PATH . 'images/watermark.gif' : PATH . 'images/watermark.png';
-$stylfiles	= $lngfiles	= $authtypes =  $time_zones = '';
+#general varaibles
 $optionss	= array();
-$n_googleanalytics = '<a href="http://www.google.com/analytics">Google Analytics</a>';
-
 $query	= array(
 					'SELECT'	=> '*',
 					'FROM'		=> "{$dbprefix}config",
 					'ORDER BY'	=> 'display_order, type ASC'
 			);
 
-$CONFIGEXTEND	  = $SQL->escape($current_smt);
-$CONFIGEXTENDLANG = $go_menu[$current_smt]['name'];
+#$CONFIGEXTEND	  = $SQL->escape($current_smt);
+#$CONFIGEXTENDLANG = $go_menu[$current_smt]['name'];
 
 if($current_smt != 'all')
 {
@@ -121,60 +140,11 @@ while($row=$SQL->fetch($result))
 	#make new lovely array !!
 	$con[$row['name']] = $row['value'];
 
-	if($row['name'] == 'thumbs_imgs')
-	{
-		list($thmb_dim_w, $thmb_dim_h) = array_map('trim', @explode('*', $thumbs_are));
-	}
-	else if($row['name'] == 'time_zone')
-	{
-		$zones = time_zones();
-		foreach($zones as $z=>$t)
-		{
-			$time_zones .= '<option ' . ($con['time_zone'] == $t ? 'selected="selected"' : '') . ' value="' . $t . '">' . $z . '</option>' . "\n";
-		}
-	}
-	else if($row['name'] == 'language')
-	{
-		//get languages
-		if ($dh = @opendir(PATH . 'lang'))
-		{
-			while (($file = readdir($dh)) !== false)
-			{
-				if(strpos($file, '.') === false && $file != '..' && $file != '.')
-				{
-					$lngfiles .= '<option ' . ($con['language'] == $file ? 'selected="selected"' : '') . ' value="' . $file . '">' . $file . '</option>' . "\n";
-				}
-			}
-			@closedir($dh);
-		}
-	}
-	####
-	## TO BE RE-WRITTEN IN A GOOD WAY, TO MAKE IT AS PLUGIN AND NOT A PART OF KLEEJA ITSELF
-	## TODO
-	####
-	else if($row['name'] == 'user_system')
-	{
-		//get auth types
-		//fix previous choice in old kleeja
-		if(in_array($con['user_system'], array('2', '3', '4')))
-		{
-			$con['user_system'] = str_replace(array('2', '3', '4'), array('phpbb', 'vb', 'mysmartbb'), $con['user_system']);
-		}
+	#if($row['name'] == 'thumbs_imgs')
+	#{
+	#	list($thmb_dim_w, $thmb_dim_h) = array_map('trim', @explode('*', $thumbs_are));
+	#}
 
-		$authtypes .= '<option value="1"' . ($con['user_system']=='1' ? ' selected="selected"' : '') . '>' . $lang['NORMAL'] . '</option>' . "\n";
-		if ($dh = @opendir(PATH . 'includes/auth_integration'))
-		{
-			while (($file = readdir($dh)) !== false)
-			{
-				if(strpos($file, '.php') !== false)
-				{
-					$file = trim(str_replace('.php', '', $file));
-					$authtypes .= '<option value="' . $file . '"' . ($con['user_system'] == $file ? ' selected="selected"' : '') . '>' . $file . '</option>' . "\n";
-				}
-			}
-			@closedir($dh);
-		}
-	}
 
 	($hook = $plugin->run_hook('while_fetch_adm_config')) ? eval($hook) : null; //run hook
 
@@ -191,7 +161,7 @@ while($row=$SQL->fetch($result))
 
 		$optionss[$row['name']] = array(
 				'option'		 => '<div class="form-group">' . "\n" .
-									'<label for="' . $row['name'] . '">' . (!empty($lang[strtoupper($row['name'])]) ? $lang[strtoupper($row['name'])] : $olang[strtoupper($row['name'])]) . '</label>' . "\n" .
+									'<label for="' . $row['name'] . '">' . (!empty($lang[strtoupper($row['name'])]) ? $lang[strtoupper($row['name'])] : strtoupper($row['name'])) . '</label>' . "\n" .
 									'' . $option_value . '' . "\n" .
 									'</div>' . "\n" . '',
 				'type'			=> $row['type'],
@@ -199,13 +169,13 @@ while($row=$SQL->fetch($result))
 			);
 	}
 
-	//when submit
+	#after user's submit
 	if (isset($_POST['submit']))
 	{
 		//-->
 		$new[$row['name']] = (isset($_POST[$row['name']])) ? $_POST[$row['name']] : $con[$row['name']];
 
-		//save them as you want ..
+		#make sure before saving them
 		if($row['name'] == 'thumbs_imgs')
 		{
 			if(intval($_POST['thmb_dim_w']) < 10)
@@ -218,8 +188,8 @@ while($row=$SQL->fetch($result))
 				$_POST['thmb_dim_h'] = 10;
 			}
 
-			$thumbs_were = trim($_POST['thmb_dim_w']) . '*' . trim($_POST['thmb_dim_h']);
-			update_config('thmb_dims', $thumbs_were);
+			//$thumbs_were = trim($_POST['thmb_dim_w']) . '*' . trim($_POST['thmb_dim_h']);
+			//update_config('thmb_dims', $thumbs_were);
 		}
 		else if($row['name'] == 'livexts')
 		{
@@ -290,36 +260,10 @@ if (isset($_POST['submit']))
 {
 	($hook = $plugin->run_hook('after_submit_adm_config')) ? eval($hook) : null; //run hook
 
-	//empty ..
-	/*
-	if (empty($_POST['sitename']) || empty($_POST['siteurl']) || empty($_POST['foldername']) || empty($_POST['filesnum']))
-	{
-		$text	= $lang['EMPTY_FIELDS'];
-		$stylee	= "admin_err";
-	}
-	elseif (!is_numeric($_POST['filesnum']) || !is_numeric($_POST['sec_down']))
-	{
-		$text	= $lang['NUMFIELD_S'];
-		$stylee	= "admin_err";
-	}
-	else
-	{
-	*/
 
 	#delete cache ..
 	delete_cache('data_config');
 
-	#some configs need refresh page ..
-	$need_refresh_configs = array('language');
-	foreach($need_refresh_configs as $l)
-	{
-		if(isset($_POST[$l]) and $_POST[$l] != $config[$l])
-		{
-			header('Location: ' . basename(ADMIN_PATH));
-			exit();
-		}
-	}
-
-	kleeja_admin_info($lang['CONFIGS_UPDATED'], true, '', true,  basename(ADMIN_PATH) . '?cp=options', 3);
+	kleeja_admin_info($lang['CONFIGS_UPDATED'], true, '', true,  ADMIN_PATH . '?cp=options', 3);
 	//}
 }#submit
