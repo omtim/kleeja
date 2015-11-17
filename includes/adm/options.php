@@ -43,10 +43,16 @@ function parse_options($opt)
 
 	if($opt[1] == 'yesno' && trim($opt[2]) != '')
 	{
-		return '<label>' . $lang['YES'] . '<input type="radio" id="register" name="register" value="1" ' . ($con[$opt[2]] == 1 ? ' checked="checked"' :'') . '></label>' .
-					'<label>' . $lang['NO'] . '<input type="radio" id="register" name="register" value="0" ' . ($con[$opt[2]] == 0 ? ' checked="checked"' :'') . '></label>';
-
+		return '<div class="radio"><label><input type="radio" id="' . $opt[2] . '" name="' . $opt[2] . '" value="1" ' . ($con[$opt[2]] == 1 ? ' checked="checked"' :'') . '>' . $lang['YES'] . '</label></div>' .
+					'<div class="radio"><label><input type="radio" id="' .  $opt[2] . '" name="' . $opt[2] . '" value="0" ' . ($con[$opt[2]] == 0 ? ' checked="checked"' :'') . '>' . $lang['NO'] . '</label></div>' .
+					(isset($opt[4]) ? '<br> <p class="text-muted">' . $lang[$opt[4]]  .'</p>': '');
 	}
+
+	if(($opt[1] == 'text' || $opt[1] == 'ltr') && trim($opt[2]) != '')
+	{
+		return '<input type="text" id="' . $opt[2] . '" name="' . $opt[2] . '" value="' . $con[$opt[2]] . '" class="form-control text-options" ' . ($opt[1] == 'ltr'? ' style="direction:ltr"' : '') .' />';
+	}
+
 }
 
 
@@ -142,6 +148,10 @@ while($row=$SQL->fetch($result))
 			@closedir($dh);
 		}
 	}
+	####
+	## TO BE RE-WRITTEN IN A GOOD WAY, TO MAKE IT AS PLUGIN AND NOT A PART OF KLEEJA ITSELF
+	## TODO
+	####
 	else if($row['name'] == 'user_system')
 	{
 		//get auth types
@@ -169,34 +179,21 @@ while($row=$SQL->fetch($result))
 	($hook = $plugin->run_hook('while_fetch_adm_config')) ? eval($hook) : null; //run hook
 
 
-	//options from database [UNDER TEST]
+	#parsing options form the database
 	if(!empty($row['option']))
 	{
-
 		$option_value = preg_replace_callback(
-		'!\{([a-z]+)\.([a-zA-Z0-9-_]+)\}!',
+		'!\{([a-z]+)\.([a-zA-Z0-9-_]+)(\.([a-zA-Z0-9_-]+))?\}!',
 		'parse_options',
 		$row['option']);
 
 
 
-		if(strpos($option_value, 'delf_caution') !== false){
-			$option_value = str_replace('delf_caution', 'text-warning', $option_value);
-		}
-
-		$is_it_radio = strpos($option_value, 'type="radio"') !== false;
-
-		if($is_it_radio){
-			$option_value = str_replace(array('<label>', '</label>'), array('<div class="radio"><label>', '</label></div>'), $option_value);
-		}
-
-		$option_value = str_replace(array('<select ', 'type="text" '), array('<select class="form-control" ', 'type="text" class="form-control" '), $option_value);
-
 		$optionss[$row['name']] = array(
-				'option'		 => '<li class="list-group-item form-group">' . "\n" .
-									'<h4 class="list-group-item-heading"><label for="' . $row['name'] . '">' . (!empty($lang[strtoupper($row['name'])]) ? $lang[strtoupper($row['name'])] : $olang[strtoupper($row['name'])]) . '</label></h4>' . "\n" .
-									'<p class="list-group-item-text">' . $option_value . '</p>' . "\n" .
-									'</li>' . "\n" . '',
+				'option'		 => '<div class="form-group">' . "\n" .
+									'<label for="' . $row['name'] . '">' . (!empty($lang[strtoupper($row['name'])]) ? $lang[strtoupper($row['name'])] : $olang[strtoupper($row['name'])]) . '</label>' . "\n" .
+									'' . $option_value . '' . "\n" .
+									'</div>' . "\n" . '',
 				'type'			=> $row['type'],
 				'display_order' => $row['display_order'],
 			);
@@ -271,7 +268,7 @@ foreach($optionss as $key => $option)
 {
 	if(empty($types[$option['type']]))
 	{
-		$types[$option['type']] = '<h2>' . $go_menu[$option['type']]['name'] . '</h2><ul class="list-group">';
+		$types[$option['type']] = '<h2>' . $go_menu[$option['type']]['name'] . '</h2>';
 	}
 }
 

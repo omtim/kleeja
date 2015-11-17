@@ -2,11 +2,11 @@
 <!--- START EDIT STAGE -->
 <!-- the big box begin -->
 <div class="configs_page">
-<form method="post" action="<?=$action?>" id="opt_form" role="form">
+<form method="post" action="<?=$action?>" id="opt_form" role="form" class="form">
 <!-- admin configs tr extra begin -->
 
 <?=$options?>
-</ul>
+
 
 <!-- admin configs tr extra -->
 
