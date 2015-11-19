@@ -104,7 +104,7 @@ function kleeja_admin_info($msg, $navigation=true, $title='', $exit=true, $redir
  */
 function insert_filter($type, $value, $time = false, $user = false, $status = '', $uid = false)
 {
-	global $SQL, $dbprefix, $userinfo;
+	global $SQL, $dbprefix, $userinfo, $plugin;
 
 	$user = !$user ? $userinfo['id'] : $user;
 	$time = !$time ? time() : $time;
@@ -118,7 +118,7 @@ function insert_filter($type, $value, $time = false, $user = false, $status = ''
 
 	$SQL->build($insert_query);
 
-	return $SQL->insert_id();
+	return $SQL->id();
 }
 
 
@@ -132,7 +132,7 @@ function insert_filter($type, $value, $time = false, $user = false, $status = ''
  */
 function update_filter($id_or_uid, $value)
 {
-	global $SQL, $dbprefix;
+	global $SQL, $dbprefix, $plugin;
 
 
 	$update_query	= array(
@@ -162,7 +162,7 @@ function update_filter($id_or_uid, $value)
  */
 function get_filter($item, $get_by = 'filter_id', $just_value = false)
 {
-	global $dbprefix, $SQL;
+	global $dbprefix, $SQL, $plugin;
 
 	$query = array(
 					'SELECT'	=> $just_value ? 'f.filter_value' : 'f.*',

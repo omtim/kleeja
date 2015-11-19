@@ -1,4 +1,4 @@
-<?php
+$h_lst_imgs<?php
 /**
 *
 * @package adm
@@ -23,8 +23,8 @@ if (!defined('IN_ADMIN'))
 
 #page info
 $current_template= 'start.php';
-$h_lst_files	= ADMIN_PATH . '?cp=c_files&amp;last_visit=';
-$h_lst_imgs		= ADMIN_PATH . '?cp=d_img_ctrl&amp;last_visit=';
+$h_lst_files	= ADMIN_PATH . '?cp=files&amp;last_visit=';
+$h_lst_imgs		= ADMIN_PATH . '?cp=images&amp;last_visit=';
 $current_smt	= isset($_GET['smt']) ? (preg_match('![a-z0-9_]!i', trim($_GET['smt'])) ? trim($_GET['smt']) : 'general') : 'general';
 $GET_FORM_KEY	= kleeja_add_form_key_get('adm_start_actions');
 

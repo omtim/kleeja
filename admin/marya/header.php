@@ -2,7 +2,7 @@
 <html lang="<?=$lang['LANG_SMALL_NAME']?>s" dir="<?=$lang['DIR']?>">
 <head>
 <title><?=$lang['KLEEJA_CP']?> - <?=$config['sitename']?></title>
-<!-- top-head -->	
+<!-- top-head -->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -59,7 +59,7 @@ body, h1, h2, h3, h4, h5{
 			<li class="<?php echo $go_to == 'start' ? 'active' : '';?>">
 				<a title="<?=$lang['R_CPINDEX']?>" class="cpindex" href="./"><?=$lang['R_CPINDEX']?></a>
 			</li>
-	
+
 			<?php foreach($adm_extensions_menu as $i=>$item):?>
 			<li class="<?php if($item['current']):?>?active<?php endif;?>">
 				<a title="<?=$item['title']?>" class="side_anchor" href="<?=$item['link']?>#!cp=<?=$item['goto']?>" <?php if($item['confirm']):?>onclick="javascript:confirm_from();"<?php endif;?>>
@@ -73,11 +73,10 @@ body, h1, h2, h3, h4, h5{
 
  <!-- content -->
 <div class="col-md-9" id="content">
-<?php if($go_menu_html):?>
-<?php if($go_to == 'options'):?><div class="panel panel-default"><div class="panel-body" style="font-size:12px;"><?php endif;?>
+<?php if(isset($go_menu_html)):?>
+<?php if($go_to == 'options'):?><div class="panel panel-default"><div class="panel-body"><?php endif;?>
   <ul class="nav nav-<?php echo $go_to == 'options' ? 'pills' : 'tabs';?>">
 	  <?=$go_menu_html?>
   </ul>
 <?php if($go_to == 'options'):?></div></div><?php endif;?>
 <?php endif;?>
-

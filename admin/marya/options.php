@@ -13,7 +13,7 @@
 <!-- button -->
 <p class="submit <?php if($lang['DIR'] == 'rtl'):?>">pull-left<?php endif;?>">
 	<input type="hidden" name="submit" value="1" />
-	<button type="submit" id="submit" name="_submit_" class="btn btn-primary" onclick="javascript:submit_kleeja_data('#opt_form', '#content', 0);"><span><?=$n_submit?></span></button>
+	<button type="submit" id="submit" name="_submit_" class="btn btn-primary"><span><?=$n_submit?></span></button>
 </p>
 
 <?=$H_FORM_KEYS?>

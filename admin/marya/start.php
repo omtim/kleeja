@@ -4,8 +4,54 @@
 
 <!-- start general -->
 <div class="page-header">
-  <h1><?=$lang['WELCOME']?> <?=$user->data['name']?><small>, <?=$lang['LAST_VISIT']?> <?=$last_visit?></small></h1>
+  <h1><?=$lang['WELCOME']?>, <?=$user->data['name']?></h1>
+
+
+<!-- last visists -->
+<?php if($last_visit):?>
+
+		<div class="btn-group">
+		    <div class="btn-group">
+		      <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+		        <span class="glyphicon glyphicon-time"></span> <?=$lang['IMG_LST_VST_SEARCH']?>: <?=$lang['TIME']?>
+		        <span class="caret"></span>
+		      </button>
+		      <ul class="dropdown-menu">
+		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_imgs?>' + (Math.round((new Date()).getTime() / 1000) - 3600);"><?=$lang['HOUR']?></a></li>
+		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_imgs?>' + (Math.round((new Date()).getTime() / 1000) - 18000);"><?=$lang['5HOURS']?></a></li>
+		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_imgs?>' + (Math.round((new Date()).getTime() / 1000) - 86400);"><?=$lang['DAY']?></a></li>
+		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_imgs?>' + (Math.round((new Date()).getTime() / 1000) - 604800);"><?=$lang['WEEK']?></a></li>
+		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_imgs?>' + (Math.round((new Date()).getTime() / 1000) - 2592000);"><?=$lang['MONTH']?></a></li>
+		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_imgs?>' + (Math.round((new Date()).getTime() / 1000) - 31536000);"><?=$lang['YEAR']?></a></li>
+		      </ul>
+		    </div>
+	  </div>
+
+      <b><?=$lang['OR'];?></b>
+
+		<div class="btn-group">
+		    <div class="btn-group">
+		      <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+		        <span class="glyphicon glyphicon-time"></span> <?=$lang['FLS_LST_VST_SEARCH']?>: <?=$lang['TIME']?>...
+		        <span class="caret"></span>
+		      </button>
+		      <ul class="dropdown-menu">
+		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_files?>' + (Math.round((new Date()).getTime() / 1000) - 3600);"><?=$lang['HOUR']?></a></li>
+		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_files?>' + (Math.round((new Date()).getTime() / 1000) - 18000);"><?=$lang['5HOURS']?></a></li>
+		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_files?>' + (Math.round((new Date()).getTime() / 1000) - 86400);"><?=$lang['DAY']?></a></li>
+		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_files?>' + (Math.round((new Date()).getTime() / 1000) - 604800);"><?=$lang['WEEK']?></a></li>
+		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_files?>' + (Math.round((new Date()).getTime() / 1000) - 2592000);"><?=$lang['MONTH']?></a></li>
+		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_files?>' + (Math.round((new Date()).getTime() / 1000) - 31536000);"><?=$lang['YEAR']?></a></li>
+		      </ul>
+		    </div>
+	  </div>
+
+
+<?php endif; ?>
+<!-- end last visits -->
+
 </div>
+<!-- /header -->
 
 <!-- notes general -->
 <?php if($ADM_NOTIFICATIONS):?>
@@ -20,62 +66,7 @@
 <?php endforeach;?>
 <?php endif;?>
 
-<!-- last visists -->
-<?php if($last_visit):?>
-<div class="row">
-	<div class="col-md-6">
-		<h4><?=$lang['IMG_LST_VST_SEARCH']?>:</h4>
 
-		<div class="btn-group">
-            <?php if($image_last_visit):?>
-				<button type="button" class="btn btn-default" onclick="javascript:javascript:location.href='<?=$h_lst_imgs?><?=$image_last_visit?>';"><?=$lang['LAST_VIEW']?></button>
-			<?php endif;?>
-
-		    <div class="btn-group">
-		      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-		        <span class="glyphicon glyphicon-time"></span> <?=$lang['TIME']?>...
-		        <span class="caret"></span>
-		      </button>
-		      <ul class="dropdown-menu">
-		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_imgs?>' + (Math.round((new Date()).getTime() / 1000) - 3600);"><?=$lang['HOUR']?></a></li>
-		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_imgs?>' + (Math.round((new Date()).getTime() / 1000) - 18000);"><?=$lang['5HOURS']?></a></li>
-		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_imgs?>' + (Math.round((new Date()).getTime() / 1000) - 86400);"><?=$lang['DAY']?></a></li>
-		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_imgs?>' + (Math.round((new Date()).getTime() / 1000) - 604800);"><?=$lang['WEEK']?></a></li>
-		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_imgs?>' + (Math.round((new Date()).getTime() / 1000) - 2592000);"><?=$lang['MONTH']?></a></li>
-		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_imgs?>' + (Math.round((new Date()).getTime() / 1000) - 31536000);"><?=$lang['YEAR']?></a></li>
-		      </ul>
-		    </div>
-	  </div>
-
-	</div>
-	<div class="col-md-6">
-		<h4><?=$lang['FLS_LST_VST_SEARCH']?></h4>
-
-		<div class="btn-group">
-            <?php if($image_last_visit):?>
-				<button type="button" class="btn btn-default"onclick="javascript:location.href='<?=$h_lst_files?><?=files_last_visit?>';"><?=$lang['LAST_VIEW']?></button>
-			<?php endif;?>
-
-		    <div class="btn-group">
-		      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-		        <span class="glyphicon glyphicon-time"></span> <?=$lang['TIME']?>...
-		        <span class="caret"></span>
-		      </button>
-		      <ul class="dropdown-menu">
-		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_files?>' + (Math.round((new Date()).getTime() / 1000) - 3600);"><?=$lang['HOUR']?></a></li>
-		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_files?>' + (Math.round((new Date()).getTime() / 1000) - 18000);"><?=$lang['5HOURS']?></a></li>
-		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_files?>' + (Math.round((new Date()).getTime() / 1000) - 86400);"><?=$lang['DAY']?></a></li>
-		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_files?>' + (Math.round((new Date()).getTime() / 1000) - 604800);"><?=$lang['WEEK']?></a></li>
-		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_files?>' + (Math.round((new Date()).getTime() / 1000) - 2592000);"><?=$lang['MONTH']?></a></li>
-		        <li><a href="javascript:void(0)" onclick="javascript:location.href='<?=$h_lst_files?>' + (Math.round((new Date()).getTime() / 1000) - 31536000);"><?=$lang['YEAR']?></a></li>
-		      </ul>
-		    </div>
-	  </div>
-
-	</div>
-</div>
-<?php endif; ?>
-<!-- end last visits -->
 
 
 <!-- hurry-hurry -->
