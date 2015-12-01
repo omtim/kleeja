@@ -16,8 +16,8 @@ if (!defined('IN_ADMIN'))
 }
 
 //for style ..
-$stylee	= "admin_ban";
-$action	= basename(ADMIN_PATH) . '?cp=' . basename(__file__, '.php');
+$current_template	= "ban.php";
+$action				= ADMIN_PATH . '?cp=ban';
 
 $affected = false;
 $H_FORM_KEYS	= kleeja_add_form_key('adm_ban');
@@ -65,10 +65,11 @@ while($row=$SQL->fetch($result))
 
 $SQL->free($result);
 
-//after submit 
+//after submit
 if (isset($_POST['submit']))
 {
 	$text	= ($affected ? $lang['BAN_UPDATED'] : $lang['NO_UP_CHANGE_S']);
-	$text	.= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=' . basename(__file__, '.php') .  '\');", 2000);</script>' . "\n";
-	$stylee	= "admin_info";
+	$text	.= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . ADMIN_PATH . '?cp=ban
+	' .  '\');", 2000);</script>' . "\n";
+	$current_template	= "info.php";
 }
