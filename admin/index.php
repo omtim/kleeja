@@ -252,7 +252,7 @@ else
 #no style defined
 if(empty($current_template))
 {
-	$text = 'THERE IS NOT TEMPLATE ASSIGNED FOR THIS PAGE!';
+	$text = 'THERE IS NO TEMPLATE ASSIGNED FOR THIS PAGE!';
 	$current_template = 'info.php';
 }
 

@@ -22,7 +22,7 @@
 			<input type="checkbox" name="del_<?=$report['id']?>" value="<?=$report['id']?>" onclick="change_color(this,'su[<?=$report['id']?>]', 'panel panel-danger', 'panel panel-default');" rel="_del">
           	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?=$report['id']?>">
 				<?=$report['name']?> @ <?=$report['human_time']?>
-			    <span class="label label-default"><?php if($sent):?><?=$lang['IS_SEND_MAIL']?><?php endif;?></span>
+			    <span class="label label-default"><?php if($report['sent']):?><?=$lang['IS_SEND_MAIL']?><?php endif;?></span>
 		   </a>
 		 </h4>
 		</div>

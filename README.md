@@ -6,3 +6,5 @@ Kleeja is a free, Feature rich, Open Source file upload system, designed to help
 
 
 [ ] Resume download ( http://www.php.net/manual/en/function.fread.php#84115 )
+[ ] IPv6 !
+[ ] FTP ?

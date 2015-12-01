@@ -16,11 +16,11 @@ if (!defined('IN_ADMIN'))
 }
 
 //for style ..
-$current_template	= "rules.php";
-$action	= basename(ADMIN_PATH) . '?cp=' . basename(__file__, '.php');
+$current_template	= 'rules.php';
+$action				= ADMIN_PATH . '?cp=rules';
 
 $affected = false;
-$H_FORM_KEYS	= kleeja_add_form_key('adm_rules');
+$H_FORM_KEYS		= kleeja_add_form_key('adm_rules');
 
 //
 // Check form key
@@ -45,11 +45,11 @@ while($row=$SQL->fetch($result))
 {
 	$rulesw = isset($_POST['rules_text']) ? $_POST['rules_text'] : $row['rules'];
 	$rules = htmlspecialchars($rulesw);
-			
-	//when submit
+
+	#After submit
 	if (isset($_POST['submit']))
 	{
-		//update
+		#update
 		$update_query	= array(
 								'UPDATE'	=> "{$dbprefix}stats",
 								'SET'		=> "rules = '" . $SQL->escape($rulesw) . "'"
@@ -67,10 +67,10 @@ while($row=$SQL->fetch($result))
 $SQL->free($result);
 
 
-//after submit 
+//after submit
 if (isset($_POST['submit']))
 {
 	$text	= ($affected ? $lang['RULES_UPDATED'] : $lang['NO_UP_CHANGE_S']);
-	$text	.= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=' . basename(__file__, '.php') .  '\');", 2000);</script>' . "\n";
-	$current_template	= "info.php";
+	$text	.= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . ADMIN_PATH . '?cp=rules' .  '\');", 2000);</script>' . "\n";
+	$current_template	= 'info.php';
 }

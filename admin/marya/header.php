@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" media="screen" href="<?=ADMIN_STYLE_PATH?>css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="<?=ADMIN_STYLE_PATH?>css/bootstrap-theme.min.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="<?=ADMIN_STYLE_PATH?>css/stylesheet.css" />
+<?php if($go_to == 'rules'):?>
+<link rel="stylesheet" type="text/css" media="screen" href="<?=ADMIN_STYLE_PATH?>css/jqueryte.css" />
+<?php endif;?>
 
 <?php if($lang['DIR'] == 'rtl'):?>
 <style type="text/css">

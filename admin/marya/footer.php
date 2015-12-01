@@ -11,6 +11,11 @@
 <script src="<?=ADMIN_STYLE_PATH?>js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?=ADMIN_STYLE_PATH?>js/jqBarGraph.js"></script>
 
+<?php if($go_to == 'rules'):?>
+<script type="text/javascript" src="<?=ADMIN_STYLE_PATH?>js/jqueryte.js"></script>
+<?php endif;?>
+
+
 <script type="text/javascript">
 <!--
 var STYLE_PATH_ADMIN = '<?=ADMIN_STYLE_PATH?>';
@@ -119,6 +124,15 @@ $('.popover-send').popover({
 
 	}
 });
+<?php elseif($go_to == 'rules'):?>
+$('#rules_text').jqte();
+	// settings of status
+	var jqteStatus = true;
+	$(".status").click(function()
+	{
+		jqteStatus = jqteStatus ? false : true;
+		$('.jqte-test').jqte({"status" : jqteStatus})
+	});
 <?php elseif($go_to == 'users'):?>
 $('.del-usergroup').popover({
 	html:true,
@@ -182,16 +196,17 @@ function get_kleeja_link(URL, ID, p)
 	}
 
 	location.href=URL;
-	return;
+	return false;
 }
 
-function submit_kleeja_data(FORM_ID, ID, p)
+function submit_kleeja_data(formid, ID, p)
 {
+
 	if(p){
 		confirm_from();
 	}
 
-	$(FORM_ID).submit();
+	$(formid).submit();
 	//return;
 }
 
