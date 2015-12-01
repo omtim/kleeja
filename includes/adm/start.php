@@ -1,4 +1,4 @@
-$h_lst_imgs<?php
+<?php
 /**
 *
 * @package adm

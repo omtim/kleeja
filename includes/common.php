@@ -250,7 +250,7 @@ if(!$config['language'] || empty($config['language']))
 	if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && strlen($_SERVER['HTTP_ACCEPT_LANGUAGE']) > 2)
 	{
 		$config['language'] = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-		if(!file_exists(PATH . 'lang/' . $config['language'] . '/common.php'))
+		if(!file_exists(PATH . 'languages/' . $config['language'] . '/common.php'))
 		{
 			$config['language'] = 'en';
 		}

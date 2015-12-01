@@ -21,7 +21,7 @@ if (!defined('IN_COMMON'))
 
 /**
  * Is given _GET variable exists?
- * 
+ *
  * @since 2.0
  * @param string $name The name of _GET variable
  * @return bool
@@ -33,7 +33,7 @@ function ig($name)
 
 /**
  * Is given _POST variable exists?
- * 
+ *
  * @since 2.0
  * @param string $name The name of _POST variable
  * @return bool
@@ -45,11 +45,11 @@ function ip($name)
 
 /**
  *  clean _GET variable if exists and return it
- * 
+ *
  * @since 2.0
  * @param string $name The name of _GET variable
  * @param string $type The type of the varaible, str or int
- * @param mixed $default_value [optional] The default value to be return if not existed 
+ * @param mixed $default_value [optional] The default value to be return if not existed
  * @return string|bool
  */
 function g($name, $type = 'str', $default_value = false)
@@ -59,11 +59,11 @@ function g($name, $type = 'str', $default_value = false)
 
 /**
  * clean _POST variable if exists and return it
- * 
+ *
  * @since 2.0
  * @param string $name The name of _POST variable
  * @param string $type The type of the varaible, str or int
- * @param mixed $default_value [optional] The default value to be return if not existed 
+ * @param mixed $default_value [optional] The default value to be return if not existed
  * @return string|bool
  */
 function p($name, $type = 'str', $default_value = false)
@@ -105,14 +105,14 @@ function clean_var($var, $type = 'str')
 
 
 /**
-* For ban ips .. 
+* For ban ips ..
 */
 function get_ban()
 {
 	global $banss, $lang, $text, $plugin;
-	
 
-	#now .. loop for banned ips 
+
+	#now .. loop for banned ips
 	if (is_array($banss) && !empty($ip))
 	{
 		foreach ($banss as $ip2)
@@ -130,13 +130,13 @@ function get_ban()
 
 			if ($ip == $ip2 || @preg_match('/' . preg_quote($replace_it, '/') . '/i', $user->data['ip']))
 			{
-				($hook = $plugin->run_hook('banned_get_ban_func')) ? eval($hook) : null; //run hook	
+				($hook = $plugin->run_hook('banned_get_ban_func')) ? eval($hook) : null; //run hook
 				kleeja_info($lang['U_R_BANNED'], $lang['U_R_BANNED']);
 			}
 		}
 	}
 
-	($hook = $plugin->run_hook('get_ban_func')) ? eval($hook) : null; //run hook	
+	($hook = $plugin->run_hook('get_ban_func')) ? eval($hook) : null; //run hook
 }
 
 
@@ -146,7 +146,7 @@ function get_ban()
 */
 function _sm_mk_utf8($text)
 {
-	return "=?UTF-8?B?" . kleeja_base64_encode($text) . "?=";
+	return "=?UTF-8?B?" . base64_encode($text) . "?=";
 }
 
 function send_mail($to, $body, $subject, $fromaddress, $fromname, $bcc='')
@@ -163,16 +163,16 @@ function send_mail($to, $body, $subject, $fromaddress, $fromname, $bcc='')
 	$headers .= 'X-Mailer: Kleeja Mailer' . $eol;
 	$headers .= 'Reply-To: ' . _sm_mk_utf8(trim(preg_replace('#[\n\r:]+#s', '', $fromname))) . ' <' . trim(preg_replace('#[\n\r:]+#s', '', $fromaddress)) . '>' . $eol;
 	//$headers .= 'Return-Path: <' . $fromaddress . '>' . $eol;
-	if (!empty($bcc)) 
+	if (!empty($bcc))
 	{
 		$headers .= 'Bcc: ' . trim(preg_replace('#[\n\r:]+#s', '', $bbc)) . $eol;
 	}
 	//$headers .= 'Message-ID: <' . md5(uniqid(time())) . '@' . _sm_mk_utf8($fromname) . '>' . $eol;
 	//$headers .= 'Date: ' . date('r') . $eol;
-	
+
 	//$headers .= 'X-Priority: 3' . $eol;
 	//$headers .= 'X-MSMail-Priority: Normal' . $eol;
-	
+
 	//$headers .= 'X-MimeOLE: kleeja' . $eol;
 
 	($hook = $plugin->run_hook('kleeja_send_mail')) ? eval($hook) : null; //run hook
@@ -220,7 +220,7 @@ function delete_cache($name, $all=false)
 	}
 
 	$path_to_cache = PATH . 'cache';
-	
+
 	if($all)
 	{
 		if($dh = @opendir($path_to_cache))
@@ -274,7 +274,7 @@ function get_lang($name, $folder = '')
 		$name = $folder . '/' . $name;
 	}
 
-	$path = PATH . 'lang/' . $config['language'] . '/' . str_replace('.php', '', $name) . '.php';
+	$path = PATH . 'languages/' . $config['language'] . '/' . str_replace('.php', '', $name) . '.php';
 	$s = defined('DEBUG') ? include($path) : @include($path);
 
 	if($s === false)
@@ -283,7 +283,7 @@ function get_lang($name, $folder = '')
 		//$sen = defined('DEBUG') ? include_once($pathen) :  @include_once($pathen);
 		//if($sen === false)
 		//{
-			big_error('There is no language file in the current path', 'lang/' . $config['language'] . '/' . str_replace('.php', '', $name) . '.php  not found');
+			big_error('There is no language file in the current path', 'languages/' . $config['language'] . '/' . str_replace('.php', '', $name) . '.php  not found');
 		//}
 	}
 
@@ -293,7 +293,7 @@ function get_lang($name, $folder = '')
 
 /*
 * Get fresh config value
-* some time cache doesnt not work as well, so some important 
+* some time cache doesnt not work as well, so some important
 * events need fresh version of config values ...
 */
 function get_config($name)
@@ -304,7 +304,7 @@ function get_config($name)
 
 	#what if this config is a group-configs related ?
 	$group_id_sql = '';
-	
+
 	if(array_key_exists($name, $d_groups[$user->data['group_id']]['configs']))
 	{
 		$table = "{$dbprefix}groups_data c";
@@ -330,7 +330,7 @@ function get_config($name)
 * type: where does your config belone, 0 = system, genetal = has no specifc cat., other = other items.
 * html: the input or radio to let the user type or choose from them, see the database:configs to understand.
 * dynamic: every refresh of the page, the config data will be brought from db, not from the cache !
-* plg_id: if this config belong to plugin .. see devKit. 
+* plg_id: if this config belong to plugin .. see devKit.
 */
 function add_config($name, $value = '', $order = 0, $field = '', $type = '0', $dynamic = false)
 {
@@ -348,7 +348,7 @@ function add_config($name, $value = '', $order = 0, $field = '', $type = '0', $d
 	}
 
 	global $dbprefix, $SQL, $config, $d_groups;
-	
+
 	if(get_config($name))
 	{
 		return true;
@@ -385,7 +385,7 @@ function add_config($name, $value = '', $order = 0, $field = '', $type = '0', $d
 
 	($hook = $plugin->run_hook('insert_sql_add_config_func')) ? eval($hook) : null; //run hook
 
-	$SQL->build($insert_query);	
+	$SQL->build($insert_query);
 
 	if($SQL->affected())
 	{
@@ -417,7 +417,7 @@ function update_config($name, $value = '', $escape = true, $group = false)
 		else if($group)
 		{
 			$group_id_sql = ' AND group_id=' . intval($group);
-		}	
+		}
 	}
 
 	$update_query	= array(
@@ -449,7 +449,7 @@ function update_config($name, $value = '', $escape = true, $group = false)
 /*
 * Delete config
 */
-function delete_config($name) 
+function delete_config($name)
 {
 	global $plugin;
 
@@ -459,21 +459,21 @@ function delete_config($name)
 		{
 			delete_config($n);
 		}
-		
+
 		return;
 	}
 
 	global $dbprefix, $SQL, $d_groups, $userinfo;
 
 	//
-	// 'IN' doesnt work here with delete, i dont know why ? 
+	// 'IN' doesnt work here with delete, i dont know why ?
 	//
 	$delete_query	= array(
 								'DELETE'	=> "{$dbprefix}config",
 								'WHERE'		=>  "name  = '" . $SQL->escape($name) . "'"
 						);
 	($hook = $plugin->run_hook('del_sql_delete_config_func')) ? eval($hook) : null; //run hook
-	
+
 	$SQL->build($delete_query);
 
 	if(array_key_exists($name, $d_groups[$userinfo['group_id']]['configs']))
@@ -513,7 +513,7 @@ function kleeja_check_captcha()
 	}
 
 	$return = false;
-	if(!empty($_SESSION['klj_sec_code']) && p('kleeja_code_answer') != '')	
+	if(!empty($_SESSION['klj_sec_code']) && p('kleeja_code_answer') != '')
 	{
 		if($_SESSION['klj_sec_code'] == trim(g('kleeja_code_answer')))
 		{
@@ -554,7 +554,7 @@ function kleeja_log($text, $reset = false)
 * Used for checking the acl for the current user
 *TODO: move to usr class
 * @param string $acl_name The privilege you want check if this group of user has or not
-* @param int $group_id [optional] The group you want to check agaist, if not given will 
+* @param int $group_id [optional] The group you want to check agaist, if not given will
 * use the current user group id.
 * @return bool
 */
@@ -572,7 +572,7 @@ function user_can($acl_name, $group_id = 0)
 
 /**
  * Get domain from a url
- * 
+ *
  * @param string $url The link you want to get the domain from
  * @return mixed
  */
@@ -588,14 +588,14 @@ function get_domain($url)
 }
 
 
-/** 
+/**
  * Extract files from a .tar archive
  *
  * @param string $file The .tar archive filepath
  * @param string $dest [optional] The extraction destination filepath, defaults to "./"
  * @return bool
  */
-function untar($file, $dest = "./") 
+function untar($file, $dest = "./")
 {
 	if (!is_readable($file))
 	{
@@ -603,39 +603,39 @@ function untar($file, $dest = "./")
 	 }
 
 	$filesize = @filesize($file);
-	
+
 	// Minimum 4 blocks
 	if ($filesize <= 512*4)
-	{ 
+	{
 		return false;
 	}
-	
-	if (!preg_match("/\/$/", $dest)) 
+
+	if (!preg_match("/\/$/", $dest))
 	{
 		// Force trailing slash
 		$dest .= "/";
 	}
-	
+
 	//Ensure write to destination
-	if (!file_exists($dest)) 
+	if (!file_exists($dest))
 	{
-		if (!mkdir($dest, 0777, true)) 
+		if (!mkdir($dest, 0777, true))
 		{
 			return false;
 		}
 	}
-	
+
 	$total = 0;
 
 	if($fh = @fopen($file, 'rb'))
 	{
 		$files = array();
-		while (($block = fread($fh, 512)) !== false) 
+		while (($block = fread($fh, 512)) !== false)
 		{
-		
+
 			$total += 512;
 			$meta = array();
-			
+
 			// Extract meta data
 			// http://www.mkssoftware.com/docs/man4/tar.4.asp
 			$meta['filename'] = trim(substr($block, 0, 99));
@@ -648,44 +648,44 @@ function untar($file, $dest = "./")
 			$meta['link_flag'] = octdec(substr($block, 156, 1));
 			$meta['linkname'] = trim(substr($block, 157, 99));
 			$meta['databytes'] = ($meta['filesize'] + 511) & ~511;
-		
-			if ($meta['link_flag'] == 5) 
+
+			if ($meta['link_flag'] == 5)
 			{
 				// Create folder
 				@mkdir($dest . $meta['filename'], 0777, true);
 				@chmod($dest . $meta['filename'], $meta['mode']);
 			}
-		
-			if ($meta['databytes'] >= 0 && $meta['header_checksum'] != 0) 
+
+			if ($meta['databytes'] >= 0 && $meta['header_checksum'] != 0)
 			{
 				$block = @fread($fh, $meta['databytes']);
 				// Extract data
 				$data = substr($block, 0, $meta['filesize']);
 
 				// Write data and set permissions
-				if (false !== ($ftmp = @fopen($dest . $meta['filename'], 'wb'))) 
+				if (false !== ($ftmp = @fopen($dest . $meta['filename'], 'wb')))
 				{
 					@flock($ftmp, LOCK_EX); // exlusive look
 					@fwrite($ftmp, $data);
 					@fclose($ftmp);
 					//@touch($dest . $meta['filename'], $meta['mtime'], $meta['mtime']);
-				
+
 					if ($meta['mode'] == 0744)
 					{
 						$meta['mode'] = 0644;
 					}
-				
+
 					@chmod($dest . $meta['filename'], $meta['mode']);
 				}
 
 				$total += $meta['databytes'];
 				$files[] = $meta;
-				
+
 			}
 
 
-		
-			if ($total >= $filesize-1024) 
+
+			if ($total >= $filesize-1024)
 			{
 				return $files;
 			}
@@ -715,14 +715,14 @@ function garbage_collection()
 	{
 		return true;
 	}
-	
+
 	global $SQL;
 
 	if($SQL)
 	{
 		$SQL->close();
 	}
-	
+
 	#now close session to let user open any other page in Kleeja
 	@session_write_close();
 

@@ -835,6 +835,7 @@ function time_zones()
 		'Europe/Belgrade' => 1.00,
 		'Europe/Minsk' => 2.00,
 		'Asia/Riyadh' => 3.00,
+		'Asia/Buraydah' => 3.00,
 		'Asia/Tehran' => 3.30,
 		'Asia/Muscat' => 4.00,
 		'Asia/Yekaterinburg' => 5.00,

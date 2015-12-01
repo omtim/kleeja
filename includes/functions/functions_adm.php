@@ -394,7 +394,7 @@ function option_select_values($name, $default_value = '')
 				$default_value = str_replace(array('2', '3', '4'), array('phpbb', 'vb', 'mysmartbb'), $default_value);
 			}
 
-			$values .= '<option value="1"' . ($con['user_system']=='1' ? ' selected="selected"' : '') . '>' . $lang['NORMAL'] . '</option>' . "\n";
+			$values .= '<option value="1"' . ($default_value=='1' ? ' selected="selected"' : '') . '>' . $lang['NORMAL'] . '</option>' . "\n";
 			if ($dh = @opendir(PATH . 'includes/auth_integration'))
 			{
 				while (($file = readdir($dh)) !== false)

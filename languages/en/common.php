@@ -3,7 +3,7 @@
  * kleeja language file
  * @package Languages
  * @subpackage English
- * 
+ *
  * @author Kleeja team & (NK, n.k@cityofangelz.com)
  */
 
@@ -224,7 +224,7 @@ $lang = array_merge($lang, array(
 	'SUBMIT' 				=> 'Submit',
 	'EDIT' 					=> 'Edit',
 	'DISABLE' 					=> 'Disable',
-	'ENABLE' 					=> 'Enable',	
+	'ENABLE' 					=> 'Enable',
 	'OPEN'						=> 'Open',
 	'KILOBYTE'					=>	'Kilobyte',
 	'NOTE'						=>	'Note',
@@ -268,7 +268,7 @@ $lang = array_merge($lang, array(
 	'ALL_FILES' 			    => 'Number of all files',
 	'ALL_IMAGES' 			    => 'Number of all images',
 	'NO_FILE_USER'				=> 'No files were found in the account!',
-	'SHOWFILESBYIP'				=> 'Show files by IP', 
+	'SHOWFILESBYIP'				=> 'Show files by IP',
 	'WAIT_LOADING'				=> 'Please wait, the files are being uploaded to the server...',
 	'NOTICECLOSED'				=> 'Notice: website closed',
 	'UNKNOWN'					=> 'Unknown',
@@ -308,9 +308,9 @@ $lang = array_merge($lang, array(
 	'ALL'				=> 'All',
 	'NOW'				=> 'Now',
 
-	//last line of this file ...					 
-	'S_TRANSLATED_BY' 			=> 'Translated By <a href="http://www.fenix4web.com/" target="_blank">Fenix4Web</a> &amp; Kleeja Team',
-	
+	//last line of this file ...
+	'S_TRANSLATED_BY' 			=> 'Translated By Kleeja Team & Others',
+
 ));
 
 #<-- EOF
