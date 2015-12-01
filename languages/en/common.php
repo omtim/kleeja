@@ -219,6 +219,7 @@ $lang = array_merge($lang, array(
 	'N_OTHERFILE' 			=> 'Other Files',
 	'RETURN_HOME' 			=> 'Return to home',
 	'TODAY' 				=> 'Today',
+	'YESTERDAY' 			=> 'Yesterday',
 	'DAYS' 					=> 'Days',
 	'BITE' 					=> 'byte',
 	'SUBMIT' 				=> 'Submit',

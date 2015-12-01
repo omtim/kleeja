@@ -208,6 +208,7 @@ $lang = array_merge($lang, array(
 	'N_OTHERFILE' 			=> 'ملفات أخرى',
 	'RETURN_HOME' 			=> 'رجوع إلى المركز',
 	'TODAY' 				=> 'اليوم',
+	'YESTERDAY' 			=> 'امس',
 	'DAYS' 					=> 'أيام',
 	'SUBMIT' 				=> 'موافق',
 	'EDIT' 					=> 'تعديل',

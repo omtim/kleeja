@@ -344,7 +344,7 @@ if($cf_num > 4)
 		$t_files = $prv_files - $s_files;
 		$t_imgs = $prev_imgs - $s_imgs;
 
-		$day = date('d-n-Y') == $prev_date ? $lang['TODAY'] . ' ~ ' . $lang['NOW'] : $prev_date;
+		$day = date('d-n-Y') == $prev_date ? $lang['TODAY'] . ' ~ ' . $lang['NOW'] : ($prev_date ==  date('d-n-Y', time() - 60 * 60 * 24) ? $lang['YESTERDAY'] : $prev_date);
 
 		$stats_chart .= ($comma ? ',': '') . "[[$t_files,$t_imgs],'" . ($cf_num > 6 ? str_replace(date('-Y'), '', $day) : $day) . "']";
 
