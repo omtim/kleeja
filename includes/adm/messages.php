@@ -35,10 +35,6 @@ if (isset($_POST['submit']))
 	{
 		kleeja_admin_err($lang['INVALID_FORM_KEY'], true, $lang['ERROR'], true, $action, 1);
 	}
-
-
-	echo 'ggggggg';
-	exit;
 }
 
 
@@ -164,7 +160,6 @@ $page_nums		= $pagination->print_nums(ADMIN_PATH . '?cp=messages', 'onclick="jav
 //after submit
 if (isset($_POST['submit']))
 {
-	print 'hhhh';
 	$text	= ($SQL->affected() ? $lang['MESSAGES_UPDATED'] : $lang['NO_UP_CHANGE_S']);
 	$text	.= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . $action .  '\'); check_msg_and_reports();", 2000);</script>' . "\n";
 	kleeja_admin_info($text, true, '', true,  $action);
