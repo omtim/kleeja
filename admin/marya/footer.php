@@ -11,7 +11,7 @@
 <script src="<?=ADMIN_STYLE_PATH?>js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?=ADMIN_STYLE_PATH?>js/jqBarGraph.js"></script>
 
-<?php if($go_to == 'rules'):?>
+<?php if($go_to == 'rules' || $go_to == 'extra'):?>
 <script type="text/javascript" src="<?=ADMIN_STYLE_PATH?>js/jqueryte.js"></script>
 <?php endif;?>
 
@@ -124,15 +124,13 @@ $('.popover-send').popover({
 
 	}
 });
+<?php elseif($go_to == 'extra'):?>
+$('.editor').jqte();
+
+
 <?php elseif($go_to == 'rules'):?>
 $('#rules_text').jqte();
-	// settings of status
-	var jqteStatus = true;
-	$(".status").click(function()
-	{
-		jqteStatus = jqteStatus ? false : true;
-		$('.jqte-test').jqte({"status" : jqteStatus})
-	});
+
 <?php elseif($go_to == 'users'):?>
 $('.del-usergroup').popover({
 	html:true,

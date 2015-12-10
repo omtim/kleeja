@@ -42,7 +42,7 @@
 	  z-index: 2;
 	}
 	.form-signin input[type="text"] {
-	  
+
 	  border-bottom-left-radius: 0;
 	  border-bottom-right-radius: 0;
 	}
@@ -60,7 +60,7 @@
 	<![endif]-->
 </head>
 <body id="login_body">
-	
+
     <div class="container">
 
      <form action="<?=$action?>" method="post" style="clear: both;" id="login_form" class="form-signin">
@@ -79,22 +79,22 @@
         <input type="password" name="lpass_<?=$KEY_FOR_PASS?>" class="form-control" placeholder="<?=$lang['PASSWORD']?>" autofocus>
 
         <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit"><?=$lang['LOGIN']?></button>
-			
+
 		<?=kleeja_add_form_key('admin_login')?>
 		<input type="hidden" name="kid" value="<?=$KEY_FOR_WEE?>" />
 
   		<hr>
-  		<a href="<?=$config['siteurl']?>" title="<?=$lang['RETURN_HOME']?>" class="muted"> &laquo; <?=$lang['RETURN_HOME']?></a> 
+  		<a href="<?=$config['siteurl']?>" title="<?=$lang['RETURN_HOME']?>" class="muted"> &laquo; <?=$lang['RETURN_HOME']?></a>
 
       </form>
     </div> <!-- /container -->
 
-	
+
 	<!--div id="login_top">
 
 	</div-->
 
-	
+
 	<script src="<?=ADMIN_STYLE_PATH?>js/jquery.min.js"></script>
 	<script src="<?=ADMIN_STYLE_PATH?>js/bootstrap.min.js"></script>
 

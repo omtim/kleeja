@@ -10,9 +10,9 @@
 
 
 /**
-* After a lot of work, we faced many hosts who use a old PHP version, or 
-* they disabled many general functions ... 
-* so, this file contains those type of functions.
+* After a lot of work, we faced many hosts who use an old PHP version, or
+* they disabled many general functions ...
+* so, this file contains alternative functions to these disabled ones.
 */
 
 
@@ -26,13 +26,13 @@ if (!defined('IN_COMMON'))
 
 
 
-if(!function_exists('json_encode')) 
+if(!function_exists('json_encode'))
 {
 	/**
 	 * Alternative Json encoding function, since some servers miss it
 	 *
 	 * @param mixed $val the value to be encoded in JSON
-	 * @return string JSON fotmat string 
+	 * @return string JSON fotmat string
 	 * @link http://php.net/json_encode
 	 */
 	function json_encode($val)
@@ -85,7 +85,7 @@ if(!function_exists('json_encode'))
 	    return $assoc ? '{' . $res . '}' : '[' . $res . ']';
 	}
 }
- 
+
 
 
 if(!function_exists('htmlspecialchars_decode'))
@@ -210,7 +210,7 @@ if(!function_exists('base64_decode'))
 		$b64 = array();
 		$base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 		$len_base64 = strlen($base64);
-		
+
 		for ($i = 0; $i < 256; $i++)
 			$b64[$i] = 0;
 		for ($i = 0; $i < $len_base64 ; $i++)
@@ -258,9 +258,9 @@ if(!function_exists('filesize'))
 	*/
 	function filesize($filename)
 	{
-		$a = fopen($filename, 'r'); 
-		fseek($a, 0, SEEK_END); 
-		$filesize = ftell($a); 
+		$a = fopen($filename, 'r');
+		fseek($a, 0, SEEK_END);
+		$filesize = ftell($a);
 		fclose($a);
 		return $filesize;
 	}

@@ -31,18 +31,27 @@ $config_values = array();
 $config_values[] = array('sitename', $config_sitename, '{text.sitename}', 1, 'general', 0, 0);
 $config_values[] = array('siteurl', $config_siteurl, '{ltr.siteurl}', 2, 'general', 0, 0);
 $config_values[] = array('sitemail', $config_sitemail,'{ltr.sitemail}', 3, 'general', 0, 0);
-$config_values[] = array('sitemail2', $config_sitemail, '{ltr.sitemail2}', '4', 'general', 0, 0);
-//$config_values[] = array('del_f_day', '0', '<input type=\"text\" id=\"del_f_day\" name=\"del_f_day\" value=\"{con.del_f_day}\" size=\"6\" style=\"text-align:center\" />{lang.DELF_CAUTION}', 5, 'advanced', 0, 0);
-$config_values[] = array('language', getlang(), '{select.language}', 6, 'interface', 0, 0);
+$config_values[] = array('sitemail2', $config_sitemail, '{ltr.sitemail2}', 4, 'general', 0, 0);
 $config_values[] = array('time_zone', $config_time_zone, '{select.time_zone}', 10, 'general', 0, 0);
+$config_values[] = array('time_format', 'd-m-Y h:i a', '{ltr.time_format}', 11, 'general', 0, 0);
 $config_values[] = array('siteclose', '0', '{yesno.siteclose}', 7, 'general', 0, 0);
 $config_values[] = array('closemsg', 'The website is closed now, sorry for the inconvenience, come back later.', '{text.closemsg}', 8, 'general', 0, 0);
-$config_values[] = array('user_system', '1', '{select.user_system}', 9, 'advanced', 0, 0);
-$config_values[] = array('register', '1', '{yesno.register}', 10, 'general', 0, 0);
-$config_values[] = array('enable_userfile', '1', '{yesno.enable_userfile}', 11, 'groups', 0, 0);
-$config_values[] = array('mod_writer', '0', '{yesno.mod_writer.MOD_WRITER_EX}', 12, 'advanced', 0, 0);
+$config_values[] = array('register', '1', '{yesno.register}', 12, 'general', 0, 0);
 
-// Cookies settings
+
+//$config_values[] = array('del_f_day', '0', '<input type=\"text\" id=\"del_f_day\" name=\"del_f_day\" value=\"{con.del_f_day}\" size=\"6\" style=\"text-align:center\" />{lang.DELF_CAUTION}', 5, 'advanced', 0, 0);
+
+
+$config_values[] = array('enable_userfile', '1', '{yesno.enable_userfile}', 11, 'groups', 0, 0);
+$config_values[] = array('filesnum', '3', '{ltr.filesnum}', 22, 'groups', 0, 0);
+$config_values[] = array('sec_down', '5', '{ltr.sec_down}', 23, 'groups', 0, 0);
+$config_values[] = array('usersectoupload', '10', '{ltr.usersectoupload}', 44, 'groups', 0, 0);
+$config_values[] = array('write_imgs', '0' , '{yesno.wirte_imgs} ', 29, 'groups', 0, 0);
+
+
+// advanced settings
+$config_values[] = array('user_system', '1', '{select.user_system}', 9, 'advanced', 0, 0);
+$config_values[] = array('mod_writer', '0', '{yesno.mod_writer.MOD_WRITER_EX}', 12, 'advanced', 0, 0);
 $cookie_data = get_cookies_settings();
 $config_values[] = array('cookie_name', $cookie_data['cookie_name'], '{ltr.cookie_name}', '13', 'advanced', 0, 0);
 $config_values[] = array('cookie_path', $cookie_data['cookie_path'], '{ltr.cookie_path}', '14', 'advanced', 0, 0);
@@ -55,8 +64,7 @@ $config_values[] = array('foldername', 'uploads', '{ltr.foldername}', 18, 'uploa
 $config_values[] = array('prefixname', '', '{ltr.prefixname}', 19, 'upload', 0, 0);
 $config_values[] = array('decode', '1', '{select.decode}', 20, 'upload', 0, 0);
 $config_values[] = array('id_form', $config_urls_type, '{select.id_form}', 21, 'upload', 0, 0);
-$config_values[] = array('filesnum', '3', '{ltr.filesnum}', 22, 'groups', 0, 0);
-$config_values[] = array('sec_down', '5', '{ltr.sec_down}', 23, 'groups', 0, 0);
+
 $config_values[] = array('del_url_file', '1', '{yesno.del_url_file}', 24, 'upload', 0, 0);
 $config_values[] = array('safe_code', '0', '{yesno.safe_code}', 25, 'upload', 0, 0);
 
@@ -66,11 +74,7 @@ $config_values[] = array('thmb_dim_h', '100', '{ltr.thmb_dim_h}', 28, 'upload', 
 
 #TODO
 $config_values[] = array('thumbs_imgs', '1', '{yesno.thumbs_imgs}', 27, 'upload', 0, 0);
-$config_values[] = array('write_imgs', '0' , '{yesno.wirte_imgs} ', 29, 'groups', 0, 0);
-
-
 $config_values[] = array('livexts', 'swf', '{ltr.livexts.COMMA_X}', '29', 'upload', 0, 0);
-$config_values[] = array('usersectoupload', '10', '{ltr.usersectoupload}', 44, 'groups', 0, 0);
 $config_values[] = array('filesnum_show', '1', '{yesno.filesnum_show}', 22, 'upload', 0, 0);
 
 //KLIVE
@@ -85,6 +89,7 @@ $config_values[] = array('allow_online', '0', '{yesno.allow_online}', 32, 'inter
 $config_values[] = array('statfooter', '0' , '{yesno.statfooter}', 33, 'interface', 0, 0);
 $config_values[] = array('googleanalytics', '', '{ltr.googleanalytics}', 35, 'interface', 0, 0);
 $config_values[] = array('enable_captcha', '1', '{yesno.enable_captcha}', 36, 'interface', 0, 0);
+$config_values[] = array('language', getlang(), '{select.language}', 6, 'interface', 0, 0);
 
 // System settings [ invisible configs ]
 $config_values[] = array('thmb_dims', '100*100', '', 0, 0, 0);

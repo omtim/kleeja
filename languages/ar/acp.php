@@ -353,4 +353,5 @@ $lang = array_merge($lang, array(
 	'AUTO_UPDATE'				=> 'Auto upgrade system',
 	'UPDATE_WT_FILE_METHOD'		=> 'Sometimes we need ftp information to proceed without problems , choose the way you want to handle the files if we can not edit them directly:',
 	'UPDATE_GOING_TODOWN'		=> 'The update files are currently being downloaded.',
+	'TIME_FORMAT'				=> 'Time Format', #2.0
 ));

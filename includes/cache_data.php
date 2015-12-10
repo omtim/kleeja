@@ -16,11 +16,12 @@ if (!defined('IN_COMMON'))
 {
 	exit();
 }
-	
-	
+
+
 /**
- * This file is where the data are extracted from database and cached for later
- */	
+ * Data that are used most frequently cached for easing the load on the database.
+ * Data like options, baned IPs and groups information.
+ */
 
 
 
@@ -33,8 +34,8 @@ if (!($config = $cache->get('data_config')))
 					'WHERE'		=> 'c.dynamic = 0',
 				);
 
-	($hook = $plugin->run_hook('qr_select_config_cache')) ? eval($hook) : null; //run hook	
-			
+	($hook = $plugin->run_hook('qr_select_config_cache')) ? eval($hook) : null; //run hook
+
 	$result = $SQL->build($query);
 
 	while($row=$SQL->fetch($result))
@@ -52,7 +53,7 @@ if (!($config = $cache->get('data_config')))
 if (!($stats = $cache->get('data_stats')))
 {
 	$query = array(
-					'SELECT'	=> 's.files, s.imgs, s.sizes, s.users, s.last_file, s.last_f_del, s.last_google' . 
+					'SELECT'	=> 's.files, s.imgs, s.sizes, s.users, s.last_file, s.last_f_del, s.last_google' .
 									', s.last_bing, s.google_num, s.bing_num, s.lastuser',
 					'FROM'		=> "{$dbprefix}stats s"
 			);
@@ -92,10 +93,10 @@ if (!($stats = $cache->get('data_stats')))
 					'WHERE'		=> "f.filter_type='stats_for_acp' AND f.filter_uid = '" . date('d-n-Y') . "'"
 				);
 
-	$result	= $SQL->build($query);		
+	$result	= $SQL->build($query);
 
 	#if already there is stats for this day, just update it, if not insert a new one
-	if($SQL->num($result))	
+	if($SQL->num($result))
 	{
 		$f_query	= array(
 							'UPDATE'	=> "{$dbprefix}filters",
@@ -129,7 +130,7 @@ if (!($banss = $cache->get('data_ban')))
 					'FROM'		=> "{$dbprefix}stats s"
 				);
 
-	($hook = $plugin->run_hook('qr_select_ban_cache')) ? eval($hook) : null; //run hook				
+	($hook = $plugin->run_hook('qr_select_ban_cache')) ? eval($hook) : null; //run hook
 	$result = $SQL->build($query);
 
 	$row = $SQL->fetch($result);
@@ -140,7 +141,7 @@ if (!($banss = $cache->get('data_ban')))
 
 	if (!empty($ban1) || $ban1 != ' '|| $ban1 != '  ')
 	{
-		//seperate ips .. 
+		//seperate ips ..
 		$ban2 = explode('|', $ban1);
 		for ($i=0; $i<sizeof($ban2); $i++)
 		{
@@ -169,10 +170,10 @@ if (!($ruless = $cache->get('data_rules')))
 	$SQL->free($result);
 
 	$cache->save('data_rules', $ruless);
-}	
+}
 
 
-#get ex-header-footer data from stats table  … 
+#get ex-header-footer data from stats table  …
 if (!($extras = $cache->get('data_extra')))
 {
 	$query = array(
@@ -184,7 +185,7 @@ if (!($extras = $cache->get('data_extra')))
 	$result = $SQL->build($query);
 
 	$row = $SQL->fetch($result);
-	
+
 	$extras = array(
 		'header' => $row['ex_header'],
 		'footer' => $row['ex_footer']
@@ -200,7 +201,7 @@ if (!($extras = $cache->get('data_extra')))
 if (!($d_groups = $cache->get('data_groups')))
 {
 	$d_groups = array();
-	
+
 	#data
 	$query = array(
 					'SELECT'	=> 'g.*',
@@ -210,12 +211,12 @@ if (!($d_groups = $cache->get('data_groups')))
 
 	($hook = $plugin->run_hook('qr_select_groups_cache')) ? eval($hook) : null; //run hook
 	$result = $SQL->build($query);
-	
+
 	#Initiating
 	while($row=$SQL->fetch($result))
 	{
 		$d_groups[$row['group_id']]['data'] = $row;
-		$d_groups[$row['group_id']]['configs'] = array(); 
+		$d_groups[$row['group_id']]['configs'] = array();
 		$d_groups[$row['group_id']]['acls'] = array();
 		$d_groups[$row['group_id']]['exts'] = array();
 	}
@@ -273,5 +274,3 @@ if (!($d_groups = $cache->get('data_groups')))
 
 	$cache->save('data_groups', $d_groups);
 }
-
-

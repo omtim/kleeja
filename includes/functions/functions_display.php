@@ -574,8 +574,13 @@ function kleeja_get_link($pid, $file_info = array())
 }
 
 
+
 /**
-* Extract info of a style
+ * Gets a style information
+ * Extracting the information of a style_name/info.txt and return them
+ *
+ * @param string $style_name Style name
+ * @return array Style information
 */
 function kleeja_style_info($style_name)
 {
@@ -626,10 +631,13 @@ function kleeja_style_info($style_name)
 
 
 /**
-* Browser detection
-* returns whether or not the visiting browser is the one specified [part of kleeja style system]
-* i.e. is_browser('ie6') -> true or false
-* i.e. is_browser('ie, opera') -> true or false
+ * Browser detection
+ * returns whether or not the visiting browser is the one specified [part of kleeja style system]
+ * i.e. is_browser('ie6') -> true or false
+ * i.e. is_browser('ie, opera') -> true or false
+ *
+ * @param string $b Browser short name like ie, chrome or opera, or both using comma
+ * @return bool True if the browser detected, false if not
 */
 function is_browser($b)
 {
@@ -711,8 +719,13 @@ function is_browser($b)
 }
 
 
+
 /**
-* Converting array to JSON format, nested arrays not supported
+ * Create a json code from an array
+ * Converting array to JSON format, nested arrays not supported
+ *
+ * @param array $array Array containing the information that you want to be in json
+ * @return string The generated json code
 */
 function generate_json($array)
 {
@@ -731,8 +744,15 @@ function generate_json($array)
 	return '{' . $json . '}';
 }
 
+
 /**
-* Send an answer for ajax request
+ * Generate a json - ajax response
+ * Create an ajax response in a JSON code
+ *
+ * @param int $code_number Ajax response number
+ * @param string $content Content of the ajax response
+ * @param string $menu The menu, leave it empty if you don't have it
+ * @return string The generated json code
 */
 function echo_ajax($code_number, $content, $menu = '')
 {
@@ -744,30 +764,24 @@ function echo_ajax($code_number, $content, $menu = '')
 
 
 /**
-* Send an answer for ajax request [ARRAY]
-*/
-function echo_array_ajax($array)
-{
-	global $SQL;
-
-	#at end, close sql connections & etc
-	garbage_collection();
-
-    //generate_json has some bugs so I will use json_encode insted :[
-	exit(@json_encode($array));
-}
-
-/**
 * show date in a human-readable-text
 */
-define('TIME_FORMAT', 'd-m-Y h:i a'); # to be moved to configs later
+/**
+ * Generate a json - ajax response
+ * Create an ajax response in a JSON code
+ *
+ * @param int $code_number Ajax response number
+ * @param string $content Content of the ajax response
+ * @param string $menu The menu, leave it empty if you don't have it
+ * @return string The generated json code
+*/
 function kleeja_date($time, $human_time = true, $format = false)
 {
 	global $lang, $config, $plugin;
 
 	if((time() - $time > (86400 * 9)) || $format || !$human_time)
 	{
-		$format = !$format ? TIME_FORMAT : $format;
+		$format = !$format ? $config['time_format'] : $format;
 		$time	= $time + ((int) $config['time_zone']*60*60);
 		return str_replace(array('am', 'pm'), array($lang['TIME_AM'], $lang['TIME_PM']), gmdate($format, $time));
 	}
@@ -808,9 +822,12 @@ function kleeja_date($time, $human_time = true, $format = false)
 }
 
 
-/*
+/**
  * World Time Zones
- */
+ * Create an ajax response in a JSON code
+ *
+ * @return array The timezones of the world
+*/
 function time_zones()
 {
 	global $plugin;
