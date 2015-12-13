@@ -35,11 +35,11 @@ define('DEBUG', true);
  */
 defined('DEV_STAGE') ? @error_reporting(E_ALL) : @error_reporting(E_ALL ^ E_NOTICE);
 
-//no CACHING while debug
+#no CACHING while debug
 if (defined('DEBUG'))
 {
 
-    //refresh cache
+    #refresh cache
     if(($dh = @opendir(PATH . 'cache')) !== false)
     {
      while (($file = readdir($dh)) !== false)
@@ -52,7 +52,7 @@ if (defined('DEBUG'))
      }
      closedir($dh);
     }
-    //session_save_path(PATH . 'cache');
+	//session_save_path(PATH . 'cache');
 }
 
 /**
@@ -63,6 +63,8 @@ define('KLEEJA_CONFIG_FILE', 'config.php');
 
 /**
  * Set default time zone
+ * There is no time difference between Coordinated Universal Time (UTC) and Greenwich Mean Time (GMT).
+ * Kleeja supports the changing of time zone through the admin panel, see functions_display.php/kleeja_date()
  */
 date_default_timezone_set('GMT');
 

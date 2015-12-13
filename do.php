@@ -20,7 +20,7 @@ define('IN_DOWNLOAD', true);
 define('IN_KLEEJA', true);
 define('PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 include PATH . 'includes/common.php';
-include PATH . 'includes/functions/functions_files.php';
+#include PATH . 'includes/functions/functions_files.php';
 
 ($hook = $plugin->run_hook('begin_download_page')) ? eval($hook) : null; //run hook
 
@@ -83,7 +83,7 @@ if(ig('id') || ig('filename'))
 			$livexts = explode(',',$config['livexts']);
 			if(in_array($type,$livexts))
 			{
-				$url_filex	= $config['mod_writer'] ? $config['siteurl'] . "downex" . (ig('filename') ? 'f' : '') . "-" . $fname2 . ".html" : $config['siteurl'] . "do.php?downex" . (ig('filename') ? 'f' : '') . "=" . $fname;		
+				$url_filex	= $config['mod_writer'] ? $config['siteurl'] . "downex" . (ig('filename') ? 'f' : '') . "-" . $fname2 . ".html" : $config['siteurl'] . "do.php?downex" . (ig('filename') ? 'f' : '') . "=" . $fname;
 				redirect($url_filex, false);
 			}
 		}
@@ -106,7 +106,7 @@ if(ig('id') || ig('filename'))
 
 	($hook = $plugin->run_hook('b4_showsty_downlaod_id_filename')) ? eval($hook) : null; //run hook
 
-	//add http reffer to session to prevent errors with some browsers ! 
+	//add http reffer to session to prevent errors with some browsers !
 	if (ig('filename'))
 	{
 		$_SESSION['HTTP_REFERER'] = $config['siteurl'] . ($config['mod_writer'] ? "downloadf" . $fname . ".html" : "do.php?filename=" . $fname);
@@ -132,7 +132,7 @@ if(ig('id') || ig('filename'))
 
 
 //
-//download file 
+//download file
 //
 # guidline for _get variable names
 # down: [0-9], default, came from do.php?id=[0-9]
@@ -144,16 +144,16 @@ if(ig('id') || ig('filename'))
 # thmb: [0-9], default, direct from do.php?thmb=[0-9]
 # thmbf: [a-z0-9].[ext], direct from do.php?thmbf=[a-z0-9].[ext]
 #
-# live extensions feature uses downex, downexf as in down & downf  
+# live extensions feature uses downex, downexf as in down & downf
 #
 # x : used only for html links, where x = extension, downf is filename without extension
 
 else if (ig('down') || ig('downf') ||
-		ig('img') || ig('imgf') ||  
-		ig('thmb') || ig('thmbf') || 
+		ig('img') || ig('imgf') ||
+		ig('thmb') || ig('thmbf') ||
 		ig('downex') || ig('downexf'))
 {
-	($hook = $plugin->run_hook('begin_down_go_page')) ? eval($hook) : null; //run hook	
+	($hook = $plugin->run_hook('begin_down_go_page')) ? eval($hook) : null; //run hook
 
 
 
@@ -254,12 +254,12 @@ else if (ig('down') || ig('downf') ||
 
 	$is_live = false;
 	$pre_ext = array_pop(@explode('.', $filename));
-	$is_image = in_array(strtolower(trim($pre_ext)), array('gif', 'jpg', 'jpeg', 'bmp', 'png')) ? true : false; 
+	$is_image = in_array(strtolower(trim($pre_ext)), array('gif', 'jpg', 'jpeg', 'bmp', 'png')) ? true : false;
 
 	if ($SQL->num($result))
 	{
 		$row = $SQL->fetch($result);
-		
+
 		$ii	= $row['id'];
 		$n	= $row['name'];
 		$rn	= $row['real_filename'];
@@ -269,10 +269,10 @@ else if (ig('down') || ig('downf') ||
 		$d_size	= $row['size'];
 
 		#img or not
-		$is_image = in_array($t, array('gif', 'jpg', 'jpeg', 'bmp', 'png')) ? true : false; 
+		$is_image = in_array($t, array('gif', 'jpg', 'jpeg', 'bmp', 'png')) ? true : false;
 		#live url
-		$is_live = in_array($t, $livexts) ? true : false; 
-		
+		$is_live = in_array($t, $livexts) ? true : false;
+
 
 		$SQL->free($result);
 
@@ -300,7 +300,7 @@ else if (ig('down') || ig('downf') ||
 			}
 			else
 			{
-				//first time 
+				//first time
 				$usrcp->kleeja_set_cookie('oldvistor', ',' . $ii . ',', time()+86400);
 			}
 		}
@@ -320,7 +320,7 @@ else if (ig('down') || ig('downf') ||
 		}
 		else
 		{
-			
+
 			#not exists file
 			($hook = $plugin->run_hook('not_exists_qr_down_file')) ? eval($hook) : null; //run hook
 			kleeja_err($lang['FILE_NO_FOUNDED']);
@@ -340,7 +340,7 @@ else if (ig('down') || ig('downf') ||
 	$chunksize = 1024*120; //1 kelobyte * 120 = 120kb that will send to user every loop
 	$resuming_on = true;
 
-	($hook = $plugin->run_hook('down_go_page')) ? eval($hook) : null; //run hook	
+	($hook = $plugin->run_hook('down_go_page')) ? eval($hook) : null; //run hook
 
 
 
@@ -391,7 +391,7 @@ else if (ig('down') || ig('downf') ||
 		$h_name = 'filename="' . rawurlencode(htmlspecialchars_decode($name)) . '"';
 	}
 
-	#Figure out the MIME type (if not specified) 
+	#Figure out the MIME type (if not specified)
 	$ext		= array_pop(explode('.', $path_file));
 	$mime_type	= get_mime_for_header($path_file);
 
@@ -399,7 +399,7 @@ else if (ig('down') || ig('downf') ||
 	@set_time_limit(0);
 	#disable output buffering
 	@ob_end_clean();
-	
+
 	#close the db connection, and session
 	garbage_collection();
 
@@ -431,7 +431,7 @@ else if (ig('down') || ig('downf') ||
 	#header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $ftime) . ' GMT');
 	#header('Content-Encoding: none');
 	header('Content-Disposition: ' . (($is_image || $is_live) ? 'inline' : 'attachment') . '; '  . $h_name);
-	
+
 	#if($is_image)
 	#{
 	#	header('Content-Transfer-Encoding: binary');
@@ -442,12 +442,12 @@ else if (ig('down') || ig('downf') ||
 	#	header('X-Download-Options: noopen');
 	#}
 
-	#header(($is_ie6 ? 'Expires: -1' : 'Expires: Mon, 26 Jul 1997 05:00:00 GMT'));	
+	#header(($is_ie6 ? 'Expires: -1' : 'Expires: Mon, 26 Jul 1997 05:00:00 GMT'));
 	#(($is_ie8) ? '; authoritative=true; X-Content-Type-Options: nosniff;' : '')
 
 
 
-	#add multipart download and resume support                        
+	#add multipart download and resume support
 	if (isset($_SERVER["HTTP_RANGE"]))
 	{
 		list($a, $range) = explode("=", $_SERVER["HTTP_RANGE"],2);

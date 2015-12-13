@@ -21,12 +21,14 @@ if (!defined('IN_COMMON'))
 
 /**
  * Get mime header
- * 
+ *
  * @param string $filename the filename
  * @return string The mime type
  */
 function get_mime_for_header($filename)
 {
+	global $plugin;
+
 	$mimetype = '';
 
 	if (function_exists('mime_content_type'))
@@ -46,15 +48,20 @@ function get_mime_for_header($filename)
 
 
 /**
-* Get remote files
-*
-* @
-* @author punbb and kleeja team
-*/
+ * Get remote files
+ *
+ * @param string $url the file link
+ * @param bool|string $save_in save file to this path, or false if not
+ * @param int $timeout trying getting the file timeout
+ * @param bool $head_only gets only the headers without the contents
+ * @param int $max_redirects allowed number of redirects
+ * @param bool $binary is the file content binary or not
+ * @author punbb and kleeja team
+ */
 function fetch_remote_file($url, $save_in = false, $timeout = 20, $head_only = false, $max_redirects = 10, $binary = false)
 {
 	global $plugin;
-	
+
 	($hook = $plugin->run_hook('kleeja_fetch_remote_file_func')) ? eval($hook) : null; //run hook
 
 	#Quite unlikely that this will be allowed on a shared host, but it can't hurt
@@ -105,7 +112,7 @@ function fetch_remote_file($url, $save_in = false, $timeout = 20, $head_only = f
 			}
 		}
 
-		// Ignore everything except a 200 response code
+		#Ignore everything except a 200 response code
 		if ($data !== false && $responce_code == '200')
 		{
 			if ($head_only)
@@ -125,7 +132,7 @@ function fetch_remote_file($url, $save_in = false, $timeout = 20, $head_only = f
 		}
 
 	}
-	// fsockopen() is the second best thing
+	#fsockopen() is the second best thing
 	else if(function_exists('fsockopen'))
 	{
 	    $url_parsed = parse_url($url);
@@ -143,7 +150,7 @@ function fetch_remote_file($url, $save_in = false, $timeout = 20, $head_only = f
 			return false;
 		}
 
-		// Send a standard HTTP 1.0 request for the page
+		#Send a standard HTTP 1.0 request for the page
 		fwrite($fp, ($head_only ? 'HEAD' : 'GET') . " $path HTTP/1.0\r\n");
 		fwrite($fp, "Host: $host\r\n");
 		fwrite($fp, 'User-Agent: Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0; Kleeja)' . "\r\n");
@@ -152,13 +159,13 @@ function fetch_remote_file($url, $save_in = false, $timeout = 20, $head_only = f
 		stream_set_timeout($fp, $timeout);
 		$stream_meta = stream_get_meta_data($fp);
 
-		//let's open new file to save it in.
+		#let's open new file to save it in.
 		if($save_in)
 		{
 			$fp2 = @fopen($save_in, 'w' . ($binary ? '' : ''));
 		}
 
-		// Fetch the response 1024 bytes at a time and watch out for a timeout
+		#Fetch the response 1024 bytes at a time and watch out for a timeout
 		$in = false;
 		$h = false;
 		$s = '';
@@ -178,7 +185,7 @@ function fetch_remote_file($url, $save_in = false, $timeout = 20, $head_only = f
 						@fwrite($fp2, $s);
 					}
 			}
-			
+
 			$in .= $s;
 			$stream_meta = stream_get_meta_data($fp);
 		}
@@ -216,7 +223,7 @@ function fetch_remote_file($url, $save_in = false, $timeout = 20, $head_only = f
 			if ($head_only)
 			{
 				return explode("\r\n", trim($in));
-			}	
+			}
 			else
 			{
 				$content_start = strpos($in, "\r\n\r\n");
@@ -261,7 +268,7 @@ function fetch_remote_file($url, $save_in = false, $timeout = 20, $head_only = f
 			{
 				return $http_response_header;
 			}
-			
+
 			if($save_in)
 			{
 				$fp2 = fopen($save_in, 'w' . ($binary ? 'b' : ''));
@@ -280,9 +287,13 @@ function fetch_remote_file($url, $save_in = false, $timeout = 20, $head_only = f
 
 
 /**
-* Try delete files or at least change its name.
-* for those who have dirty hosting 
-*/
+ * Try delete files or at least change its name.
+ * for those who have dirty hosting
+ *
+ * @param string $filepath the file path to delete
+ * @param bool $cache_file if no unlink function then cached file can be renamed
+ * @return bool the state of the deleting
+ */
 function kleeja_unlink($filepath, $cache_file = false)
 {
 	//99.9% who use this
@@ -290,28 +301,12 @@ function kleeja_unlink($filepath, $cache_file = false)
 	{
 		return @unlink($filepath);
 	}
-	//5% only who use this
-	//else if (function_exists('exec'))
-	//{
-	//	$out = array();
-	//	$return = null;
-	//	exec('del ' . escapeshellarg(realpath($filepath)) . ' /q', $out, $return);
-	//	return $return;
-	//}
-	//5% only who use this
-	//else if (function_exists('system'))
-	//{
-	//	$return = null;
-	//	system ('del ' . escapeshellarg(realpath($filepath)) . ' /q', $return);
-	//	return $return;
-	//}
-	//just rename cache file if there is new thing
+	#just rename cache file if there is new thing
 	else if (function_exists('rename') && $cache_file)
 	{
-		$new_name = substr($filepath, 0, strrpos($filepath, '/') + 1) . 'old_' . md5($filepath . time()) . '.php'; 
+		$new_name = substr($filepath, 0, strrpos($filepath, '/') + 1) . 'old_' . md5($filepath . time()) . '.php';
 		return rename($filepath, $new_name);
 	}
 
 	return false;
 }
-

@@ -15,8 +15,8 @@ if (!defined('IN_ADMIN'))
 	exit();
 }
 
-//for style ..
-$current_template	= "files.php";
+#style template
+$current_template	= 'files.php';
 
 $url_or		= isset($_REQUEST['order_by']) ? '&amp;order_by=' . htmlspecialchars($_REQUEST['order_by']) . (isset($_REQUEST['order_way']) ? '&amp;order_by=1' : '') : '';
 $url_or2	= isset($_REQUEST['order_by']) ? '&amp;order_by=' . htmlspecialchars($_REQUEST['order_by'])  : '';
@@ -31,26 +31,25 @@ $is_search		= $affected = false;
 $H_FORM_KEYS	= kleeja_add_form_key('adm_files');
 
 //
-// Check form key
+// after submit
 //
-
 if (isset($_POST['submit']))
 {
-	#wrong form
+	#wrong form key
 	if(!kleeja_check_form_key('adm_files'))
 	{
 		kleeja_admin_err($lang['INVALID_FORM_KEY'], true, $lang['ERROR'], true, $action, 1);
 	}
 
 	#gather to-be-deleted file ids
-	foreach ($_POST as $key => $value) 
+	foreach ($_POST as $key => $value)
     {
         if(preg_match('/del_(?P<digit>\d+)/', $key))
         {
             $del[$key] = $value;
         }
     }
-   
+
    #delete them once by once
    $ids = array();
    $files_num = $imgs_num = 0;
@@ -67,12 +66,12 @@ if (isset($_POST['submit']))
 
 		while($row=$SQL->fetch($result))
 		{
-			//delete from folder ..
-			@kleeja_unlink (PATH . $row['folder'] . '/' . $row['name']);
-			//delete thumb
+			#delete file from folder
+			@kleeja_unlink(PATH . $row['folder'] . '/' . $row['name']);
+			#delete thumb
 			if (file_exists(PATH . $row['folder'] . '/thumbs/' . $row['name'] ))
 			{
-				@kleeja_unlink (PATH . $row['folder'] . '/thumbs/' . $row['name'] );
+				@kleeja_unlink(PATH . $row['folder'] . '/thumbs/' . $row['name'] );
 			}
 
 			$is_image = in_array(strtolower(trim($row['type'])), array('gif', 'jpg', 'jpeg', 'bmp', 'png')) ? true : false;
@@ -86,23 +85,23 @@ if (isset($_POST['submit']))
 			{
 				$files_num++;
 			}
-			$sizes += $row['size'];	
+			$sizes += $row['size'];
 		}
 	}
-   
+
 	$SQL->free($result);
-  
-	//no files to delete
+
+	#delete files from the database
 	if(isset($ids) && sizeof($ids))
 	{
 		$query_del = array(
 								'DELETE'	=> "{$dbprefix}files",
 								'WHERE'	=> "`id` IN (" . implode(',', $ids) . ")"
 							);
-			
+
 		$SQL->build($query_del);
 
-		//update number of stats
+		#update number of stats
 		$update_query	= array(
 									'UPDATE'	=> "{$dbprefix}stats",
 									'SET'		=> "sizes=sizes-$sizes, files=files-$files_num, imgs=imgs-$imgs_num",
@@ -111,21 +110,22 @@ if (isset($_POST['submit']))
 		$SQL->build($update_query);
 		if($SQL->affected())
 		{
+			#delete cached stats to be updated later
 			delete_cache('data_stats');
 			$affected = true;
 		}
 	}
-	
+
 	#show msg now
 	$text	= ($affected ? $lang['FILES_UPDATED'] : $lang['NO_UP_CHANGE_S']) .
-				'<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . str_replace('&amp;', '&', $action) .  '\');", 2000);</script>' . "\n";
-	$current_template	= "info.php";
+				'<script type="text/javascript"> setTimeout("location.href=\'' . str_replace('&amp;', '&', $action) .  '\';", 2000);</script>' . "\n";
+	$current_template	= 'info.php';
 }
 else
 {
 
 //
-//Delete all user files [only one user]			
+//Delete all user files [only one user]
 //
 if(isset($_GET['deletefiles']))
 {
@@ -136,7 +136,7 @@ if(isset($_GET['deletefiles']))
 
 	#get search filter
 	$filter = get_filter($_GET['deletefiles'], 'filter_uid');
-	
+
 	if(!$filter)
 	{
 		kleeja_admin_err($lang['ADMIN_DELETE_FILES_NOF']);
@@ -155,13 +155,13 @@ if(isset($_GET['deletefiles']))
 	$files_num = $imgs_num = 0;
 	while($row=$SQL->fetch($result))
 	{
-		//delete from folder ..
-		@kleeja_unlink (PATH . $row['folder'] . "/" . $row['name']);
+		#delete file from folder ..
+		@kleeja_unlink(PATH . $row['folder'] . "/" . $row['name']);
 
-		//delete thumb
+		#delete thumb
 		if (file_exists(PATH . $row['folder'] . "/thumbs/" . $row['name']))
 		{
-			@kleeja_unlink (PATH . $row['folder'] . "/thumbs/" . $row['name']);
+			@kleeja_unlink(PATH . $row['folder'] . "/thumbs/" . $row['name']);
 		}
 
 		$is_image = in_array(strtolower(trim($row['type'])), array('gif', 'jpg', 'jpeg', 'bmp', 'png')) ? true : false;
@@ -186,7 +186,7 @@ if(isset($_GET['deletefiles']))
 	}
 	else
 	{
-		//update number of stats
+		#update number of stats
 		$update_query	= array(
 								'UPDATE'	=> "{$dbprefix}stats",
 								'SET'		=> "sizes=sizes-$sizes, files=files-$files_num, imgs=imgs-$imgs_num",
@@ -198,7 +198,7 @@ if(isset($_GET['deletefiles']))
 			delete_cache('data_stats');
 		}
 
-		//delete all files in just one query
+		#delete all files in just one query
 		$query_del	= array(
 							'DELETE'	=> "{$dbprefix}files",
 							'WHERE'	=> "`id` IN (" . implode(',', $ids) . ")"
@@ -213,7 +213,6 @@ if(isset($_GET['deletefiles']))
 //
 //begin default files page
 //
-
 $query	= array(
 				'SELECT'	=> 'COUNT(f.id) AS total_files',
 				'FROM'		=> "{$dbprefix}files f",
@@ -233,38 +232,42 @@ if((int) $config['user_system'] == 1)
 
 $do_not_query_total_files = false;
 
-//posts search ..
+#posts search ..
 if(isset($_GET['search_id']))
 {
-	#get search filter 
+	#get search filter
 	$filter = get_filter($_GET['search_id'], 'filter_uid');
 	$deletelink = basename(ADMIN_PATH) . '?cp=' . basename(__file__, '.php') . '&deletefiles=' . htmlspecialchars($_GET['search_id']);
 	$is_search	= true;
 	$query['WHERE'] = build_search_query(unserialize(htmlspecialchars_decode($filter['filter_value'])));
 }
+#list files as ordered by last visit
 else if(isset($_REQUEST['last_visit']))
 {
 	$query['WHERE']	= "f.time > " . intval($_REQUEST['last_visit']);
 }
-
+#list files as ordered by chosen field
 if(isset($_REQUEST['order_by']) && in_array($_REQUEST['order_by'], array('real_filename', 'size', 'user', 'user_ip', 'uploads', 'time', 'type', 'folder', 'report')))
 {
 	$query['ORDER BY'] = "f." . $SQL->escape($_REQUEST['order_by']);
 }
 else
 {
+	#list files as default, no need to request total files number
 	$do_not_query_total_files = true;
 }
 
+#if not a search, show only files, not images
 if(!isset($_GET['search_id']))
 {
-	//display files or display pics and files only in search
+	#display files or display pics and files only in search
 	$img_types = array('gif','jpg','png','bmp','jpeg','GIF','JPG','PNG','BMP','JPEG');
 	$query['WHERE'] = (empty($query['WHERE']) ? '' : $query['WHERE'] . ' AND ') . "f.type NOT IN ('" . implode("', '", $img_types) . "')";
 }
 
 $query['ORDER BY'] .= (isset($_REQUEST['order_way']) && (int) $_REQUEST['order_way'] == 1) ? ' ASC' : ' DESC';
 
+#get total files number or not
 $nums_rows = 0;
 if($do_not_query_total_files)
 {
@@ -279,13 +282,13 @@ else
 }
 
 
-//pager 
+#pagination
 $currentPage= isset($_GET['page']) ? intval($_GET['page']) : 1;
 $Pager		= new pagination($perpage, $nums_rows, $currentPage);
 $start		= $Pager->get_start_row();
 
 $no_results = false;
-	
+
 if ($nums_rows > 0)
 {
 	$query['SELECT'] = 'f.*' . ((int) $config['user_system'] == 1 ? ', u.name AS username' : '');
@@ -293,14 +296,14 @@ if ($nums_rows > 0)
 	$result = $SQL->build($query);
 	$sizes = false;
 	$num = 0;
-	#if Kleeja integtared we dont want make alot of queries
-	$ids_and_names = array();
+	#if Kleeja is integtared with other user system,  we dont want make alot of queries
+	$ids_and_names = $files_list = array();
 
 	while($row=$SQL->fetch($result))
 	{
 		$userfile =  $config['siteurl'] . ($config['mod_writer'] ? 'fileuser-' . $row['user'] . '.html' : 'ucp.php?go=fileuser&amp;id=' . $row['user']);
 
-		#for username in integrated user system
+		#for username from integrated user system
 		if($row['user'] != '-1' and (int) $config['user_system'] != 1)
 		{
 			if(!in_array($row['user'], $ids_and_names))
@@ -310,12 +313,12 @@ if ($nums_rows > 0)
 			}
 			else
 			{
-				$row['username'] = $ids_and_names[$row['user']];	
+				$row['username'] = $ids_and_names[$row['user']];
 			}
 		}
 
-		//make new lovely arrays !!
-		$arr[]	= array(
+		#files array
+		$files_list[$row['id']]	= array(
 						'id'		=> $row['id'],
 						'name'		=> "<a title=\" " . ($row['real_filename'] == '' ? $row['name'] : $row['real_filename']) . "\" href=\"./" . PATH . $row['folder'] . "/" . $row['name'] . "\" target=\"blank\">" . ($row['real_filename'] == '' ? ((strlen($row['name']) > 20) ? substr($row['name'], 0, 20) . '...' : $row['name']) : ((strlen($row['real_filename']) > 20) ? substr($row['real_filename'], 0, 20) . '...' : $row['real_filename'])) . "</a>",
 						'size'		=> readable_size($row['size']),
@@ -359,8 +362,7 @@ if(!$is_search)
 
 
 //some vars
-$total_pages	= $Pager->get_total_pages(); 
-$page_nums 		= $Pager->print_nums($page_action, 'onclick="javascript:get_kleeja_link($(this).attr(\'href\'), \'#content\'); return false;"'); 
+$total_pages	= $Pager->get_total_pages();
+$page_nums 		= $Pager->print_nums($page_action, 'onclick="javascript:get_kleeja_link($(this).attr(\'href\'), \'#content\'); return false;"');
 $current_page	= g('page', 'int', 1);;
 }
-
