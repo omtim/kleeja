@@ -16,8 +16,8 @@ if (!defined('IN_COMMON'))
 {
 	exit();
 }
-	
-	
+
+
 
 $dev_m = '';
 if(defined('DEV_STAGE'))
@@ -36,3 +36,5 @@ define('KLEEJA_VERSION' , '2.0.0' . $dev_m);
  * Kleeja Database current version
  */
 define('KLEEJA_DB_VERSION' , '10');
+
+#

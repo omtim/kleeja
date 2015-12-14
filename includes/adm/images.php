@@ -14,41 +14,43 @@ if (!defined('IN_ADMIN'))
 	exit();
 }
 
-//number of images in each page 
+#number of images in each page
 if(!isset($images_cp_perpage) || !$images_cp_perpage)
 {
-	// you can add this varibale to config.php
+	#you can add this varibale to config.php
 	$images_cp_perpage = 25;
 }
 
-//for style ..
-$current_template	= "img.php";
-$action	= basename(ADMIN_PATH) . '?cp=' . basename(__file__, '.php')  . (isset($_GET['page']) ? '&amp;page=' . intval($_GET['page']) : '') . 
+#style template
+$current_template	= 'img.php';
+$action	= ADMIN_PATH . '?cp=' . basename(__file__, '.php')  . (isset($_GET['page']) ? '&amp;page=' . intval($_GET['page']) : '') .
 			(isset($_GET['last_visit']) ? '&amp;last_visit='.intval($_GET['last_visit']) : '');
-$action_search	= basename(ADMIN_PATH) . "?cp=h_search#!cp=h_search";
+$action_search	= ADMIN_PATH . "?cp=h_search";
 $H_FORM_KEYS	= kleeja_add_form_key('adm_img_ctrl');
 $is_search		= false;
 
 //
-// Check form key
+// after submit
 //
 if (isset($_POST['submit']))
 {
+	#check form key
 	if(!kleeja_check_form_key('adm_img_ctrl'))
 	{
 		kleeja_admin_err($lang['INVALID_FORM_KEY'], true, $lang['ERROR'], true, $action, 1);
 	}
 
-	foreach ($_POST as $key => $value) 
+	foreach ($_POST as $key => $value)
     {
         if(preg_match('/del_(?P<digit>\d+)/', $key))
         {
             $del[$key] = $value;
         }
     }
-    
+
+	$sizes = $num = 0;
     foreach ($del as $key => $id)
-    { 
+    {
         $query	= array(
 						'SELECT'	=> '*',
 						'FROM'		=> "{$dbprefix}files",
@@ -59,21 +61,21 @@ if (isset($_POST['submit']))
 
 		while($row=$SQL->fetch($result))
 		{
-			//delete from folder ..
-			@kleeja_unlink (PATH . $row['folder'] . '/' . $row['name']);
-			//delete thumb
+			#delete image from folder ..
+			@kleeja_unlink(PATH . $row['folder'] . '/' . $row['name']);
+			#delete thumb
 			if (file_exists(PATH . $row['folder'] . '/thumbs/' . $row['name'] ))
 			{
-				@kleeja_unlink (PATH . $row['folder'] . '/thumbs/' . $row['name'] );
+				@kleeja_unlink(PATH . $row['folder'] . '/thumbs/' . $row['name'] );
 			}
 			$ids[] = $row['id'];
-			$num++;		
-			$sizes += $row['size'];	
+			$num++;
+			$sizes += $row['size'];
 		}
 	}
-    
+
 	$SQL->free($result);
-	   
+
 	//no files to delete
 	if(isset($ids) && sizeof($ids))
 	{
@@ -81,7 +83,7 @@ if (isset($_POST['submit']))
 								'DELETE'	=> "{$dbprefix}files",
 								'WHERE'	=> "`id` IN (" . implode(',', $ids) . ")"
 							);
-			
+
 		$SQL->build($query_del);
 
 		//update number of stats
@@ -97,10 +99,10 @@ if (isset($_POST['submit']))
 			$affected = true;
 		}
 	}
-        
-    //after submit 
+
+    //after submit
 	$text	= ($affected ? $lang['FILES_UPDATED'] : $lang['NO_UP_CHANGE_S']) .
-				'<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=' . basename(__file__, '.php') . 
+				'<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . ADMIN_PATH . '?cp=' . basename(__file__, '.php') .
 				'&page=' . (isset($_GET['page']) ? intval($_GET['page']) : '1') . '\');", 2000);</script>' . "\n";
 
 	$current_template = "info.php";
@@ -166,7 +168,7 @@ $start		= $Pager->get_start_row();
 
 
 $no_results = $affected = $sizes = false;
-if ($nums_rows > 0) 
+if ($nums_rows > 0)
 {
 
 	$query['SELECT'] = 'f.*' . ((int) $config['user_system'] == 1 ? ', u.name AS username' : '');
@@ -181,7 +183,7 @@ if ($nums_rows > 0)
 	{
 		//thumb ?
 		$is_there_thumb = file_exists(PATH . $row['folder'] . '/thumbs/' . $row['name']) ? true : false;
-		
+
 		#for username in integrated user system
 		if($row['user'] != '-1' and (int) $config['user_system'] != 1)
 		{
@@ -192,12 +194,12 @@ if ($nums_rows > 0)
 			}
 			else
 			{
-				$row['username'] = $ids_and_names[$row['user']];	
+				$row['username'] = $ids_and_names[$row['user']];
 			}
 		}
 
-		//make new lovely arrays !!
-		$arr[]	= array(
+		#make a list of the images
+		$images_list[$row['id']]	= array(
 						'id'		=> $row['id'],
 						'tdnum'		=> $tdnum == 0 ? true : false,
 						'tdnum2'	=> $tdnum == 4 ? true : false,
@@ -213,8 +215,8 @@ if ($nums_rows > 0)
 						'thumb_link'=> $is_there_thumb ? PATH . $row['folder'] . '/thumbs/' . $row['name'] :  PATH . $row['folder'] . '/' . $row['name'],
 					);
 
-		//fix ... 
-		$tdnum = $tdnum == 4 ? 0 : $tdnum+1; 
+		//fix ...
+		$tdnum = $tdnum == 4 ? 0 : $tdnum+1;
 
 		$del[$row['id']] = isset($_POST['del_' . $row['id']]) ? $_POST['del_' . $row['id']] : '';
 /*
@@ -231,15 +233,15 @@ if ($nums_rows > 0)
 					@kleeja_unlink (PATH . $row['folder'] . '/thumbs/' . $row['name'] );
 				}
 				$ids[] = $row['id'];
-				$num++;		
-				$sizes += $row['size'];	
+				$num++;
+				$sizes += $row['size'];
 			}
 		}
 */
 	}
 
 	$SQL->free($result);
-	
+
 /*
 	if (isset($_POST['submit']))
 	{
@@ -250,7 +252,7 @@ if ($nums_rows > 0)
 								'DELETE'	=> "{$dbprefix}files",
 								'WHERE'	=> "id IN (" . implode(',', $ids) . ")"
 							);
-			
+
 			$SQL->build($query_del);
 
 			//update number of stats
@@ -289,18 +291,18 @@ if(!$is_search)
 }
 
 //pages
-$total_pages 	= $Pager->get_total_pages(); 
-$page_nums 		= $Pager->print_nums(basename(ADMIN_PATH). '?cp=' . basename(__file__, '.php') . (isset($_GET['last_visit']) ? '&last_vists=' . intval($_GET['last_visit']) : '')
-						, 'onclick="javascript:get_kleeja_link($(this).attr(\'href\'), \'#content\'); return false;"'); 
+$total_pages 	= $Pager->get_total_pages();
+$page_nums 		= $Pager->print_nums(ADMIN_PATH. '?cp=' . basename(__file__, '.php') . (isset($_GET['last_visit']) ? '&last_vists=' . intval($_GET['last_visit']) : '')
+						, 'onclick="javascript:get_kleeja_link($(this).attr(\'href\'), \'#content\'); return false;"');
 $current_page	= g('page', 'int', 1);
 }
 
 /*
-//after submit 
+//after submit
 if(isset($_POST['submit']))
 {
 	$text	= ($affected ? $lang['FILES_UPDATED'] : $lang['NO_UP_CHANGE_S']) .
-				'<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=' . basename(__file__, '.php') . 
+				'<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . ADMIN_PATH . '?cp=' . basename(__file__, '.php') .
 				'&amp;page=' . (isset($_GET['page']) ? intval($_GET['page']) : '1') . '\');", 2000);</script>' . "\n";
 
 	$current_template = info";
