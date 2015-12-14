@@ -923,10 +923,19 @@ function shorten_text($text, $until = 30)
  * Get group name by its ID
  *
  * @param int $gid The group id
+ * @param bool $group_name if this is true, then $gid is the group name, not id
  * @return string Group name
  */
-function get_group_name($gid)
+function get_group_name($gid, $group_name = false)
 {
-	global $d_groups;
-	return  preg_replace('!{lang.([A-Z0-9]+)}!e', '$lang[\'\\1\']', $d_groups[$gid]['data']['group_name']);
+	global $d_groups, $lang;
+
+	return preg_replace_callback(
+							'!{lang.([A-Z0-9]+)}!',
+							function($matches){
+								 	global $lang;
+									return $lang[$matches[1]];
+								},
+							$group_name ? $gid : $d_groups[$gid]['data']['group_name']
+						);
 }
