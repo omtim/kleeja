@@ -23,9 +23,9 @@ $url_or2	= isset($_REQUEST['order_by']) ? '&amp;order_by=' . htmlspecialchars($_
 $url_lst	= isset($_REQUEST['last_visit']) ? '&amp;last_visit=' . htmlspecialchars($_REQUEST['last_visit']) : '';
 $url_sea	= isset($_GET['search_id']) ? '&amp;search_id=' . htmlspecialchars($_GET['search_id']) : '';
 $url_pg		= isset($_GET['page']) ? '&amp;page=' . intval($_GET['page']) : '';
-$page_action	= basename(ADMIN_PATH) . '?cp=' . basename(__file__, '.php')  . $url_or . $url_sea . $url_lst;
-$ord_action		= basename(ADMIN_PATH) . '?cp=' . basename(__file__, '.php') . $url_pg . $url_sea . $url_lst;
-$page2_action	= basename(ADMIN_PATH) . '?cp=' . basename(__file__, '.php') . $url_or2 . $url_sea . $url_lst;
+$page_action	= ADMIN_PATH . '?cp=' . basename(__file__, '.php')  . $url_or . $url_sea . $url_lst;
+$ord_action		= ADMIN_PATH . '?cp=' . basename(__file__, '.php') . $url_pg . $url_sea . $url_lst;
+$page2_action	= ADMIN_PATH . '?cp=' . basename(__file__, '.php') . $url_or2 . $url_sea . $url_lst;
 $action			= $page_action . $url_pg;
 $is_search		= $affected = false;
 $H_FORM_KEYS	= kleeja_add_form_key('adm_files');
@@ -52,7 +52,7 @@ if (isset($_POST['submit']))
 
    #delete them once by once
    $ids = array();
-   $files_num = $imgs_num = 0;
+   $files_num = $imgs_num = $sizes = 0;
 
     foreach ($del as $key => $id)
     {
@@ -237,7 +237,7 @@ if(isset($_GET['search_id']))
 {
 	#get search filter
 	$filter = get_filter($_GET['search_id'], 'filter_uid');
-	$deletelink = basename(ADMIN_PATH) . '?cp=' . basename(__file__, '.php') . '&deletefiles=' . htmlspecialchars($_GET['search_id']);
+	$deletelink = ADMIN_PATH . '?cp=' . basename(__file__, '.php') . '&deletefiles=' . htmlspecialchars($_GET['search_id']);
 	$is_search	= true;
 	$query['WHERE'] = build_search_query(unserialize(htmlspecialchars_decode($filter['filter_value'])));
 }
@@ -332,7 +332,7 @@ if ($nums_rows > 0)
 						'report'	=> ($row['report'] > 4) ? "<span style=\"color:red;font-weight:bold\">" . $row['report'] . "</span>":$row['report'],
 						'user'		=> ($row['user'] == '-1') ? $lang['GUST'] :  '<a href="' . $userfile . '" target="_blank">' . $row['username'] . '</a>',
 						'ip'		=> '<a href="http://www.ripe.net/whois?form_type=simple&amp;full_query_string=&amp;searchtext=' . $row['user_ip'] . '&amp;do_search=Search" target="_new">' . $row['user_ip'] . '</a>',
-						'showfilesbyip' => basename(ADMIN_PATH) . '?cp=h_search&amp;s_input=1&amp;s_value=' . $row['user_ip']
+						'showfilesbyip' => ADMIN_PATH . '?cp=h_search&amp;s_input=1&amp;s_value=' . $row['user_ip']
 					);
 
 		$del[$row['id']] = isset($_POST['del_' . $row['id']]) ? $_POST['del_' . $row['id']] : '';
@@ -361,8 +361,9 @@ if(!$is_search)
 }
 
 
-//some vars
+#some vars
 $total_pages	= $Pager->get_total_pages();
-$page_nums 		= $Pager->print_nums($page_action, 'onclick="javascript:get_kleeja_link($(this).attr(\'href\'), \'#content\'); return false;"');
+$total_pages	= $total_pages == 0 ? 1 : $total_pages;
+$page_nums 		= $Pager->print_nums($page_action, '');
 $current_page	= g('page', 'int', 1);;
 }
