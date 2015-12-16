@@ -559,7 +559,6 @@
 
 <?php foreach($data as $id=>$group): ?>
 <li class="list-group-item form-group">
-		<h4 class="list-group-item-heading"><label for="<?=$group['name']?>"><?=$group['label']?></label></h4>
 		<p class="list-group-item-text">
 			<?=$group['option']?>
 		</p>

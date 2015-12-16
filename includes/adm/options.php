@@ -26,61 +26,10 @@ $options		= '';
 $CONFIGEXTEND	= false;
 $H_FORM_KEYS	= kleeja_add_form_key('adm_options');
 
-function parse_options($opt)
-{
-	global $con, $lang;
-
-
-	#Exceptions for some options
-	if($opt[2] == 'write_imgs')
-	{
-		$opt[4] = '<br /><img src="' . (file_exists(PATH . 'images/watermark.gif') ? PATH . 'images/watermark.gif' : PATH . 'images/watermark.png') . '" alt="Seal photo" style=\"margin-top:4px;border:1px groove #FF865E;">';
-	}
-	else if($opt[2] == 'googleanalytics')
-	{
-		$opt[4] = '<a href="http://www.google.com/analytics">Google Analytics</a>';
-
-	}
 
 
 
-	#if it's only the value
-	if($opt[1] == 'con' && trim($opt[2]) != '' && isset($con[$opt[2]]))
-	{
-		return $con[$opt[2]];
-	}
-
-	#language term
-	if($opt[1] == 'lang' && trim($opt[2]) != '' && isset($lang[$opt[2]]))
-	{
-		return $lang[$opt[2]];
-	}
-
-	#yes or no option
-	if($opt[1] == 'yesno' && trim($opt[2]) != '')
-	{
-		return '<div class="radio"><label><input type="radio" id="' . $opt[2] . '" name="' . $opt[2] . '" value="1" ' . ($con[$opt[2]] == 1 ? ' checked="checked"' :'') . '>' . $lang['YES'] . '</label></div>' .
-					'<div class="radio"><label><input type="radio" id="' .  $opt[2] . '" name="' . $opt[2] . '" value="0" ' . ($con[$opt[2]] == 0 ? ' checked="checked"' :'') . '>' . $lang['NO'] . '</label></div>' .
-					(isset($opt[4]) ? '<br> <small class="text-muted">' . (isset($lang[$opt[4]]) ? $lang[$opt[4]] :  $opt[4])  .'</small>': '');
-	}
-
-	#text or left-to-right text input
-	if(($opt[1] == 'text' || $opt[1] == 'ltr') && trim($opt[2]) != '')
-	{
-		return '<input type="text" id="' . $opt[2] . '" name="' . $opt[2] . '" value="' . $con[$opt[2]] . '" class="form-control text-options" ' . ($opt[1] == 'ltr'? ' style="direction:ltr"' : '') .' />' .
-		(isset($opt[4]) ? '<br> <small class="text-muted">' . (isset($lang[$opt[4]]) ? $lang[$opt[4]] :  $opt[4])  .'</small>': '');
-	}
-
-	#select option
-	if($opt[1] == 'select' && trim($opt[2]) != '')
-	{
-		return '<select name="' . $opt[2] . '" class="form-control"  id="' . $opt[2] . '">\r\n ' . option_select_values($opt[2], $con[$opt[2]])  . '\r\n </select>' .
-		(isset($opt[4]) ? '<br> <small class="text-muted">' . (isset($lang[$opt[4]]) ? $lang[$opt[4]] :  $opt[4])  .'</small>': '');
-	}
-}
-
-
-//secondary menu
+#secondary menu
 $query	= array(
 				'SELECT'	=> 'DISTINCT(type)',
 				'FROM'		=> "{$dbprefix}config c",

@@ -257,7 +257,7 @@ else if (isset($_POST['newuser']))
 		}
 
 		#User added ..
-		kleeja_admin_info($lang['USER_ADDED'], true, '', true, ADMIN_PATH . '?cp=g_users', 3);
+		kleeja_admin_info($lang['USER_ADDED'], true, '', true, ADMIN_PATH . '?cp=users', 3);
 	}
 	else
 	{
@@ -357,11 +357,11 @@ if(isset($_POST['edituser']))
 
 		if($SQL->affected())
 		{
-			kleeja_admin_info($lang['USER_UPDATED'], true, '', true, ADMIN_PATH . '?cp=g_users&smt=show_group&qg=' . intval($_POST['l_qg']) . '&page='. intval($_POST['l_page']), 2);
+			kleeja_admin_info($lang['USER_UPDATED'], true, '', true, ADMIN_PATH . '?cp=users&smt=show_group&qg=' . intval($_POST['l_qg']) . '&page='. intval($_POST['l_page']), 2);
 		}
 		else
 		{
-			kleeja_admin_info($lang['NO_UP_CHANGE_S'], true, '', true, ADMIN_PATH . '?cp=g_users&smt=show_group&qg=' . intval($_POST['l_qg']) . '&page='. intval($_POST['l_page']), 2);
+			kleeja_admin_info($lang['NO_UP_CHANGE_S'], true, '', true, ADMIN_PATH . '?cp=users&smt=show_group&qg=' . intval($_POST['l_qg']) . '&page='. intval($_POST['l_page']), 2);
 		}
 	}
 	else
@@ -487,7 +487,7 @@ if(isset($_POST['newgroup']))
 
 		#show group-is-added message
 		delete_cache('data_groups');
-		kleeja_admin_info(sprintf($lang['GROUP_ADDED'], htmlspecialchars($_POST['gname'])), true, '', true,  ADMIN_PATH . '?cp=g_users');
+		kleeja_admin_info(sprintf($lang['GROUP_ADDED'], htmlspecialchars($_POST['gname'])), true, '', true,  ADMIN_PATH . '?cp=users');
 	}
 	else
 	{
@@ -512,13 +512,13 @@ if(isset($_POST['delgroup']))
 	#if missing IDs of groups, deleted one and transfering-to one.
 	if(!$from_group or !$to_group)
 	{
-		kleeja_admin_err('ERROR-NO-ID', true, '', true,  ADMIN_PATH . '?cp=g_users');
+		kleeja_admin_err('ERROR-NO-ID', true, '', true,  ADMIN_PATH . '?cp=users');
 	}
 
 	#We can not move users to the same group we deleting ! that's stupid pro!
 	if($from_group  == $to_group)
 	{
-		kleeja_admin_err($lang['NO_MOVE_SAME_GRP'], true, '', true,  ADMIN_PATH . '?cp=g_users');
+		kleeja_admin_err($lang['NO_MOVE_SAME_GRP'], true, '', true,  ADMIN_PATH . '?cp=users');
 	}
 
 	#to_group = '-1' : means default group .. so now we get the real ID.
@@ -530,7 +530,7 @@ if(isset($_POST['delgroup']))
 	#you can not delete default group !
 	if($from_group == (int) $config['default_group'])
 	{
-		kleeja_admin_err($lang['DEFAULT_GRP_NO_DEL'], true, '', true,  ADMIN_PATH . '?cp=g_users');
+		kleeja_admin_err($lang['DEFAULT_GRP_NO_DEL'], true, '', true,  ADMIN_PATH . '?cp=users');
 	}
 
 	#delete the exts
@@ -578,7 +578,7 @@ if(isset($_POST['delgroup']))
 
 	#delete cache ..
 	delete_cache('data_groups');
-	kleeja_admin_info(sprintf($lang['GROUP_DELETED'], $group_name_from, $group_name_to), true, '', true,  ADMIN_PATH . '?cp=g_users');
+	kleeja_admin_info(sprintf($lang['GROUP_DELETED'], $group_name_from, $group_name_to), true, '', true,  ADMIN_PATH . '?cp=users');
 }
 
 //
@@ -646,7 +646,7 @@ case 'group_acl':
 	$req_group = isset($_GET['qg']) ? intval($_GET['qg']) : 0;
 	if(!$req_group)
 	{
-		kleeja_admin_err('ERROR-NO-ID', true, '', true,  ADMIN_PATH . '?cp=g_users');
+		kleeja_admin_err('ERROR-NO-ID', true, '', true,  ADMIN_PATH . '?cp=users');
 	}
 
 	$group_name	= get_group_name($req_group);
@@ -722,7 +722,7 @@ case 'group_acl':
 
 		#delete cache ..
 		delete_cache('data_groups');
-		kleeja_admin_info($lang['CONFIGS_UPDATED'], true, '', true,  ADMIN_PATH . '?cp=g_users');
+		kleeja_admin_info($lang['CONFIGS_UPDATED'], true, '', true,  ADMIN_PATH . '?cp=users');
 	}
 break;
 
@@ -731,14 +731,15 @@ case 'group_data':
 	$req_group = isset($_GET['qg']) ? intval($_GET['qg']) : 0;
 	if(!$req_group)
 	{
-		kleeja_admin_err('ERROR-NO-ID', true, '', true,  ADMIN_PATH . '?cp=g_users');
+		kleeja_admin_err('ERROR-NO-ID', true, '', true,  ADMIN_PATH . '?cp=users');
 	}
 
 
-	# When user change langauge from start page, hurry hurry section, he comes here
+	# When user change langauge from start page, hurry hurry section, he/she comes here
+	# this part has nothing with the other thing below
 	if(isset($_GET['lang_change']))
 	{
-		//check _GET Csrf token
+		#check _GET Csrf token
 		if(!kleeja_check_form_key_get('adm_start_actions'))
 		{
 			kleeja_admin_err($lang['INVALID_GET_KEY'], true, $lang['ERROR'], true, ADMIN_PATH . '?cp=start', 2);
@@ -765,11 +766,12 @@ case 'group_data':
 				true, '', true, ADMIN_PATH . '?cp=start');
 	}
 
+
 	$group_name	= get_group_name($req_group);
 	$gdata		= $d_groups[$req_group]['data'];
 
 	$query = array(
-					'SELECT'	=> 'c.name, c.option',
+					'SELECT'	=> 'c.name, c.option, c.value',
 					'FROM'		=> "{$dbprefix}config c",
 					'WHERE'		=> "c.type='groups'",
 					'ORDER BY'	=> 'c.display_order ASC'
@@ -778,7 +780,7 @@ case 'group_data':
 	$result = $SQL->build($query);
 
 	$data = array();
-	$cdata= $d_groups[$req_group]['configs'];
+	$cdata= $con = $d_groups[$req_group]['configs'];
 	$STAMP_IMG_URL = file_exists(PATH . 'images/watermark.gif') ? PATH . 'images/watermark.gif' : PATH . 'images/watermark.png';
 
 	while($row=$SQL->fetch($result))
@@ -821,29 +823,28 @@ case 'group_data':
 			continue;
 		}
 
-		$option_o = '';
-		if(trim($row['option']) !== '')
+		$option_value = '';
+		if(trim($row['option']) != '')
 		{
-			#!!!!!
-			#O M G
-			/*$option_o = $tpl->admindisplayoption(preg_replace(array('!{con.[a-z0-9_]+}!', '!NAME="con.!'), array('{cdata.' . $row['name'] . '}', 'NAME="cdata.'), $row['option']));
 
-			if(strpos($option_o, 'radio') !== false)
-			{
-				$option_o = '<div class="checkbox">' . $option_o . '</div>';
-			}
-			else
-			{
-				$option_o = str_replace(array('<input', '<select'), array('<input class="form-control"', '<select class="form-control"'), $option_o);
-			}*/
+			$option_value = preg_replace_callback(
+			'!\{([a-z]+)\.([a-zA-Z0-9-_]+)(\.([a-zA-Z0-9_-]+))?\}!',
+			'parse_options',
+			$row['option']);
+
 		}
 
+		$data[$row['name']] = array(
+					'label'		=> (!empty($lang[strtoupper($row['name'])]) ? $lang[strtoupper($row['name'])] : $olang[strtoupper($row['name'])]),
+					'option'		 => '<div class="form-group">' . "\n" .
+										'<label for="' . $row['name'] . '">' . (!empty($lang[strtoupper($row['name'])]) ? $lang[strtoupper($row['name'])] : strtoupper($row['name'])) . '</label>' . "\n" .
+										'' . $option_value . '' . "\n" .
+										'</div>' . "\n" . '',
+					#'type'			=> $row['type'],
+					'name'		=> $row['name'],
+					#'display_order' => $row['display_order'],
+				);
 
-		$data[] = array(
-						'label'		=> (!empty($lang[strtoupper($row['name'])]) ? $lang[strtoupper($row['name'])] : $olang[strtoupper($row['name'])]),
-						'name'		=> $row['name'],
-						'option'	=> $option_o
-			);
 	}
 	$SQL->free($result);
 
@@ -875,7 +876,7 @@ case 'group_data':
 
 		#delete cache ..
 		delete_cache('data_groups');
-		kleeja_admin_info($lang['CONFIGS_UPDATED'], true, '', true,  ADMIN_PATH . '?cp=g_users');
+		kleeja_admin_info($lang['CONFIGS_UPDATED'], true, '', true,  ADMIN_PATH . '?cp=users');
 	}
 
 break;
@@ -970,7 +971,7 @@ case 'group_exts':
 
 		if(!$new_ext)
 		{
-			kleeja_admin_err($lang['EMPTY_EXT_FIELD'], true, '', true,  ADMIN_PATH . '?cp=g_users&smt=group_exts&gq=' . $req_group);
+			kleeja_admin_err($lang['EMPTY_EXT_FIELD'], true, '', true,  ADMIN_PATH . '?cp=users&smt=group_exts&gq=' . $req_group);
 		}
 
 		//check if it's welcomed one
@@ -1182,7 +1183,7 @@ case 'edit_user':
 	$u_qg		= isset($_POST['l_qg']) ? intval($_POST['u_qg']) : $udata['group_id'];
 	if($u_founder && !$im_founder)
 	{
-		kleeja_admin_err($lang['HV_NOT_PRVLG_ACCESS'], true, '', true,  ADMIN_PATH . '?cp=g_users&smt=show_group&gq=' . $u_group);
+		kleeja_admin_err($lang['HV_NOT_PRVLG_ACCESS'], true, '', true,  ADMIN_PATH . '?cp=users&smt=show_group&gq=' . $u_group);
 	}
 
 	$errs = isset($errs) ? $errs : false;
@@ -1248,13 +1249,13 @@ if (isset($_POST['submit']))
 
 //secondary menu
 $go_menu = array(
-				'general' => array('name'=>$lang['R_GROUPS'], 'link'=> ADMIN_PATH . '?cp=g_users&amp;smt=general', 'goto'=>'general', 'current'=> $current_smt == 'general'),
-				#'users' => array('name'=>$lang['R_USERS'], 'link'=> ADMIN_PATH . '?cp=g_users&amp;smt=users', 'goto'=>'users', 'current'=> $current_smt == 'users'),
+				'general' => array('name'=>$lang['R_GROUPS'], 'link'=> ADMIN_PATH . '?cp=users&amp;smt=general', 'goto'=>'general', 'current'=> $current_smt == 'general'),
+				#'users' => array('name'=>$lang['R_USERS'], 'link'=> ADMIN_PATH . '?cp=users&amp;smt=users', 'goto'=>'users', 'current'=> $current_smt == 'users'),
 				'show_su' => array('name'=>$lang['SEARCH_USERS'], 'link'=> ADMIN_PATH . '?cp=h_search&amp;smt=users', 'goto'=>'show_su', 'current'=> $current_smt == 'show_su'),
 	);
 
 #user adding is not allowed in integration
 if(!$user_not_normal)
 {
-	$go_menu['new_u'] = array('name'=>$lang['NEW_USER'], 'link'=> ADMIN_PATH . '?cp=g_users&amp;smt=new_u', 'goto'=>'new_u', 'current'=> $current_smt == 'new_u');
+	$go_menu['new_u'] = array('name'=>$lang['NEW_USER'], 'link'=> ADMIN_PATH . '?cp=users&amp;smt=new_u', 'goto'=>'new_u', 'current'=> $current_smt == 'new_u');
 }
