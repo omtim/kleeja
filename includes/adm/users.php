@@ -227,7 +227,7 @@ else if (isset($_POST['newuser']))
 	if(empty($ERRORS))
 	{
 		$name			= (string) $SQL->escape(trim($_POST['lname']));
-		$user_salt		= (string) substr(kleeja_base64_encode(pack("H*", sha1(mt_rand()))), 0, 7);
+		$user_salt		= (string) substr(base64_encode(pack("H*", sha1(mt_rand()))), 0, 7);
 		$pass			= (string) $usrcp->kleeja_hash_password($SQL->escape(trim($_POST['lpass'])) . $user_salt);
 		$mail			= (string) trim(strtolower($_POST['lmail']));
 		$clean_name		= (string) $usrcp->cleanusername($name);
@@ -241,7 +241,7 @@ else if (isset($_POST['newuser']))
 
 		if ($SQL->build($insert_query))
 		{
-			$last_user_id = $SQL->insert_id();
+			$last_user_id = $SQL->id();
 
 			//update number of stats
 			$update_query	= array(
@@ -1222,6 +1222,12 @@ case 'new_u':
 	$u_groups = array();
 	foreach($k_groups as $id)
 	{
+		#guests? no skip
+		if($id == 2)
+		{
+			continue;
+		}
+
 		$u_groups[] = array(
 					'id'		=> $id,
 					'name'		=> get_group_name($id),
