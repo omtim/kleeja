@@ -33,7 +33,7 @@
 			    <button type="button" class="btn btn-default btn-sm" onclick="javascript:location.href='<?=$action?>&smt=group_data&qg=<?=$group['id']?>';"><span class="glyphicon glyphicon-cog"></span> <?=$lang['EDIT_DATA']?></button>
 			    <button type="button" class="btn btn-default btn-sm" onclick="javascript:location.href='<?=$action?>&smt=group_exts&qg=<?=$group['id']?>';"><span class="glyphicon glyphicon-list-alt"></span> <?=$lang['R_EXTS']?></button>
 			    <button type="button" class="btn btn-default btn-sm" onclick="javascript:location.href='<?=$action?>&smt=group_acl&qg=<?=$group['id']?>';"><span class="glyphicon glyphicon-lock"></span> <?=$lang['EDIT_ACL']?></button>
-				<?php if($user_not_normal && $group['id'] != 2): ?>
+				<?php if(!$user_not_normal && $id != 1): ?>
 			    <button type="button" class="btn btn-default btn-sm" onclick="javascript:location.href='<?=$action?>&smt=show_group&qg=<?=$group['id']?>';"><span class="glyphicon glyphicon-user"></span> <?=$lang['USERS']?></button>
 			 	<?php endif; ?>
 			  </div>
@@ -160,7 +160,9 @@
 	</div>
 <?php endif; ?>
 
-
+<?php if($no_results):?>
+<div class="alert alert-warning">...</div>
+<?php endif;?>
 
 <?php if($arr): ?>
 <table class="table table-striped">
@@ -226,7 +228,7 @@
 	<label for="lpass"><?=$lang['GROUP']?></label>
 		<select name="lgroup" id="lgroup" class="form-control" style="width: 237px;">
 		<?php foreach($u_groups as $id=>$group): ?>
-			<option value="<?=$group['id']?>"<?php if($egroup['selected']): ?> selected="selected"<?php endif; ?>><?=$group['name']?> <?php if($e_group['default']): ?>(<?=$lang['DEFAULT_GROUP']?>)<?php endif; ?></option>
+			<option value="<?=$group['id']?>"<?php if($group['selected']): ?> selected="selected"<?php endif; ?>><?=$group['name']?> <?php if($group['default']): ?>(<?=$lang['DEFAULT_GROUP']?>)<?php endif; ?></option>
 		<?php endforeach;?>
 		</select>
 </div>
@@ -329,10 +331,10 @@
 	<td class="text-<?php if($lang['DIR'] == 'rtl'):?>left<?php else: ?>right<?php endif; ?>">
 		<div class="btn-group acls-radios" data-toggle="buttons">
 		<label class="btn btn-success btn-sm<?php if($group['acl_can'] == 1):?> active<?php endif; ?>">
-			<input type="radio" name="<?=$group['acl_name']?>" id="acls_<?=$group['acl_name']?>_1" <?php if($group['acl_can'] == 1):?> checked="checked"<?php endif; ?>> <?=$lang['HE_CAN']?>
+			<input type="radio" name="<?=$group['acl_name']?>" id="acls_<?=$group['acl_name']?>_1" <?php if($group['acl_can'] == 1):?> checked="checked"<?php endif; ?> value="1"> <?=$lang['HE_CAN']?>
 		</label>
 		<label class="btn btn-danger btn-sm<?php if($group['acl_can'] == 0):?> active<?php endif; ?>">
-			<input type="radio" name="<?=$group['acl_name']?>" id="acls_<?=$group['acl_name']?>_2" <?php if($group['acl_can'] == 0):?> checked="checked"<?php endif; ?>> <?=$lang['HE_CAN_NOT']?>
+			<input type="radio" name="<?=$group['acl_name']?>" id="acls_<?=$group['acl_name']?>_2" <?php if($group['acl_can'] == 0):?> checked="checked"<?php endif; ?> value="0"> <?=$lang['HE_CAN_NOT']?>
 		</label>
 		</div>
 	</td>

@@ -32,8 +32,8 @@ $extra_code_in_header = '';
  * ucp.php?go=[...]
  */
 switch (g('go', 'str', ''))
-{ 
-	case 'login' : 
+{
+	case 'login' :
 
 		#page info
 		$current_template	= 'login.php';
@@ -41,16 +41,16 @@ switch (g('go', 'str', ''))
 		$action				= 'ucp.php?go=login' . (ig('return') ? '&amp;return=' . g('return') : '');
 		$forget_pass_link	= !empty($forgetpass_script_path) && (int) $config['user_system'] != 1 ? $forgetpass_script_path : 'ucp.php?go=get_pass';
 
-		#no error yet 
+		#no error yet
 		$ERRORS = false;
 
 		#login variable
-		$t_lname = p('lname', 'str', ''); 
-		$t_lpass = p('lpass', 'str', ''); 
+		$t_lname = p('lname', 'str', '');
+		$t_lpass = p('lpass', 'str', '');
 
 		($hook = $plugin->run_hook('login_before_submit')) ? eval($hook) : null; //run hook
-		
-		#already a user? 
+
+		#already a user?
 		if ($user->is_user())
 		{
 			($hook = $plugin->run_hook('login_logon_before')) ? eval($hook) : null; //run hook
@@ -97,18 +97,18 @@ switch (g('go', 'str', ''))
 				kleeja_info($text, '', true, $config['siteurl'], 1);
 			}
 		}
-		
+
 
 		break;
 
-		case 'register' : 
+		case 'register' :
 
 		#page info
 		$current_template	= 'register.php';
 		$current_title	= $lang['REGISTER'];
 		$action	= 'ucp.php?go=register';
 
-		#no error yet 
+		#no error yet
 		$ERRORS = false;
 
 		#is regisreation disabled from configuration
@@ -168,7 +168,7 @@ switch (g('go', 'str', ''))
 		}
 		#form submit
 		else
-		{	
+		{
 			$ERRORS = array();
 
 			($hook = $plugin->run_hook('register_submit')) ? eval($hook) : null; //run hook
@@ -207,14 +207,14 @@ switch (g('go', 'str', ''))
 							'FROM'		=> "{$dbprefix}users u",
 							'WHERE'		=> "u.clean_name='" . $SQL->escape($user->cleanusername($t_lname)) . "' OR u.mail='" . strtolower($SQL->escape($t_lmail)) . "'",
 						);
-	
+
 				($hook = $plugin->run_hook('register_query_chk')) ? eval($hook) : null; //run hook
 
 				$result_chk		= $SQL->build($query_chk);
 				if($SQL->num($result_chk))
 				{
 					$data_chk = $SQL->fetch($result_chk);
-					
+
 					#well, this username exists before!
 					if($data_chk['clean_name'] == $user->cleanusername($t_lname))
 					{
@@ -226,14 +226,14 @@ switch (g('go', 'str', ''))
 					{
 						$ERRORS['mail_exists_before'] = $lang['EXIST_EMAIL'];
 					}
-					
+
 				}
 			}
 
 			($hook = $plugin->run_hook('register_submit2')) ? eval($hook) : null; //run hook
 
 			#no errors, lets do process
-			if(empty($ERRORS))	 
+			if(empty($ERRORS))
 			{
 				$name		= $SQL->escape($t_lname);
 				$user_salt	= substr(base64_encode(pack("H*", sha1(mt_rand()))), 0, 7);
@@ -279,7 +279,7 @@ switch (g('go', 'str', ''))
 		break;
 
 		case 'logout':
-		
+
 		($hook = $plugin->run_hook('begin_logout')) ? eval($hook) : null; //run hook
 
 		if ($user->logout())
@@ -293,17 +293,17 @@ switch (g('go', 'str', ''))
 		}
 
 		($hook = $plugin->run_hook('end_logout')) ? eval($hook) : null; //run hook
-		
+
 		break;
 
 
-		case 'fileuser': 
+		case 'fileuser':
 
 		($hook = $plugin->run_hook('begin_fileuser')) ? eval($hook) : null; //run hook
 
-		
-		include PATH . 'includes/functions/functions_files.php';
-		
+
+		#include PATH . 'includes/functions/functions_files.php';
+
 		#page info
 		$current_template	= 'fileuser.php';
 
@@ -370,11 +370,11 @@ switch (g('go', 'str', ''))
 		$start			= $pagination->get_start_row();
 
 		$your_fileuser_link= $config['siteurl'] . ($config['mod_writer'] ? 'fileuser-' . $user->data['id'] . '.html' : 'ucp.php?go=fileuser&amp;id=' .  $user->data['id']);
-		$total_pages	= $pagination->get_total_pages(); 
+		$total_pages	= $pagination->get_total_pages();
 		$pagination_link= $config['siteurl'] . ($config['mod_writer'] ?  'fileuser-' . $user_id  . '-'  : 'ucp.php?go=fileuser&amp;id=' . $user_id);
 		$linkgoto		= $config['siteurl'] . ($config['mod_writer'] ?  'fileuser-' . $user_id  . '-' . $current_page . '.html' : 'ucp.php?go=fileuser&amp;id=' . $user_id . '&amp;page=' . $current_page);
 		$page_nums		= $pagination->print_nums($pagination_link);
- 
+
 		$no_results = true;
 
 		if((int) $config['user_system'] != 1 && ($user->data['id'] != $user_id))
@@ -404,9 +404,9 @@ switch (g('go', 'str', ''))
 				{
 					++$i;
 					$sizes = 0;
-				
-				
-					($hook = $plugin->run_hook('submit_in_fileuser')) ? eval($hook) : null; //run hook	
+
+
+					($hook = $plugin->run_hook('submit_in_fileuser')) ? eval($hook) : null; //run hook
 
 					//check for form key
 					if(!kleeja_check_form_key('fileuser', 1800 /* half hour */))
@@ -416,7 +416,7 @@ switch (g('go', 'str', ''))
 
 					if (ip('del_' . $row['id']))
 					{
-						#/delete from folder .. 
+						#/delete from folder ..
 						kleeja_unlink($row['folder'] . '/' . $row['name']);
 
 						#delete thumb
@@ -454,7 +454,7 @@ switch (g('go', 'str', ''))
 								'WHERE'		=> "id IN (" . implode(',', $ids) . ")"
 							);
 
-					($hook = $plugin->run_hook('qr_del_files_in_filecp')) ? eval($hook) : null; //run hook	
+					($hook = $plugin->run_hook('qr_del_files_in_filecp')) ? eval($hook) : null; //run hook
 					$SQL->build($query_del);
 
 					if(($files_num <= $stat_files) && ($imgs_num <= $stat_imgs))
@@ -484,7 +484,7 @@ switch (g('go', 'str', ''))
 		break;
 
 		case 'profile':
-		
+
 		#not a user
 		if (!$user->data['name'])
 		{
@@ -497,7 +497,7 @@ switch (g('go', 'str', ''))
 		extract($user->get_data('show_my_filecp, password_salt'));
 		$data_forum		= (int) $config['user_system'] == 1 ? true : false ;
 
-		#no error yet 
+		#no error yet
 		$ERRORS = false;
 
 		#path to profile page if Kleeja user system is not the default
@@ -524,7 +524,7 @@ switch (g('go', 'str', ''))
 				$goto_forum_link = '...';
 			}
 		}
-		
+
 		#if not default user system, then redirect the user to panel of that system
 		if($config['user_system'] != 1)
 		{
@@ -582,7 +582,7 @@ switch (g('go', 'str', ''))
 				{
 					$ERRORS['wrong_email'] = $lang['WRONG_EMAIL'];
 				}
-				
+
 				#if email is ok, check if already exists
 				if(!isset($ERRORS['wrong_email']))
 				{
@@ -592,7 +592,7 @@ switch (g('go', 'str', ''))
 								'FROM'		=> "{$dbprefix}users u",
 								'WHERE'		=> "u.mail='" . $SQL->escape($t_pmail) . "'",
 							);
-	
+
 					($hook = $plugin->run_hook('profile_query_chk')) ? eval($hook) : null; //run hook
 
 					$result_chk	= $SQL->build($query_chk);
@@ -601,7 +601,7 @@ switch (g('go', 'str', ''))
 						$ERRORS['mail_exists_before'] = $lang['EXIST_EMAIL'];
 					}
 				}
-				
+
 				#set the new email to be the use email
 				$new_mail = true;
 			}
@@ -614,7 +614,7 @@ switch (g('go', 'str', ''))
 				$user_salt 	= substr(base64_encode(pack("H*", sha1(mt_rand()))), 0, 7);
 				$mail		= $new_mail ? "mail='" . $SQL->escape($t_pmail) . "'" : '';
 				$showmyfile	= $t_show_my_filecp != $show_my_filecp ?  ($mail == '' ? '': ',') . "show_my_filecp='" . $t_show_my_filecp . "'" : '';
-				$pass		= $t_ppass_new != '' ? ($showmyfile != ''  || $mail != '' ? ',' : '') . "password='" . $SQL->escape($user->kleeja_hash_password($t_ppass_new . $user_salt)) . 
+				$pass		= $t_ppass_new != '' ? ($showmyfile != ''  || $mail != '' ? ',' : '') . "password='" . $SQL->escape($user->kleeja_hash_password($t_ppass_new . $user_salt)) .
 								"', password_salt='" . $user_salt . "'" : "";
 				$id			= $user->data['id'];
 
@@ -643,10 +643,10 @@ switch (g('go', 'str', ''))
 
 		($hook = $plugin->run_hook('end_profile')) ? eval($hook) : null; //run hook
 
-		break; 
+		break;
 
 
-		case 'get_pass' : 
+		case 'get_pass' :
 
 		#if not default system, let's give him a link for integrated script
 		if ($config['user_system'] != 1)
@@ -658,12 +658,12 @@ switch (g('go', 'str', ''))
 		#page info
 		$current_template	= 'get_pass.php';
 		$current_title		= $lang['GET_LOSTPASS'];
-		$action	= 'ucp.php?go=get_pass'; 
-		#no error yet 
+		$action	= 'ucp.php?go=get_pass';
+		#no error yet
 		$ERRORS = false;
 
 
-		# As in ucp.php?go=get_pass&activation_key=1af3405662ec373d672d003cf27cf998&uid=1 
+		# As in ucp.php?go=get_pass&activation_key=1af3405662ec373d672d003cf27cf998&uid=1
 		if(ig('activation_key') && ig('uid'))
 		{
 			($hook = $plugin->run_hook('get_pass_activation_key')) ? eval($hook) : null; //run hook
@@ -671,9 +671,9 @@ switch (g('go', 'str', ''))
 			$h_key = preg_replace('![^a-z0-9]!', '', g('activation_key', 'str'));
 			$u_id = g('uid', 'int');
 
-			#if it's empty ? 
+			#if it's empty ?
 			if(trim($h_key) == '')
-			{	
+			{
 				big_error('No hash key', 'This is not a good link for activation ... Try again!');
 			}
 
@@ -682,7 +682,7 @@ switch (g('go', 'str', ''))
 						'FROM'		=> "{$dbprefix}users",
 						'WHERE'		=> "hash_key='" . $SQL->escape($h_key) . "' AND id=" . $u_id,
 					);
-	
+
 			($hook = $plugin->run_hook('get_pass_f_query')) ? eval($hook) : null; //run hook
 
 			$result= $SQL->build($query);
@@ -720,7 +720,7 @@ switch (g('go', 'str', ''))
 		}
 
 		#set variables
-		$t_rmail = p('rmail', 'mail', false); 
+		$t_rmail = p('rmail', 'mail', false);
 
 		#no submit yet
 		if (!ip('submit'))
@@ -729,7 +729,7 @@ switch (g('go', 'str', ''))
 		}
 		#submited
 		else
-		{ 
+		{
 			$ERRORS	= array();
 
 			($hook = $plugin->run_hook('submit_get_pass')) ? eval($hook) : null; //run hook
@@ -746,7 +746,7 @@ switch (g('go', 'str', ''))
 			{
 				$ERRORS['rmail'] = $lang['WRONG_EMAIL'];
 			}
-			else 
+			else
 			{
 				#if email not exists
 				$query_chk	= array(
@@ -777,7 +777,7 @@ switch (g('go', 'str', ''))
 
 				($hook = $plugin->run_hook('qr_select_mail_get_pass')) ? eval($hook) : null; //run hook
 				$result	=	$SQL->build($query);
-	
+
 				$row = $SQL->fetch($result);
 
 				#generate new password
@@ -816,15 +816,15 @@ switch (g('go', 'str', ''))
 				else
 				{
 					$text	= $lang['OK_SEND_NEWPASS'] . '<br /><a href="' . $config['siteurl']  . ($config['mod_writer'] ?  'login.html' : 'ucp.php?go=login') . '">' . $lang['LOGIN'] . '</a>';
-					kleeja_info($text);	
+					kleeja_info($text);
 				}
 			}
 		}
 
 		($hook = $plugin->run_hook('end_get_pass')) ? eval($hook) : null; //run hook
 
-		break; 
-		
+		break;
+
 
 		//
 		// add your own code here
@@ -852,5 +852,3 @@ kleeja_header($current_title, $extra_code_in_header);
 include get_template_path($current_template);
 #footer
 kleeja_footer();
-
-

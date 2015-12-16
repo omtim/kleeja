@@ -24,7 +24,7 @@ $action			.= (isset($_GET['qg']) ? '&amp;qg=' . intval($_GET['qg']) : '') . '&am
 $action_all		= ADMIN_PATH . '?cp=' . basename(__file__, '.php')  . '&amp;smt=' . $current_smt . (isset($_GET['page']) ? '&amp;page=' . intval($_GET['page']) : '');
 //if not noraml user system
 $user_not_normal = (int) $config['user_system'] != 1 ?  true : false;
-$is_search	= $affected = $is_asearch = false;
+$is_search	= $affected = $is_asearch = $GE_INFO = false;
 $isn_search	= true;
 $GET_FORM_KEY	= kleeja_add_form_key_get('adm_users');
 $H_FORM_KEYS	= kleeja_add_form_key('adm_users');
@@ -328,7 +328,7 @@ if(isset($_POST['edituser']))
 	else if ($udata['mail'] != trim($_POST['l_mail']))
 	{
 		$new_mail = true;
-		if($SQL->num($SQL->query("SELECT * FROM {$dbprefix}users WHERE mail='" . trim($SQL->escape(strtolower($_POST["lmail"]))) . "'")) != 0)
+		if($SQL->num($SQL->query("SELECT * FROM {$dbprefix}users WHERE mail='" . trim($SQL->escape(strtolower($_POST["l_mail"]))) . "'")) != 0)
 		{
 			$ERRORS[] = $lang['EXIST_EMAIL'];
 		}
@@ -414,7 +414,7 @@ if(isset($_POST['newgroup']))
 
 		$SQL->build($insert_query);
 		#Then, get the ID
-		$new_group_id = $SQL->insert_id();
+		$new_group_id = $SQL->id();
 		$org_group_id = intval($_POST['cfrom']);
 		if(!$new_group_id or !$org_group_id)
 		{
@@ -650,7 +650,7 @@ case 'group_acl':
 	}
 
 	$group_name	= get_group_name($req_group);
-	$
+
 
 	$query = array(
 					'SELECT'	=> 'acl_name, acl_can',
@@ -661,24 +661,23 @@ case 'group_acl':
 
 	$result = $SQL->build($query);
 
-	$acls = $submitted_on_acls = $submitted_ff_acls = array();
+	$acls = $submitted_on_acls = $submitted_off_acls = array();
 	while($row=$SQL->fetch($result))
 	{
 		#if submit
 		if(isset($_POST['editacl']))
 		{
-			//if(isset($_POST[$row['acl_name']]) && (int) $row['acl_can'] == 0)
-			if(isset($_POST[$row['acl_name']]))
+			if(isset($_POST[$row['acl_name']]) && $_POST[$row['acl_name']] == 1)
 			{
 				$submitted_on_acls[] = $row['acl_name'];
 			}
-			//else if(!isset($_POST[$row['acl_name']]) && (int) $row['acl_can'] == 1)
-			else if(!isset($_POST[$row['acl_name']]))
+			else if((!isset($_POST[$row['acl_name']])) || (isset($_POST[$row['acl_name']]) && $_POST[$row['acl_name']] == 0))
 			{
 				$submitted_off_acls[] = $row['acl_name'];
 			}
 		}
 
+		#Guests are no meant for this!
 		if($req_group == 2 && in_array($row['acl_name'], array('access_fileuser', 'enter_acp')))
 		{
 			continue;
@@ -936,7 +935,7 @@ case 'group_exts':
 	}
 
 	#delete ext?
-	$DELETED_EXT = $GE_INFO =  false;
+	$DELETED_EXT = $GE_INFO = false;
 	if(isset($_GET['del']))
 	{
 		//check _GET Csrf token
@@ -1066,7 +1065,7 @@ case 'show_su':
 	$filter = get_filter($_GET['search_id'], 'filter_uid');
 	if(!$filter)
 	{
-		kleeja_admin_err($lang['ERROR_TRY_AGAIN'], true, $lang['ERROR'], true, ADMIN_PATH . '?cp=h_search&smt=users', 1);
+		kleeja_admin_err($lang['ERROR_TRY_AGAIN'], true, $lang['ERROR'], true, ADMIN_PATH . '?cp=search&smt=users', 1);
 	}
 
 	$search	= unserialize(htmlspecialchars_decode($filter['filter_value']));
@@ -1109,6 +1108,7 @@ case 'users':
 	$start			= $Pager->get_start_row();
 
 	$no_results = false;
+	$arr = array();
 
 	if ($nums_rows > 0)
 	{
@@ -1125,9 +1125,9 @@ case 'users':
 						'id'		=> $row['id'],
 						'name'		=> $row['name'],
 						'userfile_link' => $userfile,
-						'delusrfile_link'	=> $row['founder'] && (int) $userinfo['founder'] == 0 ? false : ADMIN_PATH .'?cp=' . basename(__file__, '.php') . '&amp;deleteuserfile='. $row['id'] . (isset($_GET['page']) ? '&amp;page=' . intval($_GET['page']) : ''),
-						'delusr_link'		=> $userinfo['id'] == $row['id'] || ($row['founder'] && (int) $userinfo['founder'] == 0) ? false : ADMIN_PATH .'?cp=' . basename(__file__, '.php') . '&amp;del_user='. $row['id'] . (isset($_GET['page']) ? '&amp;page=' . intval($_GET['page']) : ''),
-						'editusr_link'		=> $row['founder'] && (int) $userinfo['founder'] == 0 ? false : ADMIN_PATH .'?cp=' . basename(__file__, '.php') . '&amp;smt=edit_user&amp;uid='. $row['id'] . (isset($_GET['page']) ? '&amp;page=' . intval($_GET['page']) : ''),
+						'delusrfile_link'	=> $row['founder'] && (int) $user->data['founder'] == 0 ? false : ADMIN_PATH .'?cp=' . basename(__file__, '.php') . '&amp;deleteuserfile='. $row['id'] . (isset($_GET['page']) ? '&amp;page=' . intval($_GET['page']) : ''),
+						'delusr_link'		=> $user->data['id'] == $row['id'] || ($row['founder'] && (int) $user->data['founder'] == 0) ? false : ADMIN_PATH .'?cp=' . basename(__file__, '.php') . '&amp;del_user='. $row['id'] . (isset($_GET['page']) ? '&amp;page=' . intval($_GET['page']) : ''),
+						'editusr_link'		=> $row['founder'] && (int) $user->data['founder'] == 0 ? false : ADMIN_PATH .'?cp=' . basename(__file__, '.php') . '&amp;smt=edit_user&amp;uid='. $row['id'] . (isset($_GET['page']) ? '&amp;page=' . intval($_GET['page']) : ''),
 						'founder'			=> (int) $row['founder'],
 						'last_visit'		=> empty($row['last_visit']) ? $lang['NOT_YET'] : kleeja_date($row['last_visit']),
 						'group'				=> get_group_name($row['group_id'])
@@ -1178,7 +1178,7 @@ case 'edit_user':
 
 	//If founder, just founder can edit him;
 	$u_founder	= isset($_POST['l_founder']) ? intval($_POST['l_founder']) : (int) $udata['founder'];
-	$im_founder	= (int) $userinfo['founder'];
+	$im_founder	= (int) $user->data['founder'];
 	$u_group	= isset($_POST['l_group']) ? intval($_POST['l_group']) : $udata['group_id'];
 	$u_qg		= isset($_POST['l_qg']) ? intval($_POST['u_qg']) : $udata['group_id'];
 	if($u_founder && !$im_founder)
@@ -1251,7 +1251,7 @@ if (isset($_POST['submit']))
 $go_menu = array(
 				'general' => array('name'=>$lang['R_GROUPS'], 'link'=> ADMIN_PATH . '?cp=users&amp;smt=general', 'goto'=>'general', 'current'=> $current_smt == 'general'),
 				#'users' => array('name'=>$lang['R_USERS'], 'link'=> ADMIN_PATH . '?cp=users&amp;smt=users', 'goto'=>'users', 'current'=> $current_smt == 'users'),
-				'show_su' => array('name'=>$lang['SEARCH_USERS'], 'link'=> ADMIN_PATH . '?cp=h_search&amp;smt=users', 'goto'=>'show_su', 'current'=> $current_smt == 'show_su'),
+				'show_su' => array('name'=>$lang['SEARCH_USERS'], 'link'=> ADMIN_PATH . '?cp=search&amp;smt=users', 'goto'=>'show_su', 'current'=> $current_smt == 'show_su'),
 	);
 
 #user adding is not allowed in integration
