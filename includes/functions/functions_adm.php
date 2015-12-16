@@ -465,7 +465,6 @@ function parse_options($opt)
 {
 	global $con, $lang, $plugin;
 
-
 	#Exceptions for some options
 	if($opt[2] == 'write_imgs')
 	{
@@ -494,7 +493,7 @@ function parse_options($opt)
 	{
 		return '<div class="radio"><label><input type="radio" id="' . $opt[2] . '" name="' . $opt[2] . '" value="1" ' . ($con[$opt[2]] == 1 ? ' checked="checked"' :'') . '>' . $lang['YES'] . '</label></div>' .
 					'<div class="radio"><label><input type="radio" id="' .  $opt[2] . '" name="' . $opt[2] . '" value="0" ' . ($con[$opt[2]] == 0 ? ' checked="checked"' :'') . '>' . $lang['NO'] . '</label></div>' .
-					(isset($opt[4]) ? '<br> <small class="text-muted">' . (isset($lang[$opt[4]]) ? $lang[$opt[4]] :  $opt[4])  .'</small>': '');
+					(isset($opt[4]) ? '<br> <small class="text-muted">' . (isset($lang[strtoupper($opt[4])]) ? $lang[strtoupper($opt[4])] :  $opt[4])  .'</small>': '');
 	}
 
 	#text or left-to-right text input

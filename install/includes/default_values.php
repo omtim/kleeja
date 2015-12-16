@@ -46,7 +46,7 @@ $config_values[] = array('enable_userfile', '1', '{yesno.enable_userfile}', 11, 
 $config_values[] = array('filesnum', '3', '{ltr.filesnum}', 22, 'groups', 0, 0);
 $config_values[] = array('sec_down', '5', '{ltr.sec_down}', 23, 'groups', 0, 0);
 $config_values[] = array('usersectoupload', '10', '{ltr.usersectoupload}', 44, 'groups', 0, 0);
-$config_values[] = array('write_imgs', '0' , '{yesno.wirte_imgs} ', 29, 'groups', 0, 0);
+$config_values[] = array('write_imgs', '0' , '{yesno.write_imgs} ', 29, 'groups', 0, 0);
 
 
 // advanced settings
