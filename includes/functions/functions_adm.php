@@ -373,7 +373,7 @@ function option_select_values($name, $default_value = '')
 
 		case 'language':
 
-			if ($dh = @opendir(PATH . 'lang'))
+			if ($dh = @opendir(PATH . 'languages'))
 			{
 				while (($file = readdir($dh)) !== false)
 				{
@@ -434,7 +434,7 @@ function option_select_values($name, $default_value = '')
 			$id_form_types = array(
 					'id' => $lang['IDF'],
 					'filename' => $lang['IDFF'],
-					'direct' => $lang['IDFF']
+					'direct' => $lang['IDFD']
 				);
 
 				($hook = $plugin->run_hook('option_select_values_decode_types_func')) ? eval($hook) : null; //run hook

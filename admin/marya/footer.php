@@ -4,7 +4,7 @@
 
 <footer>
 	<hr>
-	<p class="text-center text-muted">&copy; Kleeja 2007-2013</p>
+	<p class="text-center text-muted">&copy; <a href="http://www.kleeja.com" target="_tab">Kleeja</a> 2007-<?=date('Y')?></p>
 </footer>
 
 <script src="<?=ADMIN_STYLE_PATH?>js/jquery.min.js"></script>

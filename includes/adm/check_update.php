@@ -16,15 +16,15 @@ if (!defined('IN_ADMIN'))
 
 
 
-$stylee	= "admin_check_update";
-$current_smt	= isset($_GET['smt']) ? (preg_match('![a-z0-9_]!i', trim($_GET['smt'])) ? trim($_GET['smt']) : 'general') : 'general';
+$current_template	= 'check_update.php';
+$current_smt		= isset($_GET['smt']) ? (preg_match('![a-z0-9_]!i', trim($_GET['smt'])) ? trim($_GET['smt']) : 'general') : 'general';
 $error = false;
 $update_link = $config['siteurl'] . 'install/update.php?lang=' . $config['language'];
 
 #to prevent getting the url data for all cats
 if($current_smt == 'general'):
 
-//get data from kleeja database
+#get data from kleeja database
 $b_url	= empty($_SERVER['SERVER_NAME']) ? $config['siteurl'] : $_SERVER['SERVER_NAME'];
 $b_data = fetch_remote_file('http://www.kleeja.com/check_vers/?i=' . urlencode($b_url) . '&v=' . KLEEJA_VERSION, false, 6);
 
@@ -42,19 +42,10 @@ else
 
 	$version_data = trim(htmlspecialchars($b_data[0]));
 
-	//auto update requirements
-	$aupdate = false;
-
 	if (version_compare(strtolower(KLEEJA_VERSION), strtolower($version_data), '<'))
 	{
 
 		$error = true;
-
-		if(@is_writable(PATH))
-		{
-			//ECHO AUTOUPDATE ON
-			$aupdate 	= true;
-		}
 
 		$text = sprintf($lang['UPDATE_NOW_S'] , KLEEJA_VERSION, strtolower($version_data)) . '<br /><br />' . $lang['UPDATE_KLJ_NOW'];
 	}
@@ -64,23 +55,14 @@ else
 	}
 	else if (version_compare(strtolower(KLEEJA_VERSION), strtolower($version_data), '>'))
 	{
-		//$text	= $lang['U_USE_PRE_RE'];
-
-		if(@is_writable(PATH))
-		{
-			//ECHO AUTOUPDATE ON
-			$aupdate 	= true;
-
-		}
-
 		$text = sprintf($lang['UPDATE_NOW_S'] , KLEEJA_VERSION, strtolower($version_data)) . '<br /><br />' . $lang['UPDATE_KLJ_NOW'];
 	}
 
 
-	//lets recore it
+	#lets decode it
 	$v = @unserialize($config['new_version']);
 
-	//To prevent expected error [ infinit loop ]
+	#To prevent expected error [ infinit loop ]
 	if(isset($_GET['show_msg']))
 	{
 		$query_get	= array(
@@ -129,7 +111,7 @@ endif;
 
 //secondary menu
 $go_menu = array(
-				'general' => array('name'=>$lang['R_CHECK_UPDATE'], 'link'=> ADMIN_PATH . '?cp=p_check_update&amp;smt=general', 'goto'=>'general', 'current'=> $current_smt == 'general'),
-				'howto' => array('name'=>$lang['HOW_UPDATE_KLEEJA'], 'link'=> ADMIN_PATH . '?cp=p_check_update&amp;smt=howto', 'goto'=>'howto', 'current'=> $current_smt == 'howto'),
-				'site' => array('name'=>'Kleeja.com', 'link'=> ADMIN_PATH . '?cp=p_check_update&amp;smt=site', 'goto'=>'site', 'current'=> $current_smt == 'site'),
+				'general' => array('name'=>$lang['R_CHECK_UPDATE'], 'link'=> ADMIN_PATH . '?cp=check_update&amp;smt=general', 'goto'=>'general', 'current'=> $current_smt == 'general'),
+				'howto' => array('name'=>$lang['HOW_UPDATE_KLEEJA'], 'link'=> ADMIN_PATH . '?cp=check_update&amp;smt=howto', 'goto'=>'howto', 'current'=> $current_smt == 'howto'),
+				'site' => array('name'=>'Kleeja.com', 'link'=> ADMIN_PATH . '?cp=check_update&amp;smt=site', 'goto'=>'site', 'current'=> $current_smt == 'site'),
 	);

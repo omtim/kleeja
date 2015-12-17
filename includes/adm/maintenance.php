@@ -36,7 +36,7 @@ if($case && in_array($case, array('clearc', 'sync_files', 'sync_images', 'sync_u
 {
 	if(!kleeja_check_form_key_get('REPAIR_FORM_KEY'))
 	{
-		kleeja_admin_err($lang['INVALID_GET_KEY'], true, $lang['ERROR'], true, basename(ADMIN_PATH), 2);
+		kleeja_admin_err($lang['INVALID_GET_KEY'], true, $lang['ERROR'], true, ADMIN_PATH, 2);
 	}
 }
 
@@ -164,7 +164,7 @@ while($row=$SQL->fetch($result))
 
 $SQL->free($result);
 
-$text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=maintenance' .  '\');", 2000);</script>' . "\n";
+$text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . ADMIN_PATH . '?cp=maintenance' .  '\');", 2000);</script>' . "\n";
 $current_template = 'info.php';
 
 
@@ -239,7 +239,7 @@ $result = $SQL->build($update_query);
 
 delete_cache('data_stats');
 $text = sprintf($lang['SYNCING'], $lang['USERS_ST']);
-$text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=maintenance' .  '\');", 2000);</script>' . "\n";
+$text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . ADMIN_PATH . '?cp=maintenance' .  '\');", 2000);</script>' . "\n";
 
 $current_template = 'info.php';
 
@@ -267,7 +267,7 @@ if(function_exists('apc_fetch') && defined('APC_CACHE'))
 
 #show done, msg
 $text .= '<li>' . $lang['REPAIRE_CACHE'] . '</li>';
-$text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . basename(ADMIN_PATH) . '?cp=maintenance' .  '\');", 2000);</script>' . "\n";
+$text .= '<script type="text/javascript"> setTimeout("get_kleeja_link(\'' . ADMIN_PATH . '?cp=maintenance' .  '\');", 2000);</script>' . "\n";
 
 
 $current_template = 'info.php';

@@ -209,7 +209,7 @@ function delete_cache($name, $all=false)
 
 	($hook = $plugin->run_hook('delete_cache_func')) ? eval($hook) : null; //run hook
 
-	//handle array of cached files
+	#handle array of cached files
 	if(is_array($name))
 	{
 		foreach($name as $n)
@@ -220,6 +220,8 @@ function delete_cache($name, $all=false)
 	}
 
 	$path_to_cache = PATH . 'cache';
+
+	$del = false;
 
 	if($all)
 	{

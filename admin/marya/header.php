@@ -18,10 +18,8 @@
 
 <?php if($lang['DIR'] == 'rtl'):?>
 <style type="text/css">
-body, h1, h2, h3, h4, h5{
-	font-family: "Tahoma",Arial,sans-serif !important;
-  font-weight: 300;
-}
+	body{font-family: "Tahoma",Arial,sans-serif;}
+
 </style>
 <?php endif?>
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
